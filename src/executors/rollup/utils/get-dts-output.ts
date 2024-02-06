@@ -1,14 +1,25 @@
-import { relative, resolve } from 'node:path';
+import { dirname, relative, resolve } from 'node:path';
 
 import { type RollupOptions } from 'rollup';
 import dts from 'rollup-plugin-dts';
 
 import { PkgxOptions } from '../../../interfaces/index.js';
+import { getTsconfigJson } from '../../../utils/index.js';
 
 export function getDtsOutput(options: Required<PkgxOptions>) {
   const inputFileName = options.esmInputFileName.slice(0, -3) + '.d.ts';
   const outputDir = `${options.outputDirName}`;
-  const targetDir = relative(resolve('.', '../../'), resolve('.'));
+
+  const tsconfigJson = getTsconfigJson();
+
+  let targetDir = '';
+
+  if (tsconfigJson.extends) {
+    targetDir = relative(
+      resolve('.', dirname(tsconfigJson.extends)),
+      resolve('.'),
+    );
+  }
 
   const dtsInput = `${outputDir}/esm/.dts/${targetDir}/${options.inputDir}/${inputFileName}`;
 
