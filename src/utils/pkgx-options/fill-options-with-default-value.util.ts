@@ -69,6 +69,7 @@ export function fillOptionsWithDefaultValue(
     inputFileName,
     cjsInputFileName: options.cjsInputFileName || inputFileName,
     esmInputFileName: options.esmInputFileName || inputFileName,
+    cliInputFileName: options.cliInputFileName || '',
     inputDir: cmdOptions.inputDir || options.inputDir || 'src',
     outputDirName: options.outputDirName || 'output',
     external: getExternal(options, cmdOptions, internalOptions),

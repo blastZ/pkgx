@@ -75,6 +75,13 @@ export async function addPackageJsonFile(options: Required<PkgxOptions>) {
     };
   }
 
+  if (options.cliInputFileName) {
+    templatePkgJson.bin = {
+      [pkgJson.name.includes('@') ? pkgJson.name.split('/')[1] : pkgJson.name]:
+        './bin/index.js',
+    };
+  }
+
   let str = JSON.stringify(templatePkgJson, null, 2);
 
   str = str

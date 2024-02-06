@@ -2,6 +2,7 @@ export interface PkgJson {
   name: string;
   type?: 'module' | 'commonjs';
   main?: string;
+  bin?: Record<string, string>;
   exports?: Record<string, string>;
   scripts?: Record<string, string>;
   types?: string;

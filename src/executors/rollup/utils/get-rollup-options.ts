@@ -3,6 +3,7 @@ import { type RollupOptions } from 'rollup';
 import { PkgxOptions } from '../../../interfaces/index.js';
 
 import { getCjsOutput } from './get-cjs-output.js';
+import { getCliOutput } from './get-cli-output.js';
 import { getDtsOutput } from './get-dts-output.js';
 import { getEsmOutput } from './get-esm-output.js';
 
@@ -25,6 +26,12 @@ export function getRollupOptions(options: Required<PkgxOptions>) {
     const dtsOutput = getDtsOutput(options);
 
     outputs.push(dtsOutput);
+  }
+
+  if (options.cliInputFileName) {
+    const cliOutput = getCliOutput(options);
+
+    outputs.push(cliOutput);
   }
 
   return outputs;
