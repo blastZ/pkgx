@@ -27,7 +27,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 ARG APP_NAME
 
-RUN pnpm nx run ${APP_NAME}:build
+RUN pnpm --filter ${APP_NAME} build
 
 FROM pnpm-env AS app-deps
 
