@@ -1,10 +1,11 @@
 import { resolve } from 'node:path';
 
+import { type Command } from 'commander';
 import { cd } from 'zx';
 
-import { RollupExecutor } from '../../executors/rollup/index.js';
-import { PkgxCmdOptions } from '../../interfaces/index.js';
-import { getPkgxOptions } from '../../utils/index.js';
+import { RollupExecutor } from '@/executors/rollup';
+import { PkgxCmdOptions } from '@/interfaces';
+import { getPkgxOptions } from '@/utils';
 
 async function serve(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
   const pkgPath = resolve(process.cwd(), pkgRelativePath);
@@ -18,9 +19,16 @@ async function serve(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
   executor.serve(pkgxOptions);
 }
 
-export async function serveAppCommand(
-  pkgRelativePath: string,
-  cmdOptions: PkgxCmdOptions,
-) {
+async function serveApp(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
   await serve(pkgRelativePath, cmdOptions);
+}
+
+export function createServeAppCommand(serveCommand: Command) {
+  const command = serveCommand
+    .command('application', { isDefault: true })
+    .alias('app')
+    .description('serve application based package')
+    .action(serveApp);
+
+  return command;
 }

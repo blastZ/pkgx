@@ -1,9 +1,10 @@
 import { createServer } from 'node:http';
 
+import { type Command } from 'commander';
 import handler from 'serve-handler';
 
-import { CmdServeStaticOptions } from '../../interfaces/cmd-serve-static-options.interface.js';
-import { logger } from '../../utils/loggin.util.js';
+import { CmdServeStaticOptions } from '@/interfaces';
+import { logger } from '@/utils';
 
 async function serve(relativePath: string, options: CmdServeStaticOptions) {
   const server = createServer(async (request, response) => {
@@ -32,9 +33,20 @@ async function serve(relativePath: string, options: CmdServeStaticOptions) {
   });
 }
 
-export async function serveStaticCommand(
+async function serveStatic(
   relativePath: string,
   options: CmdServeStaticOptions,
 ) {
   await serve(relativePath, options);
+}
+
+export function createServeStaticCommand(serveCommand: Command) {
+  const command = serveCommand
+    .command('static')
+    .description('serve static based package')
+    .option('-p, --port <port>', 'port to listen')
+    .option('--cors', 'enable cors')
+    .action(serveStatic);
+
+  return command;
 }

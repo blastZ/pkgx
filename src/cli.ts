@@ -4,12 +4,11 @@ import { program } from 'commander';
 
 import {
   createBuildCommand,
+  createServeCommand,
   generateConfigCommand,
   generateDockerCommand,
   publishCommand,
   replaceModuleSuffixCommand,
-  serveAppCommand,
-  serveStaticCommand,
   testCommand,
 } from '@/commands';
 import {
@@ -22,21 +21,7 @@ import {
 program.version(getCliVersion(), '-v --version');
 
 program.addCommand(createBuildCommand());
-
-const serve = program.command('serve').description('serve resources');
-
-const serveApp = serve
-  .command('application', { isDefault: true })
-  .alias('app')
-  .description('serve application based package')
-  .action(serveAppCommand);
-
-const serveStatic = serve
-  .command('static')
-  .description('serve static based package')
-  .option('-p, --port <port>', 'port to listen')
-  .option('--cors', 'enable cors')
-  .action(serveStaticCommand);
+program.addCommand(createServeCommand());
 
 const test = program
   .command('test')
@@ -76,15 +61,9 @@ program.hook('preAction', () => {
   logger.logCliVersion();
 });
 
-addPackageRelativePathArg([
-  serveApp,
-  serveStatic,
-  test,
-  publish,
-  generateConfig,
-]);
+addPackageRelativePathArg([test, publish, generateConfig]);
 
-addPkgxCmdOptions([serveApp, test, publish]);
+addPkgxCmdOptions([test, publish]);
 
 program.configureOutput({
   writeErr: (str) => {
