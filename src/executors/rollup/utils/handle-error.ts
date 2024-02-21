@@ -1,5 +1,5 @@
-import chalk from 'chalk';
 import { type RollupError } from 'rollup';
+import { chalk } from 'zx';
 
 export function handleError(error: RollupError, recover = false): void {
   const name = error.name || (error.cause as Error)?.name;

@@ -4,7 +4,6 @@ import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import { type InputPluginOption, type RollupOptions } from 'rollup';
-import copy from 'rollup-plugin-copy';
 
 import { PkgxOptions } from '../../../interfaces/index.js';
 
@@ -31,17 +30,6 @@ export function getEsmOutput(options: Required<PkgxOptions>) {
   plugins.push((commonjs as unknown as typeof commonjs.default)());
 
   plugins.push((json as unknown as typeof json.default)());
-
-  if (options.assets) {
-    plugins.push(
-      (copy as unknown as typeof copy.default)({
-        targets: options.assets.map((o) => ({
-          src: o,
-          dest: outputDir,
-        })),
-      }),
-    );
-  }
 
   const output: RollupOptions = {
     input: `${options.inputDir}/${options.esmInputFileName}`,

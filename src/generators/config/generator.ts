@@ -1,6 +1,6 @@
 import { writeFile } from 'node:fs/promises';
 
-import chalk from 'chalk';
+import { chalk } from 'zx';
 
 import { getFileNameByExtensions } from '../../utils/get-file-name-by-extensions.util.js';
 import { logger } from '../../utils/loggin.util.js';

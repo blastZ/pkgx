@@ -1,7 +1,7 @@
 import { readFile, readdir, stat, writeFile } from 'node:fs/promises';
 import { extname, join } from 'node:path';
 
-import chalk from 'chalk';
+import { chalk } from 'zx';
 
 import { CmdReplaceModuleSuffixOptions } from '../interfaces/cmd-replace-module-suffix-options.interface.js';
 import { logger } from '../utils/loggin.util.js';

@@ -1,3 +1,5 @@
+import { CopyFilePattern } from './copy-file-pattern.interface.js';
+
 export interface PkgxOptions {
   inputFileName?: string;
   cjsInputFileName?: string;
@@ -8,7 +10,7 @@ export interface PkgxOptions {
   external?: (string | RegExp)[];
   packageBasedExternal?: boolean;
   excludeFromExternal?: (string | RegExp)[];
-  assets?: string[];
+  assets?: (string | CopyFilePattern)[];
   exclude?: string[];
   sourceMap?: boolean;
   disableEsmOutput?: boolean;

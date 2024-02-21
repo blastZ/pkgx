@@ -1,9 +1,8 @@
 import { readdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-import chalk from 'chalk';
 import { program } from 'commander';
-import { $ } from 'zx';
+import { $, chalk } from 'zx';
 
 import { __dirname, logger } from '../../utils/index.js';
 

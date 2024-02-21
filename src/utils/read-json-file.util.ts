@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { basename } from 'node:path';
 
-import chalk from 'chalk';
+import { chalk } from 'zx';
 
 import { logger } from './loggin.util.js';
 

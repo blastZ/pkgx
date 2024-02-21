@@ -1,6 +1,6 @@
-import chalk from 'chalk';
 import dayjs from 'dayjs';
 import ms from 'pretty-ms';
+import { chalk } from 'zx';
 
 import { getCliVersion } from './get-cli-version.util.js';
 
