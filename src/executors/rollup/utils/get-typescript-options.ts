@@ -21,7 +21,7 @@ export function getTypescriptOptions(
     incremental: options.incremental,
   };
 
-  if (type === 'esm') {
+  if (type === 'esm' && !options.disableDtsOutput) {
     tsOptions.declaration = true;
     tsOptions.declarationMap = false;
     tsOptions.declarationDir = outputDir + '/.dts';

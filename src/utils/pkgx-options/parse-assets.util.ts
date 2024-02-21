@@ -8,11 +8,11 @@ export function parseAssets(
 ): CopyFilePattern[] {
   return pkgxOptions.assets.map((o) => {
     if (typeof o === 'string') {
-      const { base } = parse(o);
+      const { dir, base } = parse(o);
 
       return {
         src: o,
-        dest: join(pkgxOptions.outputDirName, base),
+        dest: join(pkgxOptions.outputDirName, dir, base),
       };
     }
 

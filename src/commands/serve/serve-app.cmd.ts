@@ -1,7 +1,7 @@
 import { resolve } from 'node:path';
 
 import { type Command } from 'commander';
-import { cd } from 'zx';
+import { $, cd } from 'zx';
 
 import { RollupExecutor } from '@/executors/rollup';
 import { PkgxCmdOptions } from '@/interfaces';
@@ -14,9 +14,11 @@ async function serve(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
 
   const pkgxOptions = await getPkgxOptions(cmdOptions, { isServe: true });
 
+  await $`rm -rf ${pkgxOptions.outputDirName}`.quiet();
+
   const executor = new RollupExecutor();
 
-  executor.serve(pkgxOptions);
+  await executor.serve(pkgxOptions);
 }
 
 async function serveApp(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {

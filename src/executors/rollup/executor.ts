@@ -17,9 +17,11 @@ export class RollupExecutor {
     await copyFiles(parseAssets(pkgxOptions));
   }
 
-  serve(pkgxOptions: Required<PkgxOptions>) {
+  async serve(pkgxOptions: Required<PkgxOptions>) {
     const rollupOptions = getRollupOptions(pkgxOptions);
 
     startWatch(pkgxOptions, rollupOptions);
+
+    await copyFiles(parseAssets(pkgxOptions));
   }
 }
