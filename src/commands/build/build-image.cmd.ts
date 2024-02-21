@@ -1,11 +1,12 @@
 import { readdir } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
 
+import { type Command } from 'commander';
 import dayjs from 'dayjs';
 import { $, chalk } from 'zx';
 
-import { CmdBuildImageOptions } from '../../interfaces/index.js';
-import { __dirname, getPkgJson, logger } from '../../utils/index.js';
+import { CmdBuildImageOptions } from '@/interfaces';
+import { __dirname, getPkgJson, logger } from '@/utils';
 
 async function getTag() {
   const date = dayjs(new Date()).format('YYYYMMDD');
@@ -86,9 +87,29 @@ async function build(pkgRelativePath: string, options: CmdBuildImageOptions) {
   );
 }
 
-export async function buildImageCommand(
+async function buildImage(
   pkgRelativePath: string,
   options: CmdBuildImageOptions,
 ) {
   await build(pkgRelativePath, options);
+}
+
+export function createBuildImageCommand(buildCommand: Command) {
+  const command = buildCommand
+    .command('image')
+    .description('build image')
+    .option('--host <host>', 'host name')
+    .option('--namespace <namespace>', 'namespace')
+    .option('--repo <repo>', 'repo')
+    .option(
+      '--progress <progress>',
+      'type of progress output (auto, plain, tty). Use plain to show container output (default "auto")',
+    )
+    .option('--no-cache', 'do not use cache when building the image')
+    .option('--target <target>', 'set target build stage to build')
+    .option('--debug', 'debug mode, set progress to plain and no-cache to true')
+    .option('--dry-run', 'dry run')
+    .action(buildImage);
+
+  return command;
 }

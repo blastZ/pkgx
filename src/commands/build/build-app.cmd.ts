@@ -1,16 +1,14 @@
+import { type Command } from 'commander';
 import { $ } from 'zx';
 
-import { RollupExecutor } from '../../executors/rollup/index.js';
-import {
-  CmdBuildPackageOptions,
-  PkgxCmdOptions,
-} from '../../interfaces/index.js';
+import { RollupExecutor } from '@/executors/rollup';
+import { CmdBuildPackageOptions, PkgxCmdOptions } from '@/interfaces';
 import {
   addCjsPackageJsonFile,
   addPackageJsonFile,
   changeWorkingDirectory,
   getPkgxOptions,
-} from '../../utils/index.js';
+} from '@/utils';
 
 async function build(
   pkgRelativePath: string,
@@ -40,9 +38,19 @@ async function build(
   };
 }
 
-export async function buildAppCommand(
+async function buildApp(
   pkgRelativePath: string,
   cmdOptions: CmdBuildPackageOptions & PkgxCmdOptions,
 ) {
   await build(pkgRelativePath, cmdOptions);
+}
+
+export function createBuildAppCommand(buildCommand: Command) {
+  const command = buildCommand
+    .command('application')
+    .alias('app')
+    .description('build application based package')
+    .action(buildApp);
+
+  return command;
 }

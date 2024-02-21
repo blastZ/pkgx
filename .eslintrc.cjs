@@ -25,6 +25,14 @@ module.exports = {
       'warn',
       {
         'newlines-between': 'always',
+        pathGroups: [
+          {
+            pattern: '@/**',
+            group: 'external',
+            position: 'after',
+          },
+        ],
+        pathGroupsExcludedImportTypes: ['builtin'],
       },
     ],
     '@typescript-eslint/no-duplicate-enum-values': 'warn',

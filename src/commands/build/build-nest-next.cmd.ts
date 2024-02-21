@@ -1,8 +1,9 @@
 import { resolve } from 'node:path';
 
+import { type Command } from 'commander';
 import { $ } from 'zx';
 
-import { changeWorkingDirectory, getPkgxOptions } from '../../utils/index.js';
+import { changeWorkingDirectory, getPkgxOptions } from '@/utils';
 
 async function build(pkgRelativePath: string) {
   await changeWorkingDirectory(pkgRelativePath);
@@ -28,6 +29,15 @@ async function build(pkgRelativePath: string) {
   await $`rm -rf ${outputDotNextDirPath}/cache`.quiet();
 }
 
-export async function buildNestNextCommand(pkgRelativePath: string) {
+async function buildNestNext(pkgRelativePath: string) {
   await build(pkgRelativePath);
+}
+
+export function createBuildNestNextCommand(buildCommand: Command) {
+  const command = buildCommand
+    .command('nest-next')
+    .description('build next in nest application')
+    .action(buildNestNext);
+
+  return command;
 }

@@ -16,7 +16,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*/index.js"
+      ]
+    }
   },
   "exclude": [
     "**/node_modules/**",
