@@ -4,8 +4,8 @@ import { clearTimeout } from 'node:timers';
 import chokidar from 'chokidar';
 import { watch, type RollupOptions } from 'rollup';
 
-import { PkgxOptions } from '../../interfaces/index.js';
-import { logger } from '../../utils/index.js';
+import { PkgxOptions } from '@/interfaces';
+import { logger } from '@/utils';
 
 import { handleError } from './utils/handle-error.js';
 import { relativeId } from './utils/relative-id.js';

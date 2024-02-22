@@ -1,10 +1,11 @@
 import { dirname, relative, resolve } from 'node:path';
 
+import alias from '@rollup/plugin-alias';
 import { type RollupOptions } from 'rollup';
 import dts from 'rollup-plugin-dts';
 
-import { PkgxOptions } from '../../../interfaces/index.js';
-import { getTsconfigJson } from '../../../utils/index.js';
+import { PkgxOptions } from '@/interfaces';
+import { getTsconfigJson } from '@/utils';
 
 export function getDtsOutput(options: Required<PkgxOptions>) {
   const inputFileName = options.esmInputFileName.slice(0, -3) + '.d.ts';
@@ -31,7 +32,28 @@ export function getDtsOutput(options: Required<PkgxOptions>) {
         format: 'esm',
       },
     ],
-    plugins: [dts()],
+    plugins: [
+      (alias as unknown as typeof alias.default)({
+        entries: [
+          {
+            find: '@',
+            replacement: resolve(
+              process.cwd(),
+              options.outputDirName,
+              './esm/.dts',
+              options.inputDir,
+            ),
+          },
+          ...Object.entries(options.alias).map(([origin, target]) => {
+            return {
+              find: origin,
+              replacement: resolve(process.cwd(), target),
+            };
+          }),
+        ],
+      }),
+      dts(),
+    ],
     external: options.external,
     cache: options.cache,
   };

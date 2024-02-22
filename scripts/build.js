@@ -5,7 +5,7 @@ import { $, cd } from 'zx';
 async function build() {
   await $`rm -rf ./dist`.quiet();
 
-  await $`tsc`;
+  await $`pnpm tsc && pnpm tsc-alias`.quiet();
 
   const { getPkgxOptions, addCjsPackageJsonFile, addPackageJsonFile } =
     await import('../dist/src/utils/index.js');

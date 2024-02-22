@@ -1,6 +1,5 @@
-import { PkgxOptions } from '../../interfaces/index.js';
-import { copyFiles } from '../../utils/file-system/copy-files.util.js';
-import { parseAssets } from '../../utils/pkgx-options/parse-assets.util.js';
+import { PkgxOptions } from '@/interfaces';
+import { copyFiles, parseAssets } from '@/utils';
 
 import { startBundle } from './build.js';
 import { startWatch } from './serve.js';

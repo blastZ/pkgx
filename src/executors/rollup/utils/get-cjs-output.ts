@@ -4,7 +4,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import { RollupOptions } from 'rollup';
 
-import { PkgxOptions } from '../../../interfaces/index.js';
+import { PkgxOptions } from '@/interfaces';
 
 import { getNodeResolveOptions } from './get-node-resolve-options.js';
 import { getTypescriptOptions } from './get-typescript-options.js';

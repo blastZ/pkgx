@@ -21,4 +21,5 @@ export interface PkgxOptions {
   addStartScript?: boolean;
   esmShim?: boolean;
   watchExtra?: string[];
+  alias?: Record<string, string>;
 }

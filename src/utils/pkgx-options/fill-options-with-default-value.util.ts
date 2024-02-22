@@ -1,8 +1,5 @@
-import {
-  InternalOptions,
-  PkgxCmdOptions,
-  PkgxOptions,
-} from '../../interfaces/index.js';
+import { InternalOptions, PkgxCmdOptions, PkgxOptions } from '@/interfaces';
+
 import { getPkgJson } from '../get-pkg-json.util.js';
 
 function getPackageBasedExternal(internalOptions: InternalOptions) {
@@ -86,6 +83,7 @@ export function fillOptionsWithDefaultValue(
     addStartScript: false,
     esmShim: options.esmShim ?? false,
     watchExtra: options.watchExtra ?? [],
+    alias: options.alias || {},
   };
 
   if (

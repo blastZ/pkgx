@@ -18,8 +18,17 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*/index.js"
+      "@/utils": [
+        "./src/utils/index.js"
+      ],
+      "@/interfaces": [
+        "./src/interfaces/index.js"
+      ],
+      "@/commands": [
+        "./src/commands/index.js"
+      ],
+      "@/executors/rollup": [
+        "./src/executors/rollup/index.js"
       ]
     }
   },

@@ -6,7 +6,7 @@ import {
   type RollupOptions,
 } from 'rollup';
 
-import { logger } from '../../utils/index.js';
+import { logger } from '@/utils';
 
 import { handleError } from './utils/handle-error.js';
 import { relativeId } from './utils/relative-id.js';
