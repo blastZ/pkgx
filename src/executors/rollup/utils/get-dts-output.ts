@@ -1,4 +1,4 @@
-import { dirname, relative, resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 
 import alias from '@rollup/plugin-alias';
 import { type RollupOptions } from 'rollup';
@@ -22,7 +22,13 @@ export function getDtsOutput(options: Required<PkgxOptions>) {
     );
   }
 
-  const dtsInput = `${outputDir}/esm/.dts/${targetDir}/${options.inputDir}/${inputFileName}`;
+  const dtsInput = join(
+    outputDir,
+    'esm/.dts',
+    targetDir,
+    options.inputDir,
+    inputFileName,
+  );
 
   const output: RollupOptions = {
     input: dtsInput,
