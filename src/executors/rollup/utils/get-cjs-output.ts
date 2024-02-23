@@ -29,7 +29,7 @@ export function getCjsOutput(options: Required<PkgxOptions>) {
       (commonjs as unknown as typeof commonjs.default)(),
       (json as unknown as typeof json.default)(),
     ],
-    external: options.external,
+    external: options.cjsExternal,
     cache: options.cache,
   };
 

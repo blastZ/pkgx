@@ -8,8 +8,10 @@ export interface PkgxOptions {
   inputDir?: string;
   outputDirName?: string;
   external?: (string | RegExp)[];
+  cjsExternal?: (string | RegExp)[];
   packageBasedExternal?: boolean;
   excludeFromExternal?: (string | RegExp)[];
+  cjsExcludeFromExternal?: (string | RegExp)[];
   assets?: (string | CopyFilePattern)[];
   exclude?: string[];
   sourceMap?: boolean;

@@ -2,7 +2,7 @@ import { dirname, join, relative, resolve } from 'node:path';
 
 import alias from '@rollup/plugin-alias';
 import { type RollupOptions } from 'rollup';
-import dts from 'rollup-plugin-dts';
+import { dts } from 'rollup-plugin-dts';
 
 import { PkgxOptions } from '@/interfaces';
 import { getTsconfigJson } from '@/utils';

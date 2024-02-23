@@ -1,4 +1,4 @@
-import { InternalOptions, PkgxCmdOptions } from '../../interfaces/index.js';
+import { InternalOptions, PkgxCmdOptions } from '@/interfaces';
 
 import { fillOptionsWithDefaultValue } from './fill-options-with-default-value.util.js';
 import { getPkgxConfigFileOptions } from './get-pkgx-config-file-options.util.js';

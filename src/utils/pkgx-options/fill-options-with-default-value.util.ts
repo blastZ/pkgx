@@ -28,6 +28,7 @@ function getExternal(
 ) {
   const packageBasedExternal = options.packageBasedExternal ?? true;
   const excludeFromExternal = options.excludeFromExternal || [];
+  const cjsExcludeFromExternal = options.cjsExcludeFromExternal || [];
 
   let external = packageBasedExternal
     ? getPackageBasedExternal(internalOptions)
@@ -37,7 +38,11 @@ function getExternal(
 
   external = external.filter((o) => !excludeFromExternal.includes(o));
 
-  return external;
+  const cjsExternal = external.filter(
+    (o) => !cjsExcludeFromExternal.includes(o),
+  );
+
+  return { external, cjsExternal };
 }
 
 function getExclude(
@@ -62,6 +67,12 @@ export function fillOptionsWithDefaultValue(
   const inputFileName =
     cmdOptions.inputFileName || options.inputFileName || 'index.ts';
 
+  const { external, cjsExternal } = getExternal(
+    options,
+    cmdOptions,
+    internalOptions,
+  );
+
   const filledOptions: Required<PkgxOptions> = {
     inputFileName,
     cjsInputFileName: options.cjsInputFileName || inputFileName,
@@ -69,9 +80,11 @@ export function fillOptionsWithDefaultValue(
     cliInputFileName: options.cliInputFileName || '',
     inputDir: cmdOptions.inputDir || options.inputDir || 'src',
     outputDirName: options.outputDirName || 'output',
-    external: getExternal(options, cmdOptions, internalOptions),
+    external,
+    cjsExternal,
     packageBasedExternal: options.packageBasedExternal ?? true,
     excludeFromExternal: options.excludeFromExternal || [],
+    cjsExcludeFromExternal: options.cjsExcludeFromExternal || [],
     assets: options.assets || [],
     exclude: getExclude(options, cmdOptions, internalOptions),
     sourceMap: options.sourceMap ?? false,
