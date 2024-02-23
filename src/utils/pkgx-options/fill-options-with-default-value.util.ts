@@ -1,6 +1,6 @@
-import { InternalOptions, PkgxCmdOptions, PkgxOptions } from '@/interfaces';
+import { getPkgJson } from '@libs/pkgx-common';
 
-import { getPkgJson } from '../get-pkg-json.util.js';
+import { InternalOptions, PkgxCmdOptions, PkgxOptions } from '@/interfaces';
 
 function getPackageBasedExternal(internalOptions: InternalOptions) {
   const pkgJson = getPkgJson();
@@ -94,6 +94,7 @@ export function fillOptionsWithDefaultValue(
     incremental: options.incremental ?? false,
     cache: false,
     addStartScript: false,
+    customScripts: options.customScripts || {},
     esmShim: options.esmShim ?? false,
     watchExtra: options.watchExtra ?? [],
     alias: options.alias || {},

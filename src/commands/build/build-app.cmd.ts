@@ -1,14 +1,11 @@
 import { type Command } from 'commander';
 import { $ } from 'zx';
 
+import { NpmGenerator } from '@libs/pkgx-generator-npm';
+
 import { RollupExecutor } from '@/executors/rollup';
 import { CmdBuildPackageOptions, PkgxCmdOptions } from '@/interfaces';
-import {
-  addCjsPackageJsonFile,
-  addPackageJsonFile,
-  changeWorkingDirectory,
-  getPkgxOptions,
-} from '@/utils';
+import { changeWorkingDirectory, getPkgxOptions } from '@/utils';
 
 async function build(
   pkgRelativePath: string,
@@ -30,8 +27,10 @@ async function build(
 
   await $`rm -rf ${outputDirName}/esm/.dts`.quiet();
 
-  await addPackageJsonFile(pkgxOptions);
-  await addCjsPackageJsonFile(pkgxOptions);
+  const npmGenerator = new NpmGenerator(pkgxOptions);
+
+  await npmGenerator.generatePackageJsonFile();
+  await npmGenerator.generateCjsPackageJsonFile();
 
   return {
     pkgxOptions,

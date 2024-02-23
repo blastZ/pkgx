@@ -1,4 +1,6 @@
-import { $, cd, fs } from 'zx';
+import { resolve } from 'node:path';
+
+import { $, fs } from 'zx';
 
 describe('pkgx', () => {
   // beforeAll(async () => {
@@ -6,12 +8,13 @@ describe('pkgx', () => {
   // }, 30000);
 
   it('should build package', async () => {
-    cd('tests/projects/node-package');
+    const dir = 'tests/projects/node-package';
 
-    await $`pkgx build .`;
+    await $`pkgx build ${dir}`;
 
-    // @ts-ignore
     const { maskStr, currentYear } = await import(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       './projects/node-package/output'
     );
 
@@ -19,10 +22,40 @@ describe('pkgx', () => {
     expect(currentYear()).toBe(new Date().getFullYear().toString());
 
     expect(
-      (await fs.readFile('./output/src/assets/temp.txt')).toString(),
+      (
+        await fs.readFile(resolve(dir, './output/src/assets/temp.txt'))
+      ).toString(),
     ).toEqual('temp');
     expect(
-      (await fs.readFile('./output/src/assets/views/home.ejs')).toString(),
+      (
+        await fs.readFile(resolve(dir, './output/src/assets/views/home.ejs'))
+      ).toString(),
     ).toEqual('<p>home</p>');
-  });
+
+    const cjsPkgJson = JSON.parse(
+      (await fs.readFile(resolve(dir, './output/cjs/package.json'))).toString(),
+    );
+
+    expect(cjsPkgJson.type).toEqual('commonjs');
+  }, 5000);
+
+  it('should build app', async () => {
+    const dir = 'tests/projects/node-app';
+
+    await $`pkgx build app ${dir}`;
+
+    const { app } = await import(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      './projects/node-app/output/esm/index.js'
+    );
+
+    const pkgJson = JSON.parse(
+      (await fs.readFile(resolve(dir, './output/package.json'))).toString(),
+    );
+
+    expect(app.listen).toBeDefined();
+    expect(pkgJson.scripts.start).toBe('node esm/index.js');
+    expect(pkgJson.scripts.test).toBe('echo test');
+  }, 5000);
 });

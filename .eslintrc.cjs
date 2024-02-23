@@ -20,7 +20,7 @@ module.exports = {
     '**/dist/**',
     'tools/**',
     '**/output/**',
-    '**/tests/**',
+    'tests/projects/**',
   ],
   rules: {
     '@typescript-eslint/interface-name-prefix': 'off',
@@ -32,6 +32,11 @@ module.exports = {
       {
         'newlines-between': 'always',
         pathGroups: [
+          {
+            pattern: '@libs/**',
+            group: 'external',
+            position: 'after',
+          },
           {
             pattern: '@/**',
             group: 'external',

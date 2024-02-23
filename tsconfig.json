@@ -29,6 +29,12 @@
       ],
       "@/executors/rollup": [
         "./src/executors/rollup/index.js"
+      ],
+      "@libs/pkgx-generator-npm": [
+        "./libs/pkgx-generator-npm/src/index.js"
+      ],
+      "@libs/pkgx-common": [
+        "./libs/pkgx-common/src/index.js"
       ]
     }
   },

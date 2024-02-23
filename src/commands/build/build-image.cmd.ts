@@ -5,8 +5,10 @@ import { type Command } from 'commander';
 import dayjs from 'dayjs';
 import { $, chalk } from 'zx';
 
+import { getPkgJson } from '@libs/pkgx-common';
+
 import { CmdBuildImageOptions } from '@/interfaces';
-import { __dirname, getPkgJson, logger } from '@/utils';
+import { __dirname, logger } from '@/utils';
 
 async function getTag() {
   const date = dayjs(new Date()).format('YYYYMMDD');

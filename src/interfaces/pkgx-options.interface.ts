@@ -21,6 +21,7 @@ export interface PkgxOptions {
   incremental?: boolean;
   cache?: boolean;
   addStartScript?: boolean;
+  customScripts?: Record<string, string>;
   esmShim?: boolean;
   watchExtra?: string[];
   alias?: Record<string, string>;

@@ -3,7 +3,7 @@ import { basename } from 'node:path';
 
 import { chalk } from 'zx';
 
-import { logger } from './loggin.util.js';
+import { logger } from './logger.util.js';
 
 const parsedMap = new Map<string, unknown>();
 
