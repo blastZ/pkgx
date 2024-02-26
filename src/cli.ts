@@ -15,8 +15,11 @@ import {
   addPackageRelativePathArg,
   addPkgxCmdOptions,
   getCliVersion,
+  initZx,
   logger,
 } from '@/utils';
+
+initZx();
 
 program.version(getCliVersion(), '-v --version');
 
