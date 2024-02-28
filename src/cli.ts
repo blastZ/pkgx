@@ -4,9 +4,8 @@ import { program } from 'commander';
 
 import {
   createBuildCommand,
+  createGenerateCommand,
   createServeCommand,
-  generateConfigCommand,
-  generateDockerCommand,
   publishCommand,
   replaceModuleSuffixCommand,
   testCommand,
@@ -25,6 +24,7 @@ program.version(getCliVersion(), '-v --version');
 
 program.addCommand(createBuildCommand());
 program.addCommand(createServeCommand());
+program.addCommand(createGenerateCommand());
 
 const test = program
   .command('test')
@@ -45,26 +45,11 @@ program
   .option('--index-dirs [indexDirs...]', 'replace suffix with index file path')
   .action(replaceModuleSuffixCommand);
 
-const generate = program
-  .command('generate')
-  .alias('g')
-  .description('generate resources');
-
-const generateConfig = generate
-  .command('config')
-  .description('generate config file')
-  .action(generateConfigCommand);
-
-generate
-  .command('docker')
-  .description('generate docker file')
-  .action(generateDockerCommand);
-
 program.hook('preAction', () => {
   logger.logCliVersion();
 });
 
-addPackageRelativePathArg([test, publish, generateConfig]);
+addPackageRelativePathArg([test, publish]);
 
 addPkgxCmdOptions([test, publish]);
 
