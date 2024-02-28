@@ -10,10 +10,9 @@ import {
   type PkgxOptions,
 } from '@libs/pkgx-plugin-devkit';
 
-import { logger } from '@/utils';
-
 import { getRollupOptions } from '../../utils/get-rollup-options.js';
 import { handleError } from '../../utils/handle-error.js';
+import { logger } from '../../utils/logger.util.js';
 import { relativeId } from '../../utils/relative-id.js';
 
 /**

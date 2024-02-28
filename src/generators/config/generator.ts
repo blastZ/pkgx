@@ -2,8 +2,9 @@ import { writeFile } from 'node:fs/promises';
 
 import { chalk } from 'zx';
 
+import { logger } from '@/utils';
+
 import { getFileNameByExtensions } from '../../utils/get-file-name-by-extensions.util.js';
-import { logger } from '../../utils/loggin.util.js';
 import { DEFAULT_CONFIG_BASE } from '../../utils/pkgx-options/get-pkgx-config-file-options.util.js';
 
 const CONFIG_TEMPLATE = `

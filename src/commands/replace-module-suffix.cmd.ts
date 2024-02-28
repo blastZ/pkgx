@@ -3,8 +3,9 @@ import { extname, join } from 'node:path';
 
 import { chalk } from 'zx';
 
+import { logger } from '@/utils';
+
 import { CmdReplaceModuleSuffixOptions } from '../interfaces/cmd-replace-module-suffix-options.interface.js';
-import { logger } from '../utils/loggin.util.js';
 
 function getRegExp() {
   return new RegExp(
