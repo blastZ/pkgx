@@ -14,9 +14,7 @@ async function test(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
 
   await $`rm -rf ${outputDirName}`.quiet();
 
-  const executor = new BuildExecutor(pkgxOptions);
-
-  await executor.run();
+  await new BuildExecutor(pkgxOptions).run();
 
   await $`rm -rf ${outputDirName}/esm/.dts`.quiet();
 

@@ -8,15 +8,13 @@ async function build() {
   await $`pnpm tsc && pnpm tsc-alias`.quiet();
 
   const { getPkgxOptions } = await import('../dist/src/utils/index.js');
-  const { rollupPlugin, NpmGenerator } = await import('../dist/src/index.js');
+  const { rollupPlugin, npmPlugin } = await import('../dist/src/index.js');
 
   await $`rm -rf ./output`.quiet();
 
   const pkgxOptions = await getPkgxOptions();
 
-  const executor = new rollupPlugin.BuildExecutor(pkgxOptions);
-
-  await executor.run();
+  await new rollupPlugin.BuildExecutor(pkgxOptions).run();
 
   await $`rm -rf ./output/esm/.dts`.quiet();
 
@@ -24,10 +22,8 @@ async function build() {
   await $`cp ./src/generators/docker/templates/* ./output/templates`.quiet();
   await $`cp ./src/generators/ts/templates/* ./output/templates`.quiet();
 
-  const npmGenerator = new NpmGenerator(pkgxOptions);
-
-  await npmGenerator.generatePackageJsonFile();
-  await npmGenerator.generateCjsPackageJsonFile();
+  await new npmPlugin.PackageJsonFileGenerator(pkgxOptions).run();
+  await new npmPlugin.CjsPackageJsonFileGenerator(pkgxOptions).run();
 
   cd('./output');
 

@@ -13,6 +13,9 @@ import { getRollupOptions } from '../../utils/get-rollup-options.js';
 import { handleError } from '../../utils/handle-error.js';
 import { relativeId } from '../../utils/relative-id.js';
 
+/**
+ * Executor: @pkgx/rollup:build
+ */
 export class BuildExecutor {
   constructor(private pkgxOptions: Required<PkgxOptions>) {}
 

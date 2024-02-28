@@ -17,9 +17,7 @@ async function serve(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
 
   await $`rm -rf ${pkgxOptions.outputDirName}`.quiet();
 
-  const executor = new ServeExecutor(pkgxOptions);
-
-  await executor.run();
+  await new ServeExecutor(pkgxOptions).run();
 }
 
 async function serveApp(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {

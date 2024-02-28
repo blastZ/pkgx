@@ -11,6 +11,9 @@ import { getRollupOptions } from '../../utils/get-rollup-options.js';
 import { handleError } from '../../utils/handle-error.js';
 import { relativeId } from '../../utils/relative-id.js';
 
+/**
+ * Executor: @pkgx/rollup:serve
+ */
 export class ServeExecutor {
   constructor(private pkgxOptions: Required<PkgxOptions>) {}
 

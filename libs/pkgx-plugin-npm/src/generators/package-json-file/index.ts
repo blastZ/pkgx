@@ -1,35 +1,19 @@
-import { existsSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 
 import { getPkgJson } from '@libs/pkgx-common';
 
 import { PkgxOptions } from '@/interfaces';
 
-import { CJS_TEMPLATE } from './constants/cjs-template.constant.js';
-import { ESM_TEMPLATE } from './constants/esm-template.constant.js';
+import { ESM_TEMPLATE } from '../../constants/esm-template.constant.js';
+import { fixDependencies } from '../../utils/fix-denpendencies.util.js';
 
-export class NpmGenerator {
-  constructor(private options: Required<PkgxOptions>) {}
+/**
+ * Generator: @pkgx/npm:package-json-file
+ */
+export class PackageJsonFileGenerator {
+  constructor(private pkgxOptions: Required<PkgxOptions>) {}
 
-  getDependencies(originDependencies: Record<string, string>) {
-    const targetDependencies: Record<string, string> = {};
-
-    Object.keys(originDependencies).map((key) => {
-      if (this.options.excludeFromExternal.includes(key)) {
-        // do noting
-      } else {
-        targetDependencies[key] = originDependencies[key];
-      }
-    });
-
-    if (Object.keys(targetDependencies).length < 1) {
-      return undefined;
-    }
-
-    return targetDependencies;
-  }
-
-  async generatePackageJsonFile() {
+  async run() {
     const pkgJson = getPkgJson();
 
     const templatePkgJson = ESM_TEMPLATE;
@@ -42,28 +26,30 @@ export class NpmGenerator {
       templatePkgJson.repository = undefined;
     }
 
-    templatePkgJson.dependencies = this.getDependencies(
+    templatePkgJson.dependencies = fixDependencies(
+      this.pkgxOptions,
       pkgJson.dependencies || {},
     );
-    templatePkgJson.peerDependencies = this.getDependencies(
+    templatePkgJson.peerDependencies = fixDependencies(
+      this.pkgxOptions,
       pkgJson.peerDependencies || {},
     );
 
     templatePkgJson.scripts = {
       ...templatePkgJson.scripts,
-      ...(this.options.addStartScript
+      ...(this.pkgxOptions.addStartScript
         ? {
             start: 'node esm/index.js',
           }
         : {}),
-      ...this.options.customScripts,
+      ...this.pkgxOptions.customScripts,
     };
 
     if (Object.keys(templatePkgJson.scripts).length < 1) {
       templatePkgJson.scripts = undefined;
     }
 
-    if (this.options.cliInputFileName) {
+    if (this.pkgxOptions.cliInputFileName) {
       templatePkgJson.bin = {
         [pkgJson.name.includes('@')
           ? pkgJson.name.split('/')[1]
@@ -89,20 +75,6 @@ export class NpmGenerator {
       .replace('REPLACE_WITH_PACKAGE_AUTHOR', pkgJson.author || '')
       .replace('REPLACE_WITH_PACKAGE_LICENSE', pkgJson.license || 'ISC');
 
-    await writeFile(`./${this.options.outputDirName}/package.json`, str);
-  }
-
-  async generateCjsPackageJsonFile() {
-    const pkgJson = getPkgJson();
-
-    const templatePkgJson = CJS_TEMPLATE;
-
-    let str = JSON.stringify(templatePkgJson, null, 2);
-
-    str = str.replace('REPLACE_WITH_PACKAGE_NAME', pkgJson.name);
-
-    if (existsSync(`./${this.options.outputDirName}/cjs`)) {
-      await writeFile(`./${this.options.outputDirName}/cjs/package.json`, str);
-    }
+    await writeFile(`./${this.pkgxOptions.outputDirName}/package.json`, str);
   }
 }

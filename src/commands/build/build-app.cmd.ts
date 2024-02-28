@@ -1,7 +1,10 @@
 import { type Command } from 'commander';
 import { $ } from 'zx';
 
-import { NpmGenerator } from '@libs/pkgx-generator-npm';
+import {
+  CjsPackageJsonFileGenerator,
+  PackageJsonFileGenerator,
+} from '@libs/pkgx-plugin-npm';
 import { BuildExecutor } from '@libs/pkgx-plugin-rollup';
 
 import { CmdBuildPackageOptions, PkgxCmdOptions } from '@/interfaces';
@@ -21,16 +24,12 @@ async function build(
 
   await $`rm -rf ${outputDirName}`.quiet();
 
-  const executor = new BuildExecutor(pkgxOptions);
-
-  await executor.run();
+  await new BuildExecutor(pkgxOptions).run();
 
   await $`rm -rf ${outputDirName}/esm/.dts`.quiet();
 
-  const npmGenerator = new NpmGenerator(pkgxOptions);
-
-  await npmGenerator.generatePackageJsonFile();
-  await npmGenerator.generateCjsPackageJsonFile();
+  await new PackageJsonFileGenerator(pkgxOptions).run();
+  await new CjsPackageJsonFileGenerator(pkgxOptions).run();
 
   return {
     pkgxOptions,

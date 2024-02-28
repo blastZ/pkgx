@@ -1,6 +1,9 @@
 import { $, cd } from 'zx';
 
-import { NpmGenerator } from '@libs/pkgx-generator-npm';
+import {
+  CjsPackageJsonFileGenerator,
+  PackageJsonFileGenerator,
+} from '@libs/pkgx-plugin-npm';
 import { BuildExecutor } from '@libs/pkgx-plugin-rollup';
 
 import { PkgxCmdOptions } from '../interfaces/index.js';
@@ -15,16 +18,12 @@ async function publish(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
 
   await $`rm -rf ${outputDirName}`.quiet();
 
-  const executor = new BuildExecutor(pkgxOptions);
-
-  await executor.run();
+  await new BuildExecutor(pkgxOptions).run();
 
   await $`rm -rf ${outputDirName}/esm/.dts`.quiet();
 
-  const npmGenerator = new NpmGenerator(pkgxOptions);
-
-  await npmGenerator.generatePackageJsonFile();
-  await npmGenerator.generateCjsPackageJsonFile();
+  await new PackageJsonFileGenerator(pkgxOptions).run();
+  await new CjsPackageJsonFileGenerator(pkgxOptions).run();
 
   cd(pkgxOptions.outputDirName);
 
