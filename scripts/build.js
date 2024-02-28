@@ -16,8 +16,6 @@ async function build() {
 
   await new rollupPlugin.BuildExecutor(pkgxOptions).run();
 
-  await $`rm -rf ./output/esm/.dts`.quiet();
-
   await $`mkdir -p ./output/templates`.quiet();
   await $`cp ./src/generators/ts/templates/* ./output/templates`.quiet();
 

@@ -20,8 +20,6 @@ async function publish(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
 
   await new BuildExecutor(pkgxOptions).run();
 
-  await $`rm -rf ${outputDirName}/esm/.dts`.quiet();
-
   await new PackageJsonFileGenerator(pkgxOptions).run();
   await new CjsPackageJsonFileGenerator(pkgxOptions).run();
 

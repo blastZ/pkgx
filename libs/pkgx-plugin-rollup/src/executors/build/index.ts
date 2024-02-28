@@ -5,6 +5,7 @@ import {
   type RollupBuild,
   type RollupOptions,
 } from 'rollup';
+import { $ } from 'zx';
 
 import {
   copyFiles,
@@ -76,6 +77,8 @@ export class BuildExecutor {
     for (const options of rollupOptions) {
       await this.startBundle(options);
     }
+
+    await $`rm -rf ${this.pkgxOptions.outputDirName}/esm/.dts`.quiet();
 
     await copyFiles(parseAssets(this.pkgxOptions));
   }

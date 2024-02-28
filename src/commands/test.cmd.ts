@@ -16,8 +16,6 @@ async function test(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
 
   await new BuildExecutor(pkgxOptions).run();
 
-  await $`rm -rf ${outputDirName}/esm/.dts`.quiet();
-
   $`node --enable-source-maps ${pkgxOptions.outputDirName}/esm/index.js`;
 }
 
