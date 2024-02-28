@@ -1,6 +1,6 @@
-import { getPkgJson } from '@libs/pkgx-common';
+import { getPkgJson, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
-import { InternalOptions, PkgxCmdOptions, PkgxOptions } from '@/interfaces';
+import { InternalOptions, PkgxCmdOptions } from '@/interfaces';
 
 function getPackageBasedExternal(internalOptions: InternalOptions) {
   const pkgJson = getPkgJson();

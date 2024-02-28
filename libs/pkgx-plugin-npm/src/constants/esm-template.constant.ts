@@ -1,4 +1,4 @@
-import { PkgJson } from '@libs/pkgx-common';
+import { type PkgJson } from '@libs/pkgx-plugin-devkit';
 
 export const ESM_TEMPLATE: PkgJson = {
   name: 'REPLACE_WITH_PACKAGE_NAME',

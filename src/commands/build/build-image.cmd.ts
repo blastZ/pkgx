@@ -5,7 +5,7 @@ import { type Command } from 'commander';
 import dayjs from 'dayjs';
 import { $, chalk } from 'zx';
 
-import { getPkgJson } from '@libs/pkgx-common';
+import { getPkgJson } from '@libs/pkgx-plugin-devkit';
 
 import { CmdBuildImageOptions } from '@/interfaces';
 import { __dirname, logger } from '@/utils';

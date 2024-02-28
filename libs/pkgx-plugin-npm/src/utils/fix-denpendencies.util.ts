@@ -1,4 +1,4 @@
-import { PkgxOptions } from '@/interfaces';
+import { type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 export function fixDependencies(
   pkgxOptions: Required<PkgxOptions>,

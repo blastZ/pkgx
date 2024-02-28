@@ -1,6 +1,6 @@
 import { globby } from 'globby';
 
-import { CopyFilePattern } from '../../interfaces/copy-file-pattern.interface.js';
+import { CopyFilePattern } from '../interfaces/copy-file-pattern.interface.js';
 
 import { copyFile } from './copy-file.util.js';
 

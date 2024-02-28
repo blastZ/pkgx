@@ -6,8 +6,13 @@ import {
   type RollupOptions,
 } from 'rollup';
 
-import { PkgxOptions } from '@/interfaces';
-import { copyFiles, logger, parseAssets } from '@/utils';
+import {
+  copyFiles,
+  parseAssets,
+  type PkgxOptions,
+} from '@libs/pkgx-plugin-devkit';
+
+import { logger } from '@/utils';
 
 import { getRollupOptions } from '../../utils/get-rollup-options.js';
 import { handleError } from '../../utils/handle-error.js';

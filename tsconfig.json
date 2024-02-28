@@ -30,8 +30,8 @@
       "@/executors/rollup": [
         "./src/executors/rollup/index.js"
       ],
-      "@libs/pkgx-common": [
-        "./libs/pkgx-common/src/index.js"
+      "@libs/pkgx-plugin-devkit": [
+        "./libs/pkgx-plugin-devkit/src/index.js"
       ],
       "@libs/pkgx-plugin-npm": [
         "./libs/pkgx-plugin-npm/src/index.js"

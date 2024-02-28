@@ -1,6 +1,7 @@
 import { resolve } from 'node:path';
 
-import { PkgxOptions } from '../../interfaces/pkgx-options.interface.js';
+import { type PkgxOptions } from '@libs/pkgx-plugin-devkit';
+
 import { getFileNameByExtensions } from '../get-file-name-by-extensions.util.js';
 
 export const DEFAULT_CONFIG_BASE = 'pkgx.config';

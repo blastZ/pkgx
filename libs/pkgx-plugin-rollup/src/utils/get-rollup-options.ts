@@ -1,6 +1,6 @@
 import { type RollupOptions } from 'rollup';
 
-import { PkgxOptions } from '@/interfaces';
+import { type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 import { getCjsOutput } from './get-cjs-output.js';
 import { getCliOutput } from './get-cli-output.js';

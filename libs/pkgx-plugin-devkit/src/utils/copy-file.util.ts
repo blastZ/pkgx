@@ -2,9 +2,8 @@ import { join, parse } from 'node:path';
 
 import { chalk, fs } from 'zx';
 
-import { logger } from '../loggin.util.js';
-
 import { isDir } from './is-dir.util.js';
+import { logger } from './logger.util.js';
 
 export async function copyFile(
   src: string,

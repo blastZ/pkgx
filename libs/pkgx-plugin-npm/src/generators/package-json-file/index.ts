@@ -1,8 +1,6 @@
 import { writeFile } from 'node:fs/promises';
 
-import { getPkgJson } from '@libs/pkgx-common';
-
-import { PkgxOptions } from '@/interfaces';
+import { getPkgJson, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 import { ESM_TEMPLATE } from '../../constants/esm-template.constant.js';
 import { fixDependencies } from '../../utils/fix-denpendencies.util.js';

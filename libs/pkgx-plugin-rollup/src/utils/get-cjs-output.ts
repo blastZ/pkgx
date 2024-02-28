@@ -2,9 +2,9 @@ import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
-import { RollupOptions } from 'rollup';
+import { type RollupOptions } from 'rollup';
 
-import { PkgxOptions } from '@/interfaces';
+import { type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 import { getNodeResolveOptions } from './get-node-resolve-options.js';
 import { getTypescriptOptions } from './get-typescript-options.js';

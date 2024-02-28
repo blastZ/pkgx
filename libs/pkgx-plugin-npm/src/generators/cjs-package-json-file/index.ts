@@ -1,9 +1,7 @@
 import { existsSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 
-import { getPkgJson } from '@libs/pkgx-common';
-
-import { PkgxOptions } from '@/interfaces';
+import { getPkgJson, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 import { CJS_TEMPLATE } from '../../constants/cjs-template.constant.js';
 

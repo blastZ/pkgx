@@ -1,6 +1,7 @@
 import { join, parse } from 'node:path';
 
-import { CopyFilePattern, PkgxOptions } from '@/interfaces';
+import { CopyFilePattern } from '../interfaces/copy-file-pattern.interface.js';
+import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
 export function parseAssets(
   pkgxOptions: Required<PkgxOptions>,

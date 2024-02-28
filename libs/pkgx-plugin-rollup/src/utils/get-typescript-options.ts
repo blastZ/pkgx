@@ -2,7 +2,7 @@ import { resolve } from 'node:path';
 
 import { type RollupTypescriptOptions as RollupTypeScriptOptions } from '@rollup/plugin-typescript';
 
-import { PkgxOptions } from '@/interfaces';
+import { type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 export function getTypescriptOptions(
   type: 'esm' | 'cjs' | 'bin',

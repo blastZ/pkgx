@@ -4,9 +4,7 @@ import alias from '@rollup/plugin-alias';
 import { type RollupOptions } from 'rollup';
 import { dts } from 'rollup-plugin-dts';
 
-import { getTsconfigJson } from '@libs/pkgx-common';
-
-import { PkgxOptions } from '@/interfaces';
+import { getTsconfigJson, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 export function getDtsOutput(options: Required<PkgxOptions>) {
   const inputFileName = options.esmInputFileName.slice(0, -3) + '.d.ts';

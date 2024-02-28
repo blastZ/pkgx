@@ -1,6 +1,6 @@
 import { $, chalk, log, type LogEntry } from 'zx';
 
-import { logger } from '@libs/pkgx-common';
+import { logger } from '@libs/pkgx-plugin-devkit';
 
 function customLog(entry: LogEntry) {
   switch (entry.kind) {
