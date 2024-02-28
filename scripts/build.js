@@ -8,15 +8,15 @@ async function build() {
   await $`pnpm tsc && pnpm tsc-alias`.quiet();
 
   const { getPkgxOptions } = await import('../dist/src/utils/index.js');
-  const { RollupExecutor, NpmGenerator } = await import('../dist/src/index.js');
+  const { rollupPlugin, NpmGenerator } = await import('../dist/src/index.js');
 
   await $`rm -rf ./output`.quiet();
 
   const pkgxOptions = await getPkgxOptions();
 
-  const executor = new RollupExecutor();
+  const executor = new rollupPlugin.BuildExecutor(pkgxOptions);
 
-  await executor.build(pkgxOptions);
+  await executor.run();
 
   await $`rm -rf ./output/esm/.dts`.quiet();
 

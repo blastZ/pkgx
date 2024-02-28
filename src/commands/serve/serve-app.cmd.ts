@@ -3,7 +3,8 @@ import { resolve } from 'node:path';
 import { type Command } from 'commander';
 import { $, cd } from 'zx';
 
-import { RollupExecutor } from '@/executors/rollup';
+import { ServeExecutor } from '@libs/pkgx-plugin-rollup';
+
 import { PkgxCmdOptions } from '@/interfaces';
 import { getPkgxOptions } from '@/utils';
 
@@ -16,9 +17,9 @@ async function serve(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
 
   await $`rm -rf ${pkgxOptions.outputDirName}`.quiet();
 
-  const executor = new RollupExecutor();
+  const executor = new ServeExecutor(pkgxOptions);
 
-  await executor.serve(pkgxOptions);
+  await executor.run();
 }
 
 async function serveApp(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {

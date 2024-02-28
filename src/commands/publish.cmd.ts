@@ -1,8 +1,8 @@
 import { $, cd } from 'zx';
 
 import { NpmGenerator } from '@libs/pkgx-generator-npm';
+import { BuildExecutor } from '@libs/pkgx-plugin-rollup';
 
-import { RollupExecutor } from '../executors/rollup/index.js';
 import { PkgxCmdOptions } from '../interfaces/index.js';
 import { changeWorkingDirectory, getPkgxOptions } from '../utils/index.js';
 
@@ -15,9 +15,9 @@ async function publish(pkgRelativePath: string, cmdOptions: PkgxCmdOptions) {
 
   await $`rm -rf ${outputDirName}`.quiet();
 
-  const executor = new RollupExecutor();
+  const executor = new BuildExecutor(pkgxOptions);
 
-  await executor.build(pkgxOptions);
+  await executor.run();
 
   await $`rm -rf ${outputDirName}/esm/.dts`.quiet();
 
