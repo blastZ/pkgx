@@ -5,10 +5,10 @@ import { type Command } from 'commander';
 import dayjs from 'dayjs';
 import { $, chalk } from 'zx';
 
-import { getPkgJson } from '@libs/pkgx-plugin-devkit';
+import { __dirname, getPkgJson } from '@libs/pkgx-plugin-devkit';
 
 import { CmdBuildImageOptions } from '@/interfaces';
-import { __dirname, logger } from '@/utils';
+import { logger } from '@/utils';
 
 async function getTag() {
   const date = dayjs(new Date()).format('YYYYMMDD');
@@ -60,7 +60,13 @@ async function build(pkgRelativePath: string, options: CmdBuildImageOptions) {
   ];
 
   if (pkgxDockerfile) {
-    flags.push('-f', resolve(__dirname, '../templates/pkgx.Dockerfile'));
+    flags.push(
+      '-f',
+      resolve(
+        __dirname,
+        '../libs/pkgx-plugin-docker/templates/pkgx.Dockerfile',
+      ),
+    );
   }
 
   if (options.debug || !options.cache) {

@@ -1,11 +1,13 @@
 import { type Command } from 'commander';
 
-import { DockerGenerator } from '../../generators/docker/generator.js';
+import {
+  DockerfileGenerator,
+  DockerignoreGenerator,
+} from '@libs/pkgx-plugin-docker';
 
 async function generateDocker() {
-  const generator = new DockerGenerator();
-
-  await generator.generate();
+  await new DockerfileGenerator().run();
+  await new DockerignoreGenerator().run();
 }
 
 export function createGenerateDockerCommand(generateCommand: Command) {

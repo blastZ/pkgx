@@ -27,9 +27,6 @@
       "@/commands": [
         "./src/commands/index.js"
       ],
-      "@/executors/rollup": [
-        "./src/executors/rollup/index.js"
-      ],
       "@libs/pkgx-plugin-devkit": [
         "./libs/pkgx-plugin-devkit/src/index.js"
       ],
@@ -38,6 +35,9 @@
       ],
       "@libs/pkgx-plugin-rollup": [
         "./libs/pkgx-plugin-rollup/src/index.js"
+      ],
+      "@libs/pkgx-plugin-docker": [
+        "./libs/pkgx-plugin-docker/src/index.js"
       ]
     }
   },

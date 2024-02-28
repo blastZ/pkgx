@@ -1,4 +1,3 @@
-export * from './__dirname.util.js';
 export * from './change-working-directory.util.js';
 export * from './command/index.js';
 export * from './get-cli-version.util.js';
