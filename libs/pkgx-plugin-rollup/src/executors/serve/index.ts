@@ -4,11 +4,7 @@ import { clearTimeout } from 'node:timers';
 import chokidar from 'chokidar';
 import { watch, type RollupOptions } from 'rollup';
 
-import {
-  copyFiles,
-  parseAssets,
-  type PkgxOptions,
-} from '@libs/pkgx-plugin-devkit';
+import { copyFiles, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 import { getRollupOptions } from '../../utils/get-rollup-options.js';
 import { handleError } from '../../utils/handle-error.js';
@@ -126,10 +122,12 @@ export class ServeExecutor {
   }
 
   async run() {
-    const rollupOptions = getRollupOptions(this.pkgxOptions);
+    const rollupOptions = await getRollupOptions(this.pkgxOptions);
 
     this.startWatch(rollupOptions);
 
-    await copyFiles(parseAssets(this.pkgxOptions));
+    await copyFiles(this.pkgxOptions.assets, {
+      destDir: this.pkgxOptions.outputDirName,
+    });
   }
 }

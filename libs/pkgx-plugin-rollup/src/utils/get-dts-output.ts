@@ -6,11 +6,11 @@ import { dts } from 'rollup-plugin-dts';
 
 import { getTsconfigJson, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
-export function getDtsOutput(options: Required<PkgxOptions>) {
+export async function getDtsOutput(options: Required<PkgxOptions>) {
   const inputFileName = options.esmInputFileName.slice(0, -3) + '.d.ts';
   const outputDir = `${options.outputDirName}`;
 
-  const tsconfigJson = getTsconfigJson();
+  const tsconfigJson = await getTsconfigJson();
 
   let targetDir = '';
 

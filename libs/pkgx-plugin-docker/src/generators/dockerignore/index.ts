@@ -23,7 +23,7 @@ export class DockerignoreGenerator {
 
     await $`cp ${resolve(
       __dirname,
-      '../libs/pkgx-plugin-docker/templates/pkgx.Dockerfile.dockerignore',
+      '../templates/pkgx.Dockerfile.dockerignore',
     )} ./.dockerignore`.quiet();
 
     logger.info(chalk.green(`create .dockerignore successfully`));

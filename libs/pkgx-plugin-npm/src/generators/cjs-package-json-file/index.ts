@@ -12,7 +12,7 @@ export class CjsPackageJsonFileGenerator {
   constructor(private options: Required<PkgxOptions>) {}
 
   async run() {
-    const pkgJson = getPkgJson();
+    const pkgJson = await getPkgJson();
 
     const templatePkgJson = CJS_TEMPLATE;
 

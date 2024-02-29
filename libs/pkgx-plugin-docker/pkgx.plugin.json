@@ -1,0 +1,11 @@
+{
+  "name": "@pkgx/docker",
+  "generators": {
+    "dockerfile": {
+      "factory": "DockerfileGenerator"
+    },
+    "dockerignore": {
+      "factory": "DockerignoreGenerator"
+    }
+  }
+}

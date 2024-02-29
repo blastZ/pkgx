@@ -6,12 +6,12 @@ interface TsconfigJson {
   extends?: string;
 }
 
-export function getTsconfigJson(dir?: string) {
+export async function getTsconfigJson(dir?: string) {
   const tsconfigJsonPath = dir
     ? resolve(dir, './tsconfig.json')
     : './tsconfig.json';
 
-  const tsconfigJson = readJsonFile<TsconfigJson>(tsconfigJsonPath);
+  const tsconfigJson = await readJsonFile<TsconfigJson>(tsconfigJsonPath);
 
   return tsconfigJson;
 }

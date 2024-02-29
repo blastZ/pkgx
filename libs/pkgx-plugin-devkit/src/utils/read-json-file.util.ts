@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
 import { basename } from 'node:path';
 
 import { chalk } from 'zx';
@@ -7,7 +7,7 @@ import { logger } from './logger.util.js';
 
 const parsedMap = new Map<string, unknown>();
 
-export function readJsonFile<T>(path: string): T {
+export async function readJsonFile<T>(path: string): Promise<T> {
   const parsed = parsedMap.get(path);
 
   if (parsed) {
@@ -17,7 +17,7 @@ export function readJsonFile<T>(path: string): T {
   let jsonStr: string;
 
   try {
-    jsonStr = readFileSync(path).toString();
+    jsonStr = (await readFile(path)).toString();
   } catch (err) {
     logger.warn(
       chalk.yellow(

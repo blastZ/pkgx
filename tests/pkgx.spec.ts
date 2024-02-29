@@ -58,4 +58,47 @@ describe('pkgx', () => {
     expect(pkgJson.scripts.start).toBe('node esm/index.js');
     expect(pkgJson.scripts.test).toBe('echo test');
   }, 5000);
+
+  it('should work with config generator', async () => {
+    const dir = 'tests/projects/temp-1';
+
+    await $`mkdir -p ${dir}`.quiet();
+
+    await $`pkgx g config ${dir}`.quiet();
+
+    const t = await fs.exists(resolve(dir, 'pkgx.config.js'));
+
+    expect(t).toBe(true);
+
+    await $`rm -rf ${dir}`.quiet();
+  });
+
+  it('should work with docker plugin', async () => {
+    const dir = 'tests/projects/temp-2';
+
+    await $`mkdir -p ${dir}`.quiet();
+
+    await $`pkgx g dockerfile ${dir}`.quiet();
+    await $`pkgx g dockerignore ${dir}`.quiet();
+
+    const t1 = await fs.exists(resolve(dir, 'Dockerfile'));
+    const t2 = await fs.exists(resolve(dir, '.dockerignore'));
+
+    expect(t1).toBe(true);
+    expect(t2).toBe(true);
+
+    await $`rm -rf ${dir}`.quiet();
+    await $`mkdir -p ${dir}`.quiet();
+
+    await $`pkgx g @pkgx/docker:dockerfile ${dir}`.quiet();
+    await $`pkgx g @pkgx/docker:dockerignore ${dir}`.quiet();
+
+    const t3 = await fs.exists(resolve(dir, 'Dockerfile'));
+    const t4 = await fs.exists(resolve(dir, '.dockerignore'));
+
+    expect(t3).toBe(true);
+    expect(t4).toBe(true);
+
+    await $`rm -rf ${dir}`.quiet();
+  });
 });

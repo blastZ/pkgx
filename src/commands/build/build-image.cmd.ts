@@ -31,7 +31,7 @@ async function build(pkgRelativePath: string, options: CmdBuildImageOptions) {
     logger.info('Dockerfile not found, use pkgx.Dockerfile');
   }
 
-  const pkgJson = getPkgJson(pkgDir);
+  const pkgJson = await getPkgJson(pkgDir);
 
   const appName = pkgJson.name;
   const appFolder = basename(pkgDir);

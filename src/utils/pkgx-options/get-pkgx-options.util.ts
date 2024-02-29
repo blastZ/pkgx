@@ -9,7 +9,7 @@ export async function getPkgxOptions(
 ) {
   const configFileOptions = await getPkgxConfigFileOptions();
 
-  const filledOptions = fillOptionsWithDefaultValue(
+  const filledOptions = await fillOptionsWithDefaultValue(
     configFileOptions,
     cmdOptions,
     internalOptions,

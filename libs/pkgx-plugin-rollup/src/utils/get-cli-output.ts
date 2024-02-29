@@ -38,6 +38,7 @@ export function getCliOutput(options: Required<PkgxOptions>) {
         file: `${outputDir}/index.js`,
         format: 'esm',
         sourcemap: options.sourceMap,
+        inlineDynamicImports: true,
       },
     ],
     plugins,

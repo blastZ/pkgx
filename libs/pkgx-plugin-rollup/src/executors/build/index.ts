@@ -7,11 +7,7 @@ import {
 } from 'rollup';
 import { $ } from 'zx';
 
-import {
-  copyFiles,
-  parseAssets,
-  type PkgxOptions,
-} from '@libs/pkgx-plugin-devkit';
+import { copyFiles, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 import { getRollupOptions } from '../../utils/get-rollup-options.js';
 import { handleError } from '../../utils/handle-error.js';
@@ -72,7 +68,7 @@ export class BuildExecutor {
   }
 
   async run() {
-    const rollupOptions = getRollupOptions(this.pkgxOptions);
+    const rollupOptions = await getRollupOptions(this.pkgxOptions);
 
     for (const options of rollupOptions) {
       await this.startBundle(options);
@@ -80,6 +76,8 @@ export class BuildExecutor {
 
     await $`rm -rf ${this.pkgxOptions.outputDirName}/esm/.dts`.quiet();
 
-    await copyFiles(parseAssets(this.pkgxOptions));
+    await copyFiles(this.pkgxOptions.assets, {
+      destDir: this.pkgxOptions.outputDirName,
+    });
   }
 }

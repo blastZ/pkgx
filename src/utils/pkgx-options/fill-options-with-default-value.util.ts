@@ -2,8 +2,8 @@ import { getPkgJson, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 import { InternalOptions, PkgxCmdOptions } from '@/interfaces';
 
-function getPackageBasedExternal(internalOptions: InternalOptions) {
-  const pkgJson = getPkgJson();
+async function getPackageBasedExternal(internalOptions: InternalOptions) {
+  const pkgJson = await getPkgJson();
 
   const dependencies = Object.keys(pkgJson.dependencies || {});
   const peerDependencies = Object.keys(pkgJson.peerDependencies || {});
@@ -21,7 +21,7 @@ function getPackageBasedExternal(internalOptions: InternalOptions) {
   return external;
 }
 
-function getExternal(
+async function getExternal(
   options: PkgxOptions,
   cmdOptions: PkgxCmdOptions,
   internalOptions: InternalOptions,
@@ -31,7 +31,7 @@ function getExternal(
   const cjsExcludeFromExternal = options.cjsExcludeFromExternal || [];
 
   let external = packageBasedExternal
-    ? getPackageBasedExternal(internalOptions)
+    ? await getPackageBasedExternal(internalOptions)
     : [];
 
   external = external.concat(options.external || []);
@@ -59,7 +59,7 @@ function getExclude(
   return exclude.concat(options.exclude || []);
 }
 
-export function fillOptionsWithDefaultValue(
+export async function fillOptionsWithDefaultValue(
   options: PkgxOptions,
   cmdOptions: PkgxCmdOptions,
   internalOptions: InternalOptions = {},
@@ -67,7 +67,7 @@ export function fillOptionsWithDefaultValue(
   const inputFileName =
     cmdOptions.inputFileName || options.inputFileName || 'index.ts';
 
-  const { external, cjsExternal } = getExternal(
+  const { external, cjsExternal } = await getExternal(
     options,
     cmdOptions,
     internalOptions,

@@ -23,7 +23,7 @@ export class DockerfileGenerator {
 
     await $`cp ${resolve(
       __dirname,
-      '../libs/pkgx-plugin-docker/templates/pkgx.Dockerfile',
+      '../templates/pkgx.Dockerfile',
     )} ./Dockerfile`.quiet();
 
     logger.info(chalk.green(`create Dockerfile successfully`));

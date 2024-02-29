@@ -12,7 +12,7 @@ export class PackageJsonFileGenerator {
   constructor(private pkgxOptions: Required<PkgxOptions>) {}
 
   async run() {
-    const pkgJson = getPkgJson();
+    const pkgJson = await getPkgJson();
 
     const templatePkgJson = ESM_TEMPLATE;
 
