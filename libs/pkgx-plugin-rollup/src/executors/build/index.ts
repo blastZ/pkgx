@@ -14,9 +14,6 @@ import { handleError } from '../../utils/handle-error.js';
 import { logger } from '../../utils/logger.util.js';
 import { relativeId } from '../../utils/relative-id.js';
 
-/**
- * Executor: @pkgx/rollup:build
- */
 export class BuildExecutor {
   constructor(private pkgxOptions: Required<PkgxOptions>) {}
 

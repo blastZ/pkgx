@@ -6,9 +6,6 @@ import { $, chalk } from 'zx';
 
 import { __dirname, logger } from '@libs/pkgx-plugin-devkit';
 
-/**
- * Generator: @pkgx/docker:dockerfile
- */
 export class DockerfileGenerator {
   async checkDockerfileExists() {
     const filesInDirectory = new Set(await readdir(process.cwd()));

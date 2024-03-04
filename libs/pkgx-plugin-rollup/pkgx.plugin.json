@@ -1,0 +1,52 @@
+{
+  "name": "@pkgx/rollup",
+  "executors": {
+    "build-package": {
+      "factory": "BuildPackageExecutor",
+      "aliases": ["build"],
+      "cmd": {
+        "arguments": [
+          {
+            "flags": "<relative-path>",
+            "description": "relative path to package root folder"
+          }
+        ],
+        "options": [
+          {
+            "flags": "--input-file-name <inputFileName>",
+            "description": "input file name"
+          },
+          {
+            "flags": "--input-dir <inputDir>",
+            "description": "input dir"
+          },
+          {
+            "flags": "--pack",
+            "description": "pack package after build"
+          }
+        ]
+      }
+    },
+    "build-app": {
+      "factory": "BuildAppExecutor",
+      "cmd": {
+        "arguments": [
+          {
+            "flags": "<relative-path>",
+            "description": "relative path to package root folder"
+          }
+        ],
+        "options": [
+          {
+            "flags": "--input-file-name <inputFileName>",
+            "description": "input file name"
+          },
+          {
+            "flags": "--input-dir <inputDir>",
+            "description": "input dir"
+          }
+        ]
+      }
+    }
+  }
+}

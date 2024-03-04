@@ -3,7 +3,7 @@ import { chalk } from 'zx';
 
 import { logger } from '@libs/pkgx-plugin-devkit';
 
-import { PluginHelper, getPkgxOptions, parsePlugins } from '@/utils';
+import { PluginHelper, parsePlugins } from '@/utils';
 
 async function run(inputExecutor: string, userArgs: string[]) {
   const plugins = await parsePlugins();
@@ -21,12 +21,9 @@ async function run(inputExecutor: string, userArgs: string[]) {
     const cmdArguments = args.slice(0, -2);
     const cmdOptions = args.at(-2) || {};
 
-    const pkgxOptions = await getPkgxOptions();
-
     logger.info(chalk.underline(`${pluginName}:${executorName}`));
 
     await pluginHelper.runExecutor(pluginName, executorName, {
-      pkgxOptions,
       cmdArguments,
       cmdOptions,
     });
