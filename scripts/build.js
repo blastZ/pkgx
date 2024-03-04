@@ -4,7 +4,7 @@ import { $, cd } from 'zx';
 
 async function buildPlugins(rollupPlugin, pkgxOptions) {
   await Promise.all(
-    ['pkgx-plugin-docker'].map((pluginName) => {
+    ['pkgx-plugin-docker', 'pkgx-plugin-web'].map((pluginName) => {
       return new rollupPlugin.BuildExecutor({
         ...pkgxOptions,
         inputDir: `libs/${pluginName}/src`,

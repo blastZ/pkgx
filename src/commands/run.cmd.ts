@@ -23,9 +23,7 @@ async function run(inputExecutor: string, userArgs: string[]) {
 
     const pkgxOptions = await getPkgxOptions();
 
-    logger.info(
-      `run executor ${chalk.underline(`${pluginName}:${executorName}`)}`,
-    );
+    logger.info(chalk.underline(`${pluginName}:${executorName}`));
 
     await pluginHelper.runExecutor(pluginName, executorName, {
       pkgxOptions,

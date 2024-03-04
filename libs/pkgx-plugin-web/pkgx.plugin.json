@@ -1,0 +1,26 @@
+{
+  "name": "@pkgx/web",
+  "executors": {
+    "serve-static": {
+      "factory": "ServeStaticExecutor",
+      "cmd": {
+        "arguments": [
+          {
+            "flags": "<relative-path>",
+            "description": "relative path to root folder"
+          }
+        ],
+        "options": [
+          {
+            "flags": "-p, --port <port>",
+            "description": "port to listen"
+          },
+          {
+            "flags": "--cors",
+            "description": "enable cors"
+          }
+        ]
+      }
+    }
+  }
+}
