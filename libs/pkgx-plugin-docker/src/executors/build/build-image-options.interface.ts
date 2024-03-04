@@ -1,4 +1,4 @@
-export interface CmdBuildImageOptions {
+export interface BuildImageOptions {
   host?: string;
   namespace?: string;
   repo?: string;

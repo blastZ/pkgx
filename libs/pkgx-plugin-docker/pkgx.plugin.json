@@ -7,5 +7,52 @@
     "dockerignore": {
       "factory": "DockerignoreGenerator"
     }
+  },
+  "executors": {
+    "build": {
+      "factory": "BuildExecutor",
+      "cmd": {
+        "arguments": [
+          {
+            "flags": "<relative-path>",
+            "description": "relative path to app folder"
+          }
+        ],
+        "options": [
+          {
+            "flags": "--host <host>",
+            "description": "host name"
+          },
+          {
+            "flags": "--namespace <namespace>",
+            "description": "namespace"
+          },
+          {
+            "flags": "--repo <repo>",
+            "description": "repository"
+          },
+          {
+            "flags": "--progress <progress>",
+            "description": "type of progress output (auto, plain, tty). Use plain to show container output (default \"auto\")"
+          },
+          {
+            "flags": "--no-cache",
+            "description": "do not use cache when building the image"
+          },
+          {
+            "flags": "--target <target>",
+            "description": "set target build stage to build"
+          },
+          {
+            "flags": "--debug",
+            "description": "debug mode, set progress to plain and no-cache to true"
+          },
+          {
+            "flags": "--dry-run",
+            "description": "dry run"
+          }
+        ]
+      }
+    }
   }
 }

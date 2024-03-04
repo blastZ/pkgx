@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
 import { program } from 'commander';
+import { chalk } from 'zx';
+
+import { logger } from '@libs/pkgx-plugin-devkit';
 
 import {
   createBuildCommand,
   createGenerateCommand,
+  createRunCommand,
   createServeCommand,
   publishCommand,
   replaceModuleSuffixCommand,
@@ -15,13 +19,13 @@ import {
   addPkgxCmdOptions,
   getCliVersion,
   initZx,
-  logger,
 } from '@/utils';
 
 initZx();
 
 program.version(getCliVersion(), '-v --version');
 
+program.addCommand(createRunCommand(), { isDefault: true });
 program.addCommand(createBuildCommand());
 program.addCommand(createServeCommand());
 program.addCommand(createGenerateCommand());
@@ -45,8 +49,8 @@ program
   .option('--index-dirs [indexDirs...]', 'replace suffix with index file path')
   .action(replaceModuleSuffixCommand);
 
-program.hook('preAction', () => {
-  logger.logCliVersion();
+program.hook('preAction', async () => {
+  logger.info(chalk.underline(`v${getCliVersion()}`));
 });
 
 addPackageRelativePathArg([test, publish]);

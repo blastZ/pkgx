@@ -7,5 +7,6 @@ export * from './utils/read-json-file.util.js';
 
 export * from './interfaces/copy-file-pattern.interface.js';
 export * from './interfaces/pkg-json.interface.js';
+export * from './interfaces/pkgx-context.interface.js';
 export * from './interfaces/pkgx-options.interface.js';
 export * from './interfaces/pkgx-plugin-definition.interface.js';
