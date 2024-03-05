@@ -29,18 +29,6 @@
       ],
       "@libs/pkgx-plugin-devkit": [
         "./libs/pkgx-plugin-devkit/src/index.js"
-      ],
-      "@libs/pkgx-plugin-npm": [
-        "./libs/pkgx-plugin-npm/src/index.js"
-      ],
-      "@libs/pkgx-plugin-rollup": [
-        "./libs/pkgx-plugin-rollup/src/index.js"
-      ],
-      "@libs/pkgx-plugin-docker": [
-        "./libs/pkgx-plugin-docker/src/index.js"
-      ],
-      "@libs/pkgx-plugin-nest": [
-        "./libs/pkgx-plugin-nest/src/index.js"
       ]
     }
   },

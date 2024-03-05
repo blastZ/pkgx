@@ -196,7 +196,9 @@ export class PluginHelper {
         __dirname,
         `../libs/${plugin.name.replace('@pkgx/', 'pkgx-plugin-')}/esm/index.js`,
       )
-    );
+    ).catch((err) => {
+      throw program.error(err.message || 'import plugin module failed');
+    });
 
     if (!pluginModule) {
       throw program.error('plugin module not found');

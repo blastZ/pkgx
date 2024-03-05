@@ -1,0 +1,16 @@
+{
+  "name": "@pkgx/npm",
+  "executors": {
+    "publish": {
+      "factory": "PublishExecutor",
+      "cmd": {
+        "arguments": [
+          {
+            "flags": "<relative-path>",
+            "description": "relative path to package root folder"
+          }
+        ]
+      }
+    }
+  }
+}

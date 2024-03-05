@@ -8,27 +8,17 @@ import { logger } from '@libs/pkgx-plugin-devkit';
 import {
   createGenerateCommand,
   createRunCommand,
-  publishCommand,
   replaceModuleSuffixCommand,
 } from '@/commands';
-import {
-  addPackageRelativePathArg,
-  addPkgxCmdOptions,
-  getCliVersion,
-  initZx,
-} from '@/utils';
+import { getCliVersion, initZx } from '@/utils';
 
 initZx();
 
 program.version(getCliVersion(), '-v --version');
 
 program.addCommand(createRunCommand(), { isDefault: true });
-program.addCommand(createGenerateCommand());
 
-const publish = program
-  .command('publish')
-  .description('publish package')
-  .action(publishCommand);
+program.addCommand(createGenerateCommand());
 
 program
   .command('replace-module-suffix')
@@ -42,10 +32,6 @@ program
 program.hook('preAction', async () => {
   logger.info(chalk.underline(`v${getCliVersion()}`));
 });
-
-addPackageRelativePathArg([publish]);
-
-addPkgxCmdOptions([publish]);
 
 program.configureOutput({
   writeErr: (str) => {
