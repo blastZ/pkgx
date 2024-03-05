@@ -7,12 +7,15 @@ import {
 } from 'rollup';
 import { $ } from 'zx';
 
-import { PkgxOptions, copyFiles } from '@libs/pkgx-plugin-devkit';
+import {
+  InternalOptions,
+  PkgxOptions,
+  copyFiles,
+  getFilledPkgxOptions,
+} from '@libs/pkgx-plugin-devkit';
 
 import { CjsPackageJsonFileGenerator } from '../../generators/cjs-package-json-file/index.js';
 import { PackageJsonFileGenerator } from '../../generators/package-json-file/index.js';
-import { InternalOptions } from '../../interfaces/internal-options.interface.js';
-import { getFilledPkgxOptions } from '../../utils/get-filled-pkgx-options.js';
 import { getRollupOptions } from '../../utils/get-rollup-options.js';
 import { handleError } from '../../utils/handle-error.js';
 import { logger } from '../../utils/logger.util.js';

@@ -210,6 +210,10 @@ export class PluginHelper {
 
     const pluginModule = await this.loadPluginModule(pluginName);
 
+    if (!pluginModule[generator.factory]) {
+      throw program.error('generator factory not found');
+    }
+
     const factory = new pluginModule[generator.factory]();
 
     await factory.run();
@@ -223,6 +227,10 @@ export class PluginHelper {
     const executor = this.getExecutor(pluginName, generatorName);
 
     const pluginModule = await this.loadPluginModule(pluginName);
+
+    if (!pluginModule[executor.factory]) {
+      throw program.error('executor factory not found');
+    }
 
     const factory = new pluginModule[executor.factory](context);
 

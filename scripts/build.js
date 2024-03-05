@@ -4,16 +4,19 @@ import { $, cd } from 'zx';
 
 async function buildPlugins(rollupPlugin) {
   await Promise.all(
-    ['pkgx-plugin-docker', 'pkgx-plugin-web', 'pkgx-plugin-rollup'].map(
-      (pluginName) => {
-        return new rollupPlugin.BuildExecutor({
-          inputDir: `libs/${pluginName}/src`,
-          outputDirName: `output/libs/${pluginName}`,
-          disableDtsOutput: true,
-          disableCjsOutput: true,
-        }).run();
-      },
-    ),
+    [
+      'pkgx-plugin-docker',
+      'pkgx-plugin-web',
+      'pkgx-plugin-rollup',
+      'pkgx-plugin-nest',
+    ].map((pluginName) => {
+      return new rollupPlugin.BuildExecutor({
+        inputDir: `libs/${pluginName}/src`,
+        outputDirName: `output/libs/${pluginName}`,
+        disableDtsOutput: true,
+        disableCjsOutput: true,
+      }).run();
+    }),
   );
 }
 

@@ -6,7 +6,6 @@ import { chalk } from 'zx';
 import { logger } from '@libs/pkgx-plugin-devkit';
 
 import {
-  createBuildCommand,
   createGenerateCommand,
   createRunCommand,
   publishCommand,
@@ -25,7 +24,6 @@ initZx();
 program.version(getCliVersion(), '-v --version');
 
 program.addCommand(createRunCommand(), { isDefault: true });
-program.addCommand(createBuildCommand());
 program.addCommand(createGenerateCommand());
 
 const test = program
