@@ -1,11 +1,20 @@
 import { ChildProcess, fork } from 'node:child_process';
+import { resolve } from 'node:path';
 import { clearTimeout } from 'node:timers';
 
 import chokidar from 'chokidar';
 import { watch, type RollupOptions } from 'rollup';
+import { $ } from 'zx';
 
-import { copyFiles, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
+import {
+  changeWorkingDirectory,
+  copyFiles,
+  getPkgxConfigFileOptions,
+  PkgxContext,
+  PkgxOptions,
+} from '@libs/pkgx-plugin-devkit';
 
+import { getFilledPkgxOptions } from '../../utils/get-filled-pkgx-options.js';
 import { getRollupOptions } from '../../utils/get-rollup-options.js';
 import { handleError } from '../../utils/handle-error.js';
 import { logger } from '../../utils/logger.util.js';
@@ -15,14 +24,17 @@ import { relativeId } from '../../utils/relative-id.js';
  * Executor: @pkgx/rollup:serve
  */
 export class ServeExecutor {
-  constructor(private pkgxOptions: Required<PkgxOptions>) {}
+  constructor(private context: PkgxContext) {}
 
-  startWatch(rollupOptions: RollupOptions[]) {
+  startWatch(
+    filledPkgxOptions: Required<PkgxOptions>,
+    rollupOptions: RollupOptions[],
+  ) {
     let child: ChildProcess | null = null;
     let timer: NodeJS.Timeout | null = null;
 
     const startChild = () => {
-      child = fork(`${this.pkgxOptions.outputDirName}/esm/index.js`, {
+      child = fork(`${filledPkgxOptions.outputDirName}/esm/index.js`, {
         execArgv: ['--enable-source-maps'],
       });
 
@@ -110,8 +122,8 @@ export class ServeExecutor {
       }
     });
 
-    if (this.pkgxOptions.watchExtra.length > 0) {
-      const extraWatcher = chokidar.watch(this.pkgxOptions.watchExtra);
+    if (filledPkgxOptions.watchExtra.length > 0) {
+      const extraWatcher = chokidar.watch(filledPkgxOptions.watchExtra);
 
       extraWatcher.on('change', (path) => {
         logger.logExtraWatcherChange(path);
@@ -122,12 +134,28 @@ export class ServeExecutor {
   }
 
   async run() {
-    const rollupOptions = await getRollupOptions(this.pkgxOptions);
+    const [relativePath] = this.context.cmdArguments;
+    const cmdOptions = this.context.cmdOptions;
 
-    this.startWatch(rollupOptions);
+    const pkgPath = resolve(process.cwd(), relativePath);
 
-    await copyFiles(this.pkgxOptions.assets, {
-      destDir: this.pkgxOptions.outputDirName,
+    await changeWorkingDirectory(pkgPath);
+
+    const pkgxOptions = await getPkgxConfigFileOptions();
+
+    const filledPkgxOptions = await getFilledPkgxOptions(
+      { ...pkgxOptions, ...cmdOptions },
+      { isServe: true },
+    );
+
+    await $`rm -rf ${filledPkgxOptions.outputDirName}`.quiet();
+
+    const rollupOptions = await getRollupOptions(filledPkgxOptions);
+
+    this.startWatch(filledPkgxOptions, rollupOptions);
+
+    await copyFiles(filledPkgxOptions.assets, {
+      destDir: filledPkgxOptions.outputDirName,
     });
   }
 }

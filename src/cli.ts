@@ -9,7 +9,6 @@ import {
   createBuildCommand,
   createGenerateCommand,
   createRunCommand,
-  createServeCommand,
   publishCommand,
   replaceModuleSuffixCommand,
   testCommand,
@@ -27,7 +26,6 @@ program.version(getCliVersion(), '-v --version');
 
 program.addCommand(createRunCommand(), { isDefault: true });
 program.addCommand(createBuildCommand());
-program.addCommand(createServeCommand());
 program.addCommand(createGenerateCommand());
 
 const test = program
