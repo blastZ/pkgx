@@ -1,0 +1,31 @@
+{
+  "name": "@pkgx/node",
+  "executors": {
+    "replace-module-suffix": {
+      "factory": "ReplaceModuleSuffixExecutor",
+      "aliases": ["rms"],
+      "cmd": {
+        "arguments": [
+          {
+            "flags": "<start-path>",
+            "description": "relative path to start file or folder"
+          },
+          {
+            "flags": "<old-suffix>",
+            "description": "old suffix"
+          },
+          {
+            "flags": "<new-suffix>",
+            "description": "new suffix"
+          }
+        ],
+        "options": [
+          {
+            "flags": "--index-dirs [indexDirs...]",
+            "description": "replace suffix with index file path"
+          }
+        ]
+      }
+    }
+  }
+}

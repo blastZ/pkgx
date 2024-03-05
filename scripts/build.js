@@ -10,6 +10,7 @@ async function buildPlugins(rollupPlugin) {
       'pkgx-plugin-rollup',
       'pkgx-plugin-nest',
       'pkgx-plugin-npm',
+      'pkgx-plugin-node',
     ].map((pluginName) => {
       return new rollupPlugin.BuildExecutor({
         inputDir: `libs/${pluginName}/src`,
