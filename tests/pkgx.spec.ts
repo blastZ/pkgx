@@ -42,7 +42,7 @@ describe('pkgx', () => {
   it('should build app', async () => {
     const dir = 'tests/projects/node-app';
 
-    await $`pkgx build app ${dir}`;
+    await $`pkgx build-app ${dir}`;
 
     const { app } = await import(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

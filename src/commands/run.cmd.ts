@@ -1,9 +1,8 @@
-import { Command } from 'commander';
 import { chalk } from 'zx';
 
 import { logger } from '@libs/pkgx-plugin-devkit';
 
-import { PluginHelper, parsePlugins } from '@/utils';
+import { Command, PluginHelper, parsePlugins } from '@/utils';
 
 async function run(inputExecutor: string, userArgs: string[]) {
   const plugins = await parsePlugins();

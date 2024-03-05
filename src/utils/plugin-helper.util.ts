@@ -98,7 +98,7 @@ export class PluginHelper {
       return name;
     }
 
-    if (['build', 'serve', 'test'].includes(name)) {
+    if (['build', 'build-app', 'serve', 'test'].includes(name)) {
       return `@pkgx/rollup:${name}`;
     }
 
@@ -218,7 +218,9 @@ export class PluginHelper {
 
     const factory = new pluginModule[generator.factory]();
 
-    await factory.run();
+    await factory.run().catch((err: any) => {
+      throw program.error(err);
+    });
   }
 
   async runExecutor(
@@ -236,6 +238,8 @@ export class PluginHelper {
 
     const factory = new pluginModule[executor.factory](context);
 
-    await factory.run();
+    await factory.run().catch((err: any) => {
+      throw program.error(err);
+    });
   }
 }

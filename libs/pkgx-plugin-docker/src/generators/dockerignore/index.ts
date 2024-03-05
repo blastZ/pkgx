@@ -1,7 +1,6 @@
 import { readdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-import { program } from 'commander';
 import { $, chalk } from 'zx';
 
 import { __dirname, logger } from '@libs/pkgx-plugin-devkit';
@@ -11,7 +10,7 @@ export class DockerignoreGenerator {
     const filesInDirectory = new Set(await readdir(process.cwd()));
 
     if (filesInDirectory.has('.dockerignore')) {
-      throw program.error('.dockerignore already exists');
+      throw new Error('.dockerignore already exists');
     }
   }
 
