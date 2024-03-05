@@ -38,6 +38,9 @@
       ],
       "@libs/pkgx-plugin-docker": [
         "./libs/pkgx-plugin-docker/src/index.js"
+      ],
+      "@libs/pkgx-plugin-nest": [
+        "./libs/pkgx-plugin-nest/src/index.js"
       ]
     }
   },

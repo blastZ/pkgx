@@ -10,7 +10,6 @@ import {
   createRunCommand,
   publishCommand,
   replaceModuleSuffixCommand,
-  testCommand,
 } from '@/commands';
 import {
   addPackageRelativePathArg,
@@ -25,11 +24,6 @@ program.version(getCliVersion(), '-v --version');
 
 program.addCommand(createRunCommand(), { isDefault: true });
 program.addCommand(createGenerateCommand());
-
-const test = program
-  .command('test')
-  .description('test package')
-  .action(testCommand);
 
 const publish = program
   .command('publish')
@@ -49,9 +43,9 @@ program.hook('preAction', async () => {
   logger.info(chalk.underline(`v${getCliVersion()}`));
 });
 
-addPackageRelativePathArg([test, publish]);
+addPackageRelativePathArg([publish]);
 
-addPkgxCmdOptions([test, publish]);
+addPkgxCmdOptions([publish]);
 
 program.configureOutput({
   writeErr: (str) => {

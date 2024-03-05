@@ -98,7 +98,7 @@ export class PluginHelper {
       return name;
     }
 
-    if (['build', 'serve'].includes(name)) {
+    if (['build', 'serve', 'test'].includes(name)) {
       return `@pkgx/rollup:${name}`;
     }
 
