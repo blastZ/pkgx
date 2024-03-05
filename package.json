@@ -1,6 +1,6 @@
 {
   "name": "@blastz/pkgx",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "The zero configuration tool for any repository",
   "type": "module",
   "homepage": "https://github.com/blastZ/pkgx",
@@ -29,6 +29,7 @@
     "zx": "^7.2.3"
   },
   "devDependencies": {
+    "@blastz/jest": "^0.2.0",
     "@rollup/plugin-virtual": "^3.0.2",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.3.1",
