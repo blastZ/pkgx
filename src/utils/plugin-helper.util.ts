@@ -93,10 +93,28 @@ export class PluginHelper {
     return { pluginName, targetName: fullTargetName };
   }
 
-  private parseInputName(type: TargetType, name: string) {
-    if (!name) {
+  private completeName(name: string) {
+    if (name.startsWith('@')) {
+      return name;
+    }
+
+    if (['build', 'serve'].includes(name)) {
+      return `@pkgx/rollup:${name}`;
+    }
+
+    if (name.includes(':') && !name.startsWith('@')) {
+      return `@pkgx/${name}`;
+    }
+
+    return name;
+  }
+
+  private parseInputName(type: TargetType, inputName: string) {
+    if (!inputName) {
       throw program.error(`${type} not provided`);
     }
+
+    const name = this.completeName(inputName);
 
     if (name.includes(':')) {
       const [pluginName, targetName] = name.split(':');

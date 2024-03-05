@@ -7,15 +7,24 @@ import {
 } from 'rollup';
 import { $ } from 'zx';
 
-import { copyFiles, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
+import { PkgxOptions, copyFiles } from '@libs/pkgx-plugin-devkit';
 
+import { CjsPackageJsonFileGenerator } from '../../generators/cjs-package-json-file/index.js';
+import { PackageJsonFileGenerator } from '../../generators/package-json-file/index.js';
+import { InternalOptions } from '../../interfaces/internal-options.interface.js';
+import { getFilledPkgxOptions } from '../../utils/get-filled-pkgx-options.js';
 import { getRollupOptions } from '../../utils/get-rollup-options.js';
 import { handleError } from '../../utils/handle-error.js';
 import { logger } from '../../utils/logger.util.js';
 import { relativeId } from '../../utils/relative-id.js';
 
 export class BuildExecutor {
-  constructor(private pkgxOptions: Required<PkgxOptions>) {}
+  private filledPkgxOptions: Required<PkgxOptions> | undefined;
+
+  constructor(
+    private pkgxOptions: PkgxOptions,
+    private internalOptions: InternalOptions = {},
+  ) {}
 
   async generateOutputs(
     bundle: RollupBuild,
@@ -64,17 +73,33 @@ export class BuildExecutor {
     logger.logBundleTime(outputFiles.join(', '), Date.now() - start);
   }
 
+  async getFilledPkgxOptions() {
+    if (!this.filledPkgxOptions) {
+      this.filledPkgxOptions = await getFilledPkgxOptions(
+        this.pkgxOptions,
+        this.internalOptions,
+      );
+    }
+
+    return this.filledPkgxOptions;
+  }
+
   async run() {
-    const rollupOptions = await getRollupOptions(this.pkgxOptions);
+    const filledOptions = await this.getFilledPkgxOptions();
+
+    const rollupOptions = await getRollupOptions(filledOptions);
 
     for (const options of rollupOptions) {
       await this.startBundle(options);
     }
 
-    await $`rm -rf ${this.pkgxOptions.outputDirName}/esm/.dts`.quiet();
+    await $`rm -rf ${filledOptions.outputDirName}/esm/.dts`.quiet();
 
-    await copyFiles(this.pkgxOptions.assets, {
-      destDir: this.pkgxOptions.outputDirName,
+    await new PackageJsonFileGenerator(filledOptions).run();
+    await new CjsPackageJsonFileGenerator(filledOptions).run();
+
+    await copyFiles(filledOptions.assets, {
+      destDir: filledOptions.outputDirName,
     });
   }
 }

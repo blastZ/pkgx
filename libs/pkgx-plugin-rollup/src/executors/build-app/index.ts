@@ -5,13 +5,8 @@ import {
   changeWorkingDirectory,
   getPkgxConfigFileOptions,
 } from '@libs/pkgx-plugin-devkit';
-import {
-  CjsPackageJsonFileGenerator,
-  PackageJsonFileGenerator,
-} from '@libs/pkgx-plugin-npm';
 
 import { CmdOptions } from '../../interfaces/cmd-options.interface.js';
-import { getFilledPkgxOptions } from '../../utils/get-filled-pkgx-options.js';
 import { BuildExecutor } from '../build/index.js';
 
 export class BuildAppExecutor {
@@ -25,23 +20,17 @@ export class BuildAppExecutor {
 
     const pkgxOptions = await getPkgxConfigFileOptions();
 
-    const filledOptions = await getFilledPkgxOptions(
-      {
-        ...pkgxOptions,
-        ...options,
-      },
-      {
-        isApp: true,
-      },
+    const executor = new BuildExecutor(
+      { ...pkgxOptions, ...options },
+      { isApp: true },
     );
 
-    const outputDirName = filledOptions.outputDirName;
+    const filledPkgxOptions = await executor.getFilledPkgxOptions();
+
+    const outputDirName = filledPkgxOptions.outputDirName;
 
     await $`rm -rf ${outputDirName}`.quiet();
 
-    await new BuildExecutor(filledOptions).run();
-
-    await new PackageJsonFileGenerator(filledOptions).run();
-    await new CjsPackageJsonFileGenerator(filledOptions).run();
+    await executor.run();
   }
 }

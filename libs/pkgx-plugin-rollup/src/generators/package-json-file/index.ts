@@ -3,13 +3,27 @@ import { writeFile } from 'node:fs/promises';
 import { getPkgJson, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 import { ESM_TEMPLATE } from '../../constants/esm-template.constant.js';
-import { fixDependencies } from '../../utils/fix-denpendencies.util.js';
 
-/**
- * Generator: @pkgx/npm:package-json-file
- */
 export class PackageJsonFileGenerator {
   constructor(private pkgxOptions: Required<PkgxOptions>) {}
+
+  fixDependencies(originDependencies: Record<string, string>) {
+    const targetDependencies: Record<string, string> = {};
+
+    Object.keys(originDependencies).map((key) => {
+      if (this.pkgxOptions.excludeFromExternal.includes(key)) {
+        // do noting
+      } else {
+        targetDependencies[key] = originDependencies[key];
+      }
+    });
+
+    if (Object.keys(targetDependencies).length < 1) {
+      return undefined;
+    }
+
+    return targetDependencies;
+  }
 
   async run() {
     const pkgJson = await getPkgJson();
@@ -24,12 +38,10 @@ export class PackageJsonFileGenerator {
       templatePkgJson.repository = undefined;
     }
 
-    templatePkgJson.dependencies = fixDependencies(
-      this.pkgxOptions,
+    templatePkgJson.dependencies = this.fixDependencies(
       pkgJson.dependencies || {},
     );
-    templatePkgJson.peerDependencies = fixDependencies(
-      this.pkgxOptions,
+    templatePkgJson.peerDependencies = this.fixDependencies(
       pkgJson.peerDependencies || {},
     );
 

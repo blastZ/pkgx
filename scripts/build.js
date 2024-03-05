@@ -2,17 +2,18 @@
 
 import { $, cd } from 'zx';
 
-async function buildPlugins(rollupPlugin, pkgxOptions) {
+async function buildPlugins(rollupPlugin) {
   await Promise.all(
-    ['pkgx-plugin-docker', 'pkgx-plugin-web'].map((pluginName) => {
-      return new rollupPlugin.BuildExecutor({
-        ...pkgxOptions,
-        inputDir: `libs/${pluginName}/src`,
-        outputDirName: `output/libs/${pluginName}`,
-        disableDtsOutput: true,
-        disableCjsOutput: true,
-      }).run();
-    }),
+    ['pkgx-plugin-docker', 'pkgx-plugin-web', 'pkgx-plugin-rollup'].map(
+      (pluginName) => {
+        return new rollupPlugin.BuildExecutor({
+          inputDir: `libs/${pluginName}/src`,
+          outputDirName: `output/libs/${pluginName}`,
+          disableDtsOutput: true,
+          disableCjsOutput: true,
+        }).run();
+      },
+    ),
   );
 }
 
@@ -23,15 +24,11 @@ async function build() {
 
   await $`rm -rf ./output`.quiet();
 
-  const { getPkgxOptions } = await import('../dist/src/utils/index.js');
-  const { rollupPlugin, npmPlugin } = await import('../dist/src/index.js');
+  const { rollupPlugin } = await import('../dist/src/index.js');
 
-  const pkgxOptions = await getPkgxOptions();
+  await buildPlugins(rollupPlugin);
 
-  await buildPlugins(rollupPlugin, pkgxOptions);
-
-  const cliPkgxOptions = {
-    ...pkgxOptions,
+  await new rollupPlugin.BuildExecutor({
     cliInputFileName: 'cli.ts',
     cjsExcludeFromExternal: ['zx', 'globby', 'pretty-ms'],
     assets: [
@@ -43,15 +40,10 @@ async function build() {
     alias: {
       '@libs/pkgx-plugin-devkit': './dist/libs/pkgx-plugin-devkit/src',
     },
-  };
-
-  await new rollupPlugin.BuildExecutor(cliPkgxOptions).run();
+  }).run();
 
   await $`mkdir -p ./output/templates`.quiet();
   await $`cp ./src/generators/ts/templates/* ./output/templates`.quiet();
-
-  await new npmPlugin.PackageJsonFileGenerator(cliPkgxOptions).run();
-  await new npmPlugin.CjsPackageJsonFileGenerator(cliPkgxOptions).run();
 
   cd('./output');
 

@@ -1,10 +1,6 @@
 import { getPkgJson, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
-interface InternalOptions {
-  isApp?: boolean;
-  isTest?: boolean;
-  isServe?: boolean;
-}
+import { InternalOptions } from '../interfaces/internal-options.interface.js';
 
 async function getPackageBasedExternal(internalOptions: InternalOptions) {
   const pkgJson = await getPkgJson();
