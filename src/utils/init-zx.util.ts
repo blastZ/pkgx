@@ -2,6 +2,8 @@ import { $, chalk, log, type LogEntry } from 'zx';
 
 import { logger } from '@libs/pkgx-plugin-devkit';
 
+process.env.FORCE_COLOR = '1';
+
 function customLog(entry: LogEntry) {
   switch (entry.kind) {
     case 'cd':

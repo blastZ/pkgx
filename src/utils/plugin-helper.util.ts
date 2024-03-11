@@ -98,8 +98,12 @@ export class PluginHelper {
       return name;
     }
 
-    if (['build', 'build-app', 'serve', 'test'].includes(name)) {
+    if (['build', 'build-app', 'serve'].includes(name)) {
       return `@pkgx/rollup:${name}`;
+    }
+
+    if (['test'].includes(name)) {
+      return `@pkgx/jest:${name}`;
     }
 
     if (name.includes(':') && !name.startsWith('@')) {

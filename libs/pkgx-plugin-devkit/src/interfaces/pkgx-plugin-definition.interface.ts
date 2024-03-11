@@ -7,6 +7,7 @@ export interface PkgxExecutorDefinition {
   factory: string;
   aliases?: string[];
   cmd?: {
+    passThrough?: boolean;
     arguments?: {
       flags: string;
       description?: string;

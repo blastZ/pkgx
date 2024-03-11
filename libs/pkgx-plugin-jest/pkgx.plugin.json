@@ -1,0 +1,11 @@
+{
+  "name": "@pkgx/jest",
+  "executors": {
+    "test": {
+      "factory": "TestExecutor",
+      "cmd": {
+        "passThrough": true
+      }
+    }
+  }
+}

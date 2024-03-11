@@ -17,10 +17,17 @@ async function run(inputExecutor: string, userArgs: string[]) {
   const executor = pluginHelper.getExecutor(pluginName, executorName);
 
   command.action(async (...args: any[]) => {
-    const cmdArguments = args.slice(0, -2);
-    const cmdOptions = args.at(-2) || {};
-
     logger.info(chalk.underline(`${pluginName}:${executorName}`));
+
+    let cmdArguments;
+    let cmdOptions;
+    if (executor.cmd?.passThrough) {
+      cmdArguments = args.at(-1).args;
+      cmdOptions = {};
+    } else {
+      cmdArguments = args.slice(0, -2);
+      cmdOptions = args.at(-2) || {};
+    }
 
     await pluginHelper.runExecutor(pluginName, executorName, {
       cmdArguments,
@@ -35,6 +42,11 @@ async function run(inputExecutor: string, userArgs: string[]) {
   executor.cmd?.options?.forEach((opt) => {
     command.option(opt.flags, opt.description, opt.defaultValue);
   });
+
+  if (executor.cmd?.passThrough) {
+    command.allowExcessArguments();
+    command.allowUnknownOption();
+  }
 
   command.parse(userArgs, { from: 'user' });
 }

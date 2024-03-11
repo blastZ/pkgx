@@ -11,6 +11,7 @@ async function buildPlugins(rollupPlugin) {
       'pkgx-plugin-nest',
       'pkgx-plugin-npm',
       'pkgx-plugin-node',
+      'pkgx-plugin-jest',
     ].map((pluginName) => {
       return new rollupPlugin.BuildExecutor({
         inputDir: `libs/${pluginName}/src`,
