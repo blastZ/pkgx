@@ -88,6 +88,7 @@ export async function getFilledPkgxOptions(
     esmShim: options.esmShim ?? false,
     watchExtra: options.watchExtra ?? [],
     alias: options.alias || {},
+    serveEnvs: options.serveEnvs || {},
   };
 
   if (

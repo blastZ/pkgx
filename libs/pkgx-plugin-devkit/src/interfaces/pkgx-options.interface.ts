@@ -25,4 +25,5 @@ export interface PkgxOptions {
   esmShim?: boolean;
   watchExtra?: string[];
   alias?: Record<string, string>;
+  serveEnvs?: Record<string, string>;
 }

@@ -36,6 +36,11 @@ export class ServeExecutor {
     const startChild = () => {
       child = fork(`${filledPkgxOptions.outputDirName}/esm/index.js`, {
         execArgv: ['--enable-source-maps'],
+        env: {
+          ...process.env,
+          APP_ENV: 'local',
+          ...filledPkgxOptions.serveEnvs,
+        },
       });
 
       child.on('close', (code, signal) => {
