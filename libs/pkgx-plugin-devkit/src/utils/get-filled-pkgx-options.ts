@@ -1,3 +1,5 @@
+import { resolve } from 'node:path';
+
 import { InternalOptions } from '../interfaces/internal-options.interface.js';
 import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
@@ -49,7 +51,14 @@ function getExclude(options: PkgxOptions, internalOptions: InternalOptions) {
   const exclude = ['node_modules', 'dist', 'output'];
 
   if (!internalOptions.isTest) {
-    exclude.push('test', '**/*.spec.ts', '**/*.test.ts');
+    const rootTestDirs = [
+      resolve(process.cwd(), './test'),
+      resolve(process.cwd(), './tests'),
+    ];
+
+    const testDirPatterns = rootTestDirs.map((o) => o + '/**');
+
+    exclude.push(...testDirPatterns, '**/*.spec.ts', '**/*.test.ts');
   }
 
   return exclude.concat(options.exclude || []);
