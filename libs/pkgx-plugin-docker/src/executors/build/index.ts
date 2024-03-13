@@ -1,6 +1,7 @@
 import { readdir } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
 
+import { select } from '@inquirer/prompts';
 import dayjs from 'dayjs';
 import { $, chalk } from 'zx';
 
@@ -9,11 +10,15 @@ import {
   __dirname,
   getPkgJson,
   logger,
+  readPkgxWorkspaceConfigFile,
 } from '@libs/pkgx-plugin-devkit';
 
-import { BuildImageOptions } from './build-image-options.interface.js';
+import { BuildImageOptions } from './interfaces/build-image-options.interface.js';
+import { PluginOptions } from './interfaces/plugin-options.interface.js';
 
 export class BuildExecutor {
+  private pluginOptions: PluginOptions | undefined;
+
   constructor(private context: PkgxContext<BuildImageOptions>) {}
 
   async getTag() {
@@ -21,6 +26,89 @@ export class BuildExecutor {
     const commit = (await $`git log -n 1 --pretty=%h`.quiet()).toString();
 
     return `${date}-${commit.trim()}`;
+  }
+
+  private async getPluginOptions() {
+    if (this.pluginOptions) {
+      return this.pluginOptions;
+    }
+
+    const pkgxWorkspaceOptions = await readPkgxWorkspaceConfigFile();
+    const pluginOptions = pkgxWorkspaceOptions?.plugins?.['@pkgx/docker'];
+
+    this.pluginOptions = pluginOptions;
+
+    return this.pluginOptions;
+  }
+
+  private async getNamespace(hostUrl: string) {
+    const DEFAULT = 'library';
+
+    if (this.context.cmdOptions.namespace) {
+      return this.context.cmdOptions.namespace;
+    }
+
+    const pluginOptions = await this.getPluginOptions();
+
+    if (!pluginOptions || !pluginOptions.hosts) {
+      return DEFAULT;
+    }
+
+    const hosts = pluginOptions.hosts;
+
+    const hostKey = Object.keys(hosts).find((k) => hosts[k].url === hostUrl);
+
+    if (!hostKey) {
+      return DEFAULT;
+    }
+
+    const namespaces = pluginOptions.hosts[hostKey].namespaces;
+
+    if (!namespaces || Object.keys(namespaces).length < 1) {
+      return DEFAULT;
+    }
+
+    const namespace = await select({
+      message: 'Select a namespace',
+      choices: Object.keys(namespaces).map((k) => ({
+        name: k,
+        value: k,
+      })),
+    }).catch(() => {
+      throw new Error('No namespace selected');
+    });
+
+    return namespaces[namespace];
+  }
+
+  private async getHost() {
+    if (this.context.cmdOptions.host) {
+      return this.context.cmdOptions.host;
+    }
+
+    const pluginOptions = await this.getPluginOptions();
+
+    if (
+      !pluginOptions ||
+      !pluginOptions.hosts ||
+      Object.keys(pluginOptions.hosts).length < 1
+    ) {
+      return 'docker.io';
+    }
+
+    const hosts = pluginOptions.hosts;
+
+    const host = await select({
+      message: 'Select a host',
+      choices: Object.keys(hosts).map((k) => ({
+        name: k,
+        value: k,
+      })),
+    }).catch(() => {
+      throw new Error('No host selected');
+    });
+
+    return hosts[host].url;
   }
 
   async build() {
@@ -45,8 +133,8 @@ export class BuildExecutor {
     const appName = pkgJson.name;
     const appFolder = basename(pkgDir);
 
-    const host = options.host || 'docker.io';
-    const namespace = options.namespace || 'library';
+    const host = await this.getHost();
+    const namespace = await this.getNamespace(host);
     const repo = options.repo || appName;
     const progressType = options.progress || options.debug ? 'plain' : 'auto';
     const targetStage = options.target || 'prod';
