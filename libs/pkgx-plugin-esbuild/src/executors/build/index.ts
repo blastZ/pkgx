@@ -51,6 +51,8 @@ export class BuildExecutor {
       outfile: output,
       format: 'esm',
       packages: 'external',
+      // esbuild must explicitly set working directory
+      absWorkingDir: process.cwd(),
     });
 
     const time = Date.now() - start;
