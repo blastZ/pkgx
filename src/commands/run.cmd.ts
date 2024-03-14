@@ -1,3 +1,4 @@
+import { program } from 'commander';
 import { chalk } from 'zx';
 
 import { logger } from '@libs/pkgx-plugin-devkit';
@@ -36,7 +37,15 @@ async function run(inputExecutor: string, userArgs: string[]) {
   });
 
   executor.cmd?.arguments?.forEach((arg) => {
-    command.argument(arg.flags, arg.description);
+    if (typeof arg === 'string') {
+      if (arg === '<relative-path>') {
+        command.argument(arg, 'relative path to package root folder');
+      } else {
+        throw program.error(`Invalid argument: ${arg}`);
+      }
+    } else {
+      command.argument(arg.flags, arg.description);
+    }
   });
 
   executor.cmd?.options?.forEach((opt) => {

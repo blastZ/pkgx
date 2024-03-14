@@ -4,22 +4,8 @@
     "build-next": {
       "factory": "BuildNextExecutor",
       "cmd": {
-        "arguments": [
-          {
-            "flags": "<relative-path>",
-            "description": "relative path to package root folder"
-          }
-        ],
-        "options": [
-          {
-            "flags": "--input-file-name <inputFileName>",
-            "description": "input file name"
-          },
-          {
-            "flags": "--input-dir <inputDir>",
-            "description": "input dir"
-          }
-        ]
+        "arguments": ["<relative-path>"],
+        "includePkgxOptions": true
       }
     }
   }

@@ -5,12 +5,7 @@
       "factory": "BuildAppExecutor",
       "cmd": {
         "includePkgxOptions": true,
-        "arguments": [
-          {
-            "flags": "<relative-path>",
-            "description": "relative path to package root folder"
-          }
-        ]
+        "arguments": ["<relative-path>"]
       }
     }
   }

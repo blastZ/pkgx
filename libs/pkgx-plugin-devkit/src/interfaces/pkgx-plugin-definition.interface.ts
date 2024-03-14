@@ -8,10 +8,13 @@ export interface PkgxExecutorDefinition {
   aliases?: string[];
   cmd?: {
     passThrough?: boolean;
-    arguments?: {
-      flags: string;
-      description?: string;
-    }[];
+    arguments?: (
+      | {
+          flags: string;
+          description?: string;
+        }
+      | string
+    )[];
     options?: {
       flags: string;
       description?: string;
