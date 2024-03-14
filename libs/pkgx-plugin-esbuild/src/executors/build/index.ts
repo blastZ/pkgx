@@ -5,6 +5,8 @@ import { chalk } from 'zx';
 import {
   InternalOptions,
   PkgxOptions,
+  copyFiles,
+  createPackageJsonFile,
   getFilledPkgxOptions,
   logger,
 } from '@libs/pkgx-plugin-devkit';
@@ -32,11 +34,11 @@ export class BuildExecutor {
   }
 
   async run() {
-    const options = await this.getFilledPkgxOptions();
+    const filledOptions = await this.getFilledPkgxOptions();
 
-    const outputDir = `${options.outputDirName}/esm`;
+    const outputDir = `${filledOptions.outputDirName}/esm`;
 
-    const input = `${options.inputDir}/${options.esmInputFileName}`;
+    const input = `${filledOptions.inputDir}/${filledOptions.esmInputFileName}`;
     const output = `${outputDir}/index.js`;
 
     logger.info(`${cyanBold(input)} → ${cyanBold(output)}...`);
@@ -54,5 +56,11 @@ export class BuildExecutor {
     const time = Date.now() - start;
 
     logger.info(`created ${greenBold(output)} in ${greenBold(ms(time))}`);
+
+    await createPackageJsonFile(filledOptions);
+
+    await copyFiles(filledOptions.assets, {
+      destDir: filledOptions.outputDirName,
+    });
   }
 }

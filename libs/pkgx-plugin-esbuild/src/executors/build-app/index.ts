@@ -20,10 +20,7 @@ export class BuildAppExecutor {
 
     const pkgxOptions = await getPkgxConfigFileOptions();
 
-    const executor = new BuildExecutor(
-      { ...pkgxOptions, ...options },
-      { isApp: true },
-    );
+    const executor = new BuildExecutor({ ...pkgxOptions, ...options });
 
     const filledPkgxOptions = await executor.getFilledPkgxOptions();
 

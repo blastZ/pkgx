@@ -11,11 +11,10 @@ import {
   InternalOptions,
   PkgxOptions,
   copyFiles,
+  createPackageJsonFile,
   getFilledPkgxOptions,
 } from '@libs/pkgx-plugin-devkit';
 
-import { CjsPackageJsonFileGenerator } from '../../generators/cjs-package-json-file/index.js';
-import { PackageJsonFileGenerator } from '../../generators/package-json-file/index.js';
 import { getRollupOptions } from '../../utils/get-rollup-options.js';
 import { handleError } from '../../utils/handle-error.js';
 import { logger } from '../../utils/logger.util.js';
@@ -98,8 +97,7 @@ export class BuildExecutor {
 
     await $`rm -rf ${filledOptions.outputDirName}/esm/.dts`.quiet();
 
-    await new PackageJsonFileGenerator(filledOptions).run();
-    await new CjsPackageJsonFileGenerator(filledOptions).run();
+    await createPackageJsonFile(filledOptions);
 
     await copyFiles(filledOptions.assets, {
       destDir: filledOptions.outputDirName,

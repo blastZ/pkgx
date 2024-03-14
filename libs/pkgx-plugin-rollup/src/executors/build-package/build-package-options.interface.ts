@@ -1,5 +1,5 @@
-import { CmdOptions } from '../../interfaces/cmd-options.interface.js';
+import { PkgxCmdOptions } from '@libs/pkgx-plugin-devkit';
 
-export interface BuildPackageOptions extends CmdOptions {
+export interface BuildPackageOptions extends PkgxCmdOptions {
   pack?: boolean;
 }

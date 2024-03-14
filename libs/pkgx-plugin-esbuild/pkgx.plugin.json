@@ -1,0 +1,17 @@
+{
+  "name": "@pkgx/esbuild",
+  "executors": {
+    "build-app": {
+      "factory": "BuildAppExecutor",
+      "cmd": {
+        "includePkgxOptions": true,
+        "arguments": [
+          {
+            "flags": "<relative-path>",
+            "description": "relative path to package root folder"
+          }
+        ]
+      }
+    }
+  }
+}

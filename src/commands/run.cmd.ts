@@ -43,6 +43,11 @@ async function run(inputExecutor: string, userArgs: string[]) {
     command.option(opt.flags, opt.description, opt.defaultValue);
   });
 
+  if (executor.cmd?.includePkgxOptions) {
+    command.option('--input-file-name <inputFileName>', 'input file name');
+    command.option('--input-dir <inputDir>', 'input directory');
+  }
+
   if (executor.cmd?.passThrough) {
     command.allowExcessArguments();
     command.allowUnknownOption();

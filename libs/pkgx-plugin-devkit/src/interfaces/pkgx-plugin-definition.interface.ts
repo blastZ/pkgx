@@ -17,6 +17,7 @@ export interface PkgxExecutorDefinition {
       description?: string;
       defaultValue?: string | boolean | string[];
     }[];
+    includePkgxOptions?: boolean;
   };
 }
 
