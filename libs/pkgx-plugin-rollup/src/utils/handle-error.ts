@@ -1,6 +1,8 @@
 import { type RollupError } from 'rollup';
 import { chalk } from 'zx';
 
+import { relativeId } from './relative-id.js';
+
 export function handleError(error: RollupError, recover = false): void {
   const name = error.name || (error.cause as Error)?.name;
   const nameSection = name ? `${name}: ` : '';
@@ -10,6 +12,28 @@ export function handleError(error: RollupError, recover = false): void {
   const outputLines = [
     chalk.bold(chalk.red(`[!] ${chalk.bold(message.toString())}`)),
   ];
+
+  if (error.url) {
+    outputLines.push(chalk.cyan(error.url));
+  }
+
+  if (error.loc) {
+    outputLines.push(
+      `${relativeId((error.loc.file || error.id)!)} (${error.loc.line}:${error.loc.column})`,
+    );
+  } else if (error.id) {
+    outputLines.push(relativeId(error.id));
+  }
+
+  if (error.frame) {
+    outputLines.push(chalk.dim(error.frame));
+  }
+
+  if (error.stack) {
+    outputLines.push(
+      chalk.dim(error.stack?.replace(`${nameSection}${error.message}\n`, '')),
+    );
+  }
 
   outputLines.push('', '');
 
