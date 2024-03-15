@@ -6,9 +6,9 @@ interface TsconfigJson {
   extends?: string;
 }
 
-export async function getTsconfigJson(dir?: string) {
-  const tsconfigJsonPath = dir
-    ? resolve(dir, './tsconfig.json')
+export async function getTsconfigJson(cwd?: string) {
+  const tsconfigJsonPath = cwd
+    ? resolve(cwd, './tsconfig.json')
     : './tsconfig.json';
 
   const tsconfigJson = await readJsonFile<TsconfigJson>(tsconfigJsonPath);

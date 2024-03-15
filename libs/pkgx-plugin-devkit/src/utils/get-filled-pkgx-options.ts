@@ -1,12 +1,17 @@
 import { resolve } from 'node:path';
 
+import { PackageType } from '../enums/package-type.enum.js';
 import { InternalOptions } from '../interfaces/internal-options.interface.js';
 import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
 import { getPkgJson } from './get-pkg-json.util.js';
+import { getRootDirFromTsconfig } from './get-root-dir-from-tsconfig.util.js';
 
-async function getPackageBasedExternal(internalOptions: InternalOptions) {
-  const pkgJson = await getPkgJson();
+async function _getPackageBasedExternal(
+  pkgJsonDir: string,
+  internalOptions: InternalOptions,
+) {
+  const pkgJson = await getPkgJson(pkgJsonDir, true);
 
   const dependencies = Object.keys(pkgJson.dependencies || {});
   const peerDependencies = Object.keys(pkgJson.peerDependencies || {});
@@ -19,7 +24,30 @@ async function getPackageBasedExternal(internalOptions: InternalOptions) {
     external.push(...devDependecies);
   }
 
-  external.push(/^node:.+$/);
+  return external;
+}
+
+async function getPackageBasedExternal(internalOptions: InternalOptions) {
+  const external: (string | RegExp)[] = [];
+
+  const pkgExternal = await _getPackageBasedExternal(
+    process.cwd(),
+    internalOptions,
+  );
+
+  external.push(...pkgExternal, /^node:.+$/);
+
+  const rootDir = await getRootDirFromTsconfig();
+  const isWsp = rootDir !== process.cwd();
+
+  if (isWsp) {
+    const wspExternal = await _getPackageBasedExternal(
+      rootDir,
+      internalOptions,
+    );
+
+    external.push(...wspExternal);
+  }
 
   return external;
 }
@@ -64,6 +92,20 @@ function getExclude(options: PkgxOptions, internalOptions: InternalOptions) {
   return exclude.concat(options.exclude || []);
 }
 
+async function getPackageType(options: PkgxOptions) {
+  if (options.packageType) {
+    return options.packageType;
+  }
+
+  const packageJson = await getPkgJson();
+
+  if (!packageJson.type || packageJson.type === PackageType.Commonjs) {
+    return PackageType.Commonjs;
+  }
+
+  return PackageType.Module;
+}
+
 export async function getFilledPkgxOptions(
   options: PkgxOptions,
   internalOptions: InternalOptions = {},
@@ -98,6 +140,7 @@ export async function getFilledPkgxOptions(
     watchExtra: options.watchExtra ?? [],
     alias: options.alias || {},
     serveEnvs: options.serveEnvs || {},
+    packageType: await getPackageType(options),
   };
 
   if (
@@ -105,7 +148,12 @@ export async function getFilledPkgxOptions(
     internalOptions.isServe ||
     internalOptions.isTest
   ) {
-    filledOptions.disableCjsOutput = true;
+    if (filledOptions.packageType === PackageType.Module) {
+      filledOptions.disableCjsOutput = true;
+    } else {
+      filledOptions.disableEsmOutput = true;
+    }
+
     filledOptions.disableDtsOutput = true;
   }
 

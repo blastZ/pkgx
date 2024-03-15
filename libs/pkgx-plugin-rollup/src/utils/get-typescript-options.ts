@@ -2,7 +2,7 @@ import { resolve } from 'node:path';
 
 import { type RollupTypescriptOptions as RollupTypeScriptOptions } from '@rollup/plugin-typescript';
 
-import { type PkgxOptions } from '@libs/pkgx-plugin-devkit';
+import { PackageType, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 export function getTypescriptOptions(
   type: 'esm' | 'cjs' | 'bin',
@@ -12,7 +12,8 @@ export function getTypescriptOptions(
 
   const tsOptions: RollupTypeScriptOptions = {
     outDir: outputDir,
-    module: 'NodeNext',
+    module:
+      options.packageType === PackageType.Commonjs ? 'esnext' : 'NodeNext',
     exclude: options.exclude,
     sourceMap: options.sourceMap,
     sourceRoot: options.sourceMap

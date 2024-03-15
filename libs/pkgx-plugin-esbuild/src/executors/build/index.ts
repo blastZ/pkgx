@@ -49,7 +49,7 @@ export class BuildExecutor {
       entryPoints: [input],
       bundle: true,
       outfile: output,
-      format: 'esm',
+      format: filledOptions.disableEsmOutput ? 'cjs' : 'esm',
       packages: 'external',
       // esbuild must explicitly set working directory
       absWorkingDir: process.cwd(),

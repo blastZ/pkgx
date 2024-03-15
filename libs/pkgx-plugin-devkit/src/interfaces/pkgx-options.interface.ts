@@ -15,6 +15,7 @@ export interface PkgxOptions {
   assets?: (string | CopyFilePattern)[];
   exclude?: string[];
   sourceMap?: boolean;
+  packageType?: 'module' | 'commonjs';
   disableEsmOutput?: boolean;
   disableCjsOutput?: boolean;
   disableDtsOutput?: boolean;
