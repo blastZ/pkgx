@@ -1,3 +1,4 @@
+import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
 
 import { $, fs } from 'zx';
@@ -32,10 +33,29 @@ describe('pkgx', () => {
       ).toString(),
     ).toEqual('<p>home</p>');
 
+    const pkgJson = JSON.parse(
+      (await fs.readFile(resolve(dir, './output/package.json'))).toString(),
+    );
+
+    expect(pkgJson.name).toEqual('node-package');
+    expect(pkgJson.type).toEqual('module');
+    expect(pkgJson.main).toEqual('./cjs/index.js');
+    expect(pkgJson.exports).toEqual({
+      types: './index.d.ts',
+      require: './cjs/index.js',
+      import: './esm/index.js',
+    });
+    expect(pkgJson.types).toEqual('./index.d.ts');
+    expect(pkgJson.dependencies).toEqual({
+      dayjs: '^1.11.10',
+    });
+    expect(pkgJson.version).toEqual('1.5.2');
+
     const cjsPkgJson = JSON.parse(
       (await fs.readFile(resolve(dir, './output/cjs/package.json'))).toString(),
     );
 
+    expect(cjsPkgJson.name).toEqual('node-package');
     expect(cjsPkgJson.type).toEqual('commonjs');
   }, 5000);
 
@@ -44,19 +64,66 @@ describe('pkgx', () => {
 
     await $`pkgx build-app ${dir}`;
 
+    const pkgJson = JSON.parse(
+      (await fs.readFile(resolve(dir, './output/package.json'))).toString(),
+    );
+
+    expect(pkgJson.name).toEqual('node-app');
+    expect(pkgJson.type).toEqual('module');
+    expect(pkgJson.main).toEqual('./esm/index.js');
+    expect(pkgJson.types).toEqual('./index.d.ts');
+    expect(pkgJson.dependencies).toEqual({
+      chalk: '^5.3.0',
+      express: '^4.18.2',
+    });
+    expect(pkgJson.devDependencies).toBeUndefined();
+    expect(pkgJson.version).toEqual('1.3.1');
+    expect(pkgJson.scripts).toEqual({
+      start: 'node esm/index.js',
+      test: 'echo test',
+    });
+
     const { app } = await import(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      './projects/node-app/output/esm/index.js'
+      './projects/node-app/output'
     );
+
+    expect(app.listen).toBeDefined();
+  }, 5000);
+
+  it('should build cjs app', async () => {
+    const dir = 'tests/projects/node-cjs-app';
+
+    await $`pkgx build-app ${dir}`;
 
     const pkgJson = JSON.parse(
       (await fs.readFile(resolve(dir, './output/package.json'))).toString(),
     );
 
+    expect(pkgJson.name).toEqual('node-cjs-app');
+    expect(pkgJson.type).toBeUndefined();
+    expect(pkgJson.main).toEqual('./cjs/index.js');
+    expect(pkgJson.types).toEqual('./index.d.ts');
+    expect(pkgJson.dependencies).toEqual({
+      fastify: '^4.26.2',
+    });
+    expect(pkgJson.version).toEqual('2.2.2');
+    expect(pkgJson.scripts).toEqual({
+      start: 'node cjs/index.js',
+    });
+    expect(await fs.exists(resolve(dir, './output/cjs/package.json'))).toEqual(
+      false,
+    );
+
+    const require = createRequire(import.meta.url);
+    const {
+      app,
+    } = require(// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    './projects/node-cjs-app/output');
+
     expect(app.listen).toBeDefined();
-    expect(pkgJson.scripts.start).toBe('node esm/index.js');
-    expect(pkgJson.scripts.test).toBe('echo test');
   }, 5000);
 
   it('should work with config generator', async () => {

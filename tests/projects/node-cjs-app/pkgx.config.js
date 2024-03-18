@@ -1,7 +1,4 @@
-export default {
+module.exports = {
   inputFileName: 'app.ts',
-  customScripts: {
-    test: 'echo test',
-  },
   cjsExcludeFromExternal: ['chalk'],
 };
