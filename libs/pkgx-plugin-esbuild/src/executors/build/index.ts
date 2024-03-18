@@ -4,9 +4,9 @@ import { chalk } from 'zx';
 
 import {
   InternalOptions,
+  NpmHelper,
   PkgxOptions,
   copyFiles,
-  createPackageJsonFile,
   getFilledPkgxOptions,
   logger,
 } from '@libs/pkgx-plugin-devkit';
@@ -59,7 +59,7 @@ export class BuildExecutor {
 
     logger.info(`created ${greenBold(output)} in ${greenBold(ms(time))}`);
 
-    await createPackageJsonFile(filledOptions);
+    await new NpmHelper(process.cwd(), filledOptions).generatePackageFiles();
 
     await copyFiles(filledOptions.assets, {
       destDir: filledOptions.outputDirName,

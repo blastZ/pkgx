@@ -9,9 +9,9 @@ import { $ } from 'zx';
 
 import {
   InternalOptions,
+  NpmHelper,
   PkgxOptions,
   copyFiles,
-  createPackageJsonFile,
   getFilledPkgxOptions,
 } from '@libs/pkgx-plugin-devkit';
 
@@ -97,7 +97,7 @@ export class BuildExecutor {
 
     await $`rm -rf ${filledOptions.outputDirName}/esm/.dts`.quiet();
 
-    await createPackageJsonFile(filledOptions);
+    await new NpmHelper(process.cwd(), filledOptions).generatePackageFiles();
 
     await copyFiles(filledOptions.assets, {
       destDir: filledOptions.outputDirName,

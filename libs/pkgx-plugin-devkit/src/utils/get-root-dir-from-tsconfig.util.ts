@@ -5,14 +5,10 @@ import { getTsconfigJson } from './get-tsconfig-json.util.js';
 export async function getRootDirFromTsconfig(cwd: string = process.cwd()) {
   const tsconfigJson = await getTsconfigJson(cwd);
 
-  let rootDir = '';
+  let rootDir = cwd;
 
   if (tsconfigJson.extends) {
-    rootDir = resolve('.', dirname(tsconfigJson.extends));
-  }
-
-  if (rootDir === '') {
-    return process.cwd();
+    rootDir = resolve(rootDir, dirname(tsconfigJson.extends));
   }
 
   return rootDir;
