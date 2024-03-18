@@ -11,6 +11,7 @@ import {
   copyFiles,
   getFilledPkgxOptions,
   getPkgxConfigFileOptions,
+  PackageType,
   PkgxContext,
   PkgxOptions,
 } from '@libs/pkgx-plugin-devkit';
@@ -33,15 +34,21 @@ export class ServeExecutor {
     let child: ChildProcess | null = null;
     let timer: NodeJS.Timeout | null = null;
 
+    const startFolder =
+      filledPkgxOptions.packageType === PackageType.Module ? 'esm' : 'cjs';
+
     const startChild = () => {
-      child = fork(`${filledPkgxOptions.outputDirName}/esm/index.js`, {
-        execArgv: ['--enable-source-maps'],
-        env: {
-          ...process.env,
-          APP_ENV: 'local',
-          ...filledPkgxOptions.serveEnvs,
+      child = fork(
+        `${filledPkgxOptions.outputDirName}/${startFolder}/index.js`,
+        {
+          execArgv: ['--enable-source-maps'],
+          env: {
+            ...process.env,
+            APP_ENV: 'local',
+            ...filledPkgxOptions.serveEnvs,
+          },
         },
-      });
+      );
 
       child.on('close', (code, signal) => {
         timer && clearTimeout(timer);
