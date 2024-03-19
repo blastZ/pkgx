@@ -1,5 +1,5 @@
 export interface PkgJson {
-  name: string;
+  name?: string;
   type?: 'module' | 'commonjs';
   main?: string;
   bin?: Record<string, string>;

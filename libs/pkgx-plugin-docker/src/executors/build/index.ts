@@ -8,8 +8,8 @@ import { $, chalk } from 'zx';
 import {
   PkgxContext,
   __dirname,
-  getPkgJson,
   logger,
+  readPackageJsonFile,
   readPkgxWorkspaceConfigFile,
 } from '@libs/pkgx-plugin-devkit';
 
@@ -128,9 +128,11 @@ export class BuildExecutor {
       logger.info('Dockerfile not found, use pkgx.Dockerfile');
     }
 
-    const pkgJson = await getPkgJson(pkgDir);
+    const pkgJson = await readPackageJsonFile(
+      resolve(pkgDir, './package.json'),
+    );
 
-    const appName = pkgJson.name;
+    const appName = pkgJson?.name || basename(pkgDir);
     const appFolder = basename(pkgDir);
 
     const host = await this.getHost();

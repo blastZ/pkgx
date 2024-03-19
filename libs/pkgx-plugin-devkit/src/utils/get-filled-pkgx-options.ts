@@ -4,22 +4,23 @@ import { PackageType } from '../enums/package-type.enum.js';
 import { InternalOptions } from '../interfaces/internal-options.interface.js';
 import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
-import { getPkgJson } from './get-pkg-json.util.js';
-import { getRootDirFromTsconfig } from './get-root-dir-from-tsconfig.util.js';
+import { getPackageType } from './get-package-type.util.js';
+import { parsePackageJsonPaths } from './parse-package-json-paths.util.js';
+import { readPackageJsonFile } from './read-package-json-file.util.js';
 
-async function _getPackageBasedExternal(
-  pkgJsonDir: string,
+async function parseDependenciesToExternal(
+  pkgJsonPath: string,
   internalOptions: InternalOptions,
 ) {
-  const pkgJson = await getPkgJson(pkgJsonDir, true);
+  const pkgJson = await readPackageJsonFile(pkgJsonPath);
 
-  const dependencies = Object.keys(pkgJson.dependencies || {});
-  const peerDependencies = Object.keys(pkgJson.peerDependencies || {});
+  const dependencies = Object.keys(pkgJson?.dependencies || {});
+  const peerDependencies = Object.keys(pkgJson?.peerDependencies || {});
 
   const external: (string | RegExp)[] = dependencies.concat(peerDependencies);
 
   if (internalOptions.isTest) {
-    const devDependecies = Object.keys(pkgJson.devDependencies || {});
+    const devDependecies = Object.keys(pkgJson?.devDependencies || {});
 
     external.push(...devDependecies);
   }
@@ -28,28 +29,20 @@ async function _getPackageBasedExternal(
 }
 
 async function getPackageBasedExternal(internalOptions: InternalOptions) {
-  const external: (string | RegExp)[] = [];
-
-  const pkgExternal = await _getPackageBasedExternal(
+  const { isWsp, pkgJsonPath, wspPkgJsonPath } = await parsePackageJsonPaths(
     process.cwd(),
+  );
+
+  const pkgExternal = await parseDependenciesToExternal(
+    pkgJsonPath,
     internalOptions,
   );
 
-  external.push(...pkgExternal, /^node:.+$/);
+  const wspPkgExternal = isWsp
+    ? await parseDependenciesToExternal(wspPkgJsonPath, internalOptions)
+    : [];
 
-  const rootDir = await getRootDirFromTsconfig();
-  const isWsp = rootDir !== process.cwd();
-
-  if (isWsp) {
-    const wspExternal = await _getPackageBasedExternal(
-      rootDir,
-      internalOptions,
-    );
-
-    external.push(...wspExternal);
-  }
-
-  return external;
+  return pkgExternal.concat(wspPkgExternal).concat([/^node:.+$/]);
 }
 
 async function getExternal(
@@ -92,20 +85,6 @@ function getExclude(options: PkgxOptions, internalOptions: InternalOptions) {
   return exclude.concat(options.exclude || []);
 }
 
-async function getPackageType(options: PkgxOptions) {
-  if (options.packageType) {
-    return options.packageType;
-  }
-
-  const packageJson = await getPkgJson();
-
-  if (!packageJson.type || packageJson.type === PackageType.Commonjs) {
-    return PackageType.Commonjs;
-  }
-
-  return PackageType.Module;
-}
-
 export async function getFilledPkgxOptions(
   options: PkgxOptions,
   internalOptions: InternalOptions = {},
@@ -140,7 +119,9 @@ export async function getFilledPkgxOptions(
     watchExtra: options.watchExtra ?? [],
     alias: options.alias || {},
     serveEnvs: options.serveEnvs || {},
-    packageType: await getPackageType(options),
+    packageType:
+      options.packageType ||
+      (await getPackageType(await parsePackageJsonPaths(process.cwd()))),
   };
 
   if (

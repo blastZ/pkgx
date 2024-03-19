@@ -1,12 +1,14 @@
 import { writeFile } from 'node:fs/promises';
+import { basename } from 'node:path';
 
 import { PackageType } from '../enums/package-type.enum.js';
 import { PkgJson } from '../interfaces/pkg-json.interface.js';
 import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
-import { getPkgJson } from './get-pkg-json.util.js';
-import { getRootDirFromTsconfig } from './get-root-dir-from-tsconfig.util.js';
+import { getPackageType } from './get-package-type.util.js';
 import { isPathAvailable } from './is-path-available.util.js';
+import { parsePackageJsonPaths } from './parse-package-json-paths.util.js';
+import { readPackageJsonFile } from './read-package-json-file.util.js';
 
 const DEFAULT_PACKAGE_NAME = 'anonymous';
 
@@ -47,28 +49,18 @@ export class NpmHelper {
   ) {}
 
   private async init() {
-    this.pkgJson = await getPkgJson(this.cwd, true);
+    const parseResult = await parsePackageJsonPaths(this.cwd);
 
-    const rootDir = await getRootDirFromTsconfig(this.cwd);
+    this.isWsp = parseResult.isWsp;
 
-    this.isWsp = rootDir !== this.cwd;
+    this.pkgJson = await readPackageJsonFile(parseResult.pkgJsonPath);
+    this.wspPkgJson = this.isWsp
+      ? await readPackageJsonFile(parseResult.wspPkgJsonPath)
+      : undefined;
 
-    if (this.isWsp) {
-      this.wspPkgJson = await getPkgJson(rootDir, true);
-    }
-
-    if (this.pkgJson.type === PackageType.Module) {
-      this.template = MODULE_TEMPLATE;
-    } else if (
-      this.isWsp &&
-      !this.pkgJson.type &&
-      this.wspPkgJson?.type === PackageType.Module
-    ) {
-      this.template = MODULE_TEMPLATE;
-    } else {
-      this.packageType = PackageType.Commonjs;
-      this.template = CJS_TEMPLATE;
-    }
+    this.packageType = await getPackageType(parseResult);
+    this.template =
+      this.packageType === PackageType.Module ? MODULE_TEMPLATE : CJS_TEMPLATE;
 
     this.initialized = true;
   }
@@ -175,6 +167,12 @@ export class NpmHelper {
     return this;
   }
 
+  private fixName() {
+    this.template.name = this.pkgJson?.name || basename(this.cwd);
+
+    return this;
+  }
+
   private fixCommonAttributes() {
     if (
       this.packageType === PackageType.Module &&
@@ -184,8 +182,6 @@ export class NpmHelper {
 
       this.template.main = './esm/index.js';
     }
-
-    this.template.name = this.pkgJson?.name || DEFAULT_PACKAGE_NAME;
 
     this.template.version =
       this.pkgJson?.version || this.wspPkgJson?.version || '1.0.0';
@@ -232,6 +228,10 @@ export class NpmHelper {
   }
 
   private async writeTemplate() {
+    if (!this.initialized) {
+      throw new Error('NpmHelper is not initialized');
+    }
+
     if (
       this.packageType === PackageType.Module &&
       !this.pkgxOptions.disableCjsOutput
@@ -252,6 +252,7 @@ export class NpmHelper {
       .fixDependencies()
       .fixScripts()
       .fixCli()
+      .fixName()
       .fixCommonAttributes()
       .writeTemplate();
   }
