@@ -126,6 +126,26 @@ describe('pkgx', () => {
     expect(app.listen).toBeDefined();
   }, 5000);
 
+  it('should build simplest', async () => {
+    const dir = 'tests/projects/simplest';
+
+    await $`pkgx build ${dir}`;
+
+    const { echo } = await import(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      './projects/simplest/output'
+    );
+
+    expect(echo('123')).toBe('123');
+
+    const pkgJson = JSON.parse(
+      (await fs.readFile(resolve(dir, './output/package.json'))).toString(),
+    );
+
+    expect(pkgJson.name).toEqual('simplest');
+  }, 5000);
+
   it('should work with config generator', async () => {
     const dir = 'tests/projects/temp-1';
 
