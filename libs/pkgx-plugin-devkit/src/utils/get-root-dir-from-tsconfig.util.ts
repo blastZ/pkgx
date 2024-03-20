@@ -1,13 +1,13 @@
 import { dirname, resolve } from 'node:path';
 
-import { getTsconfigJson } from './get-tsconfig-json.util.js';
+import { readTsconfigJsonFile } from '../core/tsconfig/index.js';
 
 export async function getRootDirFromTsconfig(cwd: string = process.cwd()) {
-  const tsconfigJson = await getTsconfigJson(cwd);
+  const tsconfigJson = await readTsconfigJsonFile(cwd);
 
   let rootDir = cwd;
 
-  if (tsconfigJson.extends) {
+  if (tsconfigJson?.extends) {
     rootDir = resolve(rootDir, dirname(tsconfigJson.extends));
   }
 

@@ -122,6 +122,7 @@ export async function getFilledPkgxOptions(
     packageType:
       options.packageType ||
       (await getPackageType(await parsePackageJsonPaths(process.cwd()))),
+    useSwc: options.useSwc ?? false,
   };
 
   if (

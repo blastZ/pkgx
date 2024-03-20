@@ -27,4 +27,5 @@ export interface PkgxOptions {
   watchExtra?: string[];
   alias?: Record<string, string>;
   serveEnvs?: Record<string, string>;
+  useSwc?: boolean;
 }

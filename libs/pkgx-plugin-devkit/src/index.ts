@@ -4,7 +4,6 @@ export * from './utils/copy-files.util.js';
 export * from './utils/get-filled-pkgx-options.js';
 export * from './utils/get-pkgx-config-file-options.util.js';
 export * from './utils/get-root-dir-from-tsconfig.util.js';
-export * from './utils/get-tsconfig-json.util.js';
 export * from './utils/is-path-available.util.js';
 export * from './utils/logger.util.js';
 export * from './utils/npm-helper.util.js';
@@ -22,3 +21,5 @@ export * from './interfaces/pkgx-plugin-definition.interface.js';
 export * from './interfaces/pkgx-workspace-options.interface.js';
 
 export * from './enums/package-type.enum.js';
+
+export * from './core/tsconfig/index.js';

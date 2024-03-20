@@ -4,17 +4,23 @@ import alias from '@rollup/plugin-alias';
 import { type RollupOptions } from 'rollup';
 import { dts } from 'rollup-plugin-dts';
 
-import { getTsconfigJson, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
+import {
+  TSCONFIG_FILE_NAME,
+  readTsconfigJsonFile,
+  type PkgxOptions,
+} from '@libs/pkgx-plugin-devkit';
 
 export async function getDtsOutput(options: Required<PkgxOptions>) {
   const inputFileName = options.esmInputFileName.slice(0, -3) + '.d.ts';
   const outputDir = `${options.outputDirName}`;
 
-  const tsconfigJson = await getTsconfigJson();
+  const tsconfigJson = await readTsconfigJsonFile(
+    resolve(process.cwd(), TSCONFIG_FILE_NAME),
+  );
 
   let targetDir = '';
 
-  if (tsconfigJson.extends) {
+  if (tsconfigJson?.extends) {
     targetDir = relative(
       resolve('.', dirname(tsconfigJson.extends)),
       resolve('.'),
