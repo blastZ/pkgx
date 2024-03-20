@@ -1,9 +1,14 @@
 import { dirname, resolve } from 'node:path';
 
-import { readTsconfigJsonFile } from '../core/tsconfig/index.js';
+import {
+  TSCONFIG_FILE_NAME,
+  readTsconfigJsonFile,
+} from '../core/tsconfig/index.js';
 
 export async function getRootDirFromTsconfig(cwd: string = process.cwd()) {
-  const tsconfigJson = await readTsconfigJsonFile(cwd);
+  const tsconfigJson = await readTsconfigJsonFile(
+    resolve(cwd, TSCONFIG_FILE_NAME),
+  );
 
   let rootDir = cwd;
 
