@@ -3,7 +3,6 @@ export * from './utils/change-working-directory.util.js';
 export * from './utils/copy-files.util.js';
 export * from './utils/get-filled-pkgx-options.js';
 export * from './utils/get-pkgx-config-file-options.util.js';
-export * from './utils/get-root-dir-from-tsconfig.util.js';
 export * from './utils/is-path-available.util.js';
 export * from './utils/logger.util.js';
 export * from './utils/npm-helper.util.js';

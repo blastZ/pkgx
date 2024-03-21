@@ -6,8 +6,8 @@ import { type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 import { getSwcAliasPlugin } from './swc-plugins/get-swc-alias-plugin.js';
 import { getSwcNodeResolvePlugin } from './swc-plugins/get-swc-node-resolve-plugin.js';
 
-export async function getSwcEsmOutput(options: Required<PkgxOptions>) {
-  const outputDir = `${options.outputDirName}/esm`;
+export async function getSwcCjsOutput(options: Required<PkgxOptions>) {
+  const outputDir = `${options.outputDirName}/cjs`;
 
   const plugins: InputPluginOption = [];
 
@@ -29,17 +29,17 @@ export async function getSwcEsmOutput(options: Required<PkgxOptions>) {
   );
 
   const output: RollupOptions = {
-    input: `${options.inputDir}/${options.esmInputFileName}`,
+    input: `${options.inputDir}/${options.cjsInputFileName}`,
     output: [
       {
         file: `${outputDir}/index.js`,
-        format: 'esm',
+        format: 'cjs',
         sourcemap: options.sourceMap,
         inlineDynamicImports: true,
       },
     ],
     plugins,
-    external: options.external,
+    external: options.cjsExternal,
     cache: options.cache,
   };
 

@@ -1,6 +1,7 @@
 import { resolve } from 'node:path';
 
-import { getRootDirFromTsconfig } from './get-root-dir-from-tsconfig.util.js';
+import { parseTsconfigJsonFiles } from '../core/tsconfig/index.js';
+
 import { BASE_NAME } from './read-package-json-file.util.js';
 
 export interface ParsePackageJsonPathsResult {
@@ -14,15 +15,9 @@ export async function parsePackageJsonPaths(
 ): Promise<ParsePackageJsonPathsResult> {
   const pkgJsonPath = resolve(cwd, `./${BASE_NAME}`);
 
-  let isWsp = false;
+  const { isWsp, wspDir } = await parseTsconfigJsonFiles(cwd);
 
-  const rootDir = await getRootDirFromTsconfig(cwd);
-
-  if (rootDir !== cwd) {
-    isWsp = true;
-  }
-
-  const wspPkgJsonPath = resolve(rootDir, `./${BASE_NAME}`);
+  const wspPkgJsonPath = resolve(wspDir, `./${BASE_NAME}`);
 
   return {
     isWsp,

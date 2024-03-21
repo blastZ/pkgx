@@ -1,13 +1,16 @@
 import { resolve } from 'node:path';
 
-import { type RollupTypescriptOptions as RollupTypeScriptOptions } from '@rollup/plugin-typescript';
+import typescript, {
+  type RollupTypescriptOptions as RollupTypeScriptOptions,
+} from '@rollup/plugin-typescript';
+import { type InputPluginOption } from 'rollup';
 
 import { PackageType, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
-export function getTypescriptOptions(
+export function getTypescriptPlugin(
   type: 'esm' | 'cjs' | 'bin',
   options: Required<PkgxOptions>,
-) {
+): InputPluginOption {
   const outputDir = `${options.outputDirName}/${type}`;
 
   const tsOptions: RollupTypeScriptOptions = {
@@ -31,5 +34,5 @@ export function getTypescriptOptions(
     tsOptions.declarationMap = false;
   }
 
-  return tsOptions;
+  return (typescript as unknown as typeof typescript.default)(tsOptions);
 }

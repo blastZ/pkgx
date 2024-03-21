@@ -1,13 +1,11 @@
-import commonjs from '@rollup/plugin-commonjs';
-import json from '@rollup/plugin-json';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-import typescript from '@rollup/plugin-typescript';
 import { type RollupOptions } from 'rollup';
 
 import { type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
-import { getNodeResolveOptions } from './get-node-resolve-options.js';
-import { getTypescriptOptions } from './get-typescript-options.js';
+import { getCommonjsPlugin } from './plugins/get-commonjs-plugin.js';
+import { getJsonPlugin } from './plugins/get-json-plugin.js';
+import { getNodeResolvePlugin } from './plugins/get-node-resolve-plugin.js';
+import { getTypescriptPlugin } from './plugins/get-typescript-plugin.js';
 
 export function getCjsOutput(options: Required<PkgxOptions>) {
   const outputDir = `${options.outputDirName}/cjs`;
@@ -23,12 +21,10 @@ export function getCjsOutput(options: Required<PkgxOptions>) {
       },
     ],
     plugins: [
-      (typescript as unknown as typeof typescript.default)(
-        getTypescriptOptions('cjs', options),
-      ),
-      nodeResolve(getNodeResolveOptions()),
-      (commonjs as unknown as typeof commonjs.default)(),
-      (json as unknown as typeof json.default)(),
+      getTypescriptPlugin('cjs', options),
+      getNodeResolvePlugin(),
+      getCommonjsPlugin(),
+      getJsonPlugin(),
     ],
     external: options.cjsExternal,
     cache: options.cache,
