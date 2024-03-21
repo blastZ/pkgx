@@ -1,6 +1,6 @@
 {
   "name": "@blastz/pkgx",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "description": "The zero configuration tool for any repository",
   "type": "module",
   "homepage": "https://github.com/blastZ/pkgx",
@@ -17,6 +17,7 @@
     "@rollup/plugin-esm-shim": "^0.1.5",
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-swc": "^0.3.0",
     "@rollup/plugin-typescript": "^11.1.5",
     "@types/serve-handler": "^6.1.4",
     "chokidar": "^3.5.3",
