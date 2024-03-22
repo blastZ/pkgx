@@ -11,6 +11,8 @@ import {
   logger,
 } from '@libs/pkgx-plugin-devkit';
 
+import { getEsbuildOptions } from '../../core/get-esbuild-options.js';
+
 const cyanBold = (msg: string) => chalk.cyan(chalk.bold(msg));
 const greenBold = (msg: string) => chalk.green(chalk.bold(msg));
 
@@ -36,28 +38,24 @@ export class BuildExecutor {
   async run() {
     const filledOptions = await this.getFilledPkgxOptions();
 
-    const outputDir = `${filledOptions.outputDirName}/esm`;
+    const esbuildOptions = await getEsbuildOptions(filledOptions);
 
-    const input = `${filledOptions.inputDir}/${filledOptions.esmInputFileName}`;
-    const output = `${outputDir}/index.js`;
+    await Promise.all(
+      esbuildOptions.map(async (options) => {
+        const input = (options.entryPoints as string[])[0];
+        const output = options.outfile!;
 
-    logger.info(`${cyanBold(input)} → ${cyanBold(output)}...`);
+        logger.info(`${cyanBold(input)} → ${cyanBold(output)}...`);
 
-    const start = Date.now();
+        const start = Date.now();
 
-    await build({
-      entryPoints: [input],
-      bundle: true,
-      outfile: output,
-      format: filledOptions.disableEsmOutput ? 'cjs' : 'esm',
-      packages: 'external',
-      // esbuild must explicitly set working directory
-      absWorkingDir: process.cwd(),
-    });
+        await build(options);
 
-    const time = Date.now() - start;
+        const time = Date.now() - start;
 
-    logger.info(`created ${greenBold(output)} in ${greenBold(ms(time))}`);
+        logger.info(`created ${greenBold(output)} in ${greenBold(ms(time))}`);
+      }),
+    );
 
     await new NpmHelper(process.cwd(), filledOptions).generatePackageFiles();
 

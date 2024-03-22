@@ -3,5 +3,6 @@ export interface TsconfigJson {
   compilerOptions?: {
     baseUrl?: string;
     paths?: Record<string, string[]>;
+    emitDecoratorMetadata?: boolean;
   };
 }
