@@ -20,10 +20,6 @@ class Logger extends OriginLogger {
     this.info(`(${dayjs().format()}) waiting for changes...`);
   }
 
-  logForceRestart() {
-    this.error('app did not exit in time, forcing restart...');
-  }
-
   logExtraWatcherChange(path: string) {
     return this.info(`(watcher) file ${chalk.cyan(path)} changed.`);
   }

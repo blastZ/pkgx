@@ -1,6 +1,4 @@
-import { ChildProcess, fork } from 'node:child_process';
 import { resolve } from 'node:path';
-import { clearTimeout } from 'node:timers';
 
 import chokidar from 'chokidar';
 import { watch, type RollupOptions } from 'rollup';
@@ -11,7 +9,7 @@ import {
   copyFiles,
   getFilledPkgxOptions,
   getPkgxConfigFileOptions,
-  PackageType,
+  NodeProcessManager,
   PkgxContext,
   PkgxOptions,
 } from '@libs/pkgx-plugin-devkit';
@@ -21,9 +19,6 @@ import { handleError } from '../../core/handle-error.js';
 import { logger } from '../../core/logger.util.js';
 import { relativeId } from '../../core/relative-id.js';
 
-/**
- * Executor: @pkgx/rollup:serve
- */
 export class ServeExecutor {
   constructor(private context: PkgxContext) {}
 
@@ -31,57 +26,7 @@ export class ServeExecutor {
     filledPkgxOptions: Required<PkgxOptions>,
     rollupOptions: RollupOptions[],
   ) {
-    let child: ChildProcess | null = null;
-    let timer: NodeJS.Timeout | null = null;
-
-    const startFolder =
-      filledPkgxOptions.packageType === PackageType.Module ? 'esm' : 'cjs';
-
-    const startChild = () => {
-      child = fork(
-        `${filledPkgxOptions.outputDirName}/${startFolder}/index.js`,
-        {
-          execArgv: ['--enable-source-maps'],
-          env: {
-            ...process.env,
-            APP_ENV: 'local',
-            ...filledPkgxOptions.serveEnvs,
-          },
-        },
-      );
-
-      child.on('close', (code, signal) => {
-        timer && clearTimeout(timer);
-
-        if (code !== null && code !== 0) {
-          logger.warn(
-            `process exited with code ${code}, waiting for changes to restart...`,
-          );
-        } else {
-          startChild();
-        }
-      });
-
-      child.on('error', (err) => {
-        logger.error(err.message);
-      });
-    };
-
-    const reloadChild = () => {
-      if (child && child.exitCode === null) {
-        child.kill('SIGTERM');
-
-        timer = setTimeout(() => {
-          if (child && child.exitCode === null) {
-            logger.logForceRestart();
-
-            child.kill('SIGKILL');
-          }
-        }, 5000);
-      } else {
-        startChild();
-      }
-    };
+    const manager = new NodeProcessManager(filledPkgxOptions);
 
     const watcher = watch(rollupOptions);
 
@@ -94,8 +39,6 @@ export class ServeExecutor {
         }
 
         case 'START': {
-          // console.log(chalk.underline(`rollup v${rollup.VERSION}`));
-
           break;
         }
 
@@ -123,7 +66,7 @@ export class ServeExecutor {
         }
 
         case 'END': {
-          reloadChild();
+          manager.reloadChild();
 
           logger.logWaitingForChanges();
         }
@@ -140,7 +83,7 @@ export class ServeExecutor {
       extraWatcher.on('change', (path) => {
         logger.logExtraWatcherChange(path);
 
-        reloadChild();
+        manager.reloadChild();
       });
     }
   }
