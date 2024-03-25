@@ -7,6 +7,14 @@
         "includePkgxOptions": true,
         "arguments": ["<relative-path>"]
       }
+    },
+    "serve-app": {
+      "factory": "ServeExecutor",
+      "aliases": ["serve"],
+      "cmd": {
+        "arguments": ["<relative-path>"],
+        "includePkgxOptions": true
+      }
     }
   }
 }

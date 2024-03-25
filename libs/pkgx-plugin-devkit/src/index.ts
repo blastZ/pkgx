@@ -20,6 +20,7 @@ export * from './interfaces/pkgx-options.interface.js';
 export * from './interfaces/pkgx-plugin-definition.interface.js';
 export * from './interfaces/pkgx-workspace-options.interface.js';
 
+export * from './enums/output-type.enum.js';
 export * from './enums/package-type.enum.js';
 
 export * from './core/tsconfig/index.js';
