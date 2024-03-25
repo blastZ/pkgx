@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 
 import { $ } from 'zx';
 
-import { PkgxContext } from '@libs/pkgx-plugin-devkit';
+import type { PkgxContext } from '@libs/pkgx-plugin-devkit';
 
 export class TestExecutor {
   constructor(private context: PkgxContext) {}

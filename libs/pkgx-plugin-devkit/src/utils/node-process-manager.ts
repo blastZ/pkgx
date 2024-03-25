@@ -1,7 +1,7 @@
 import { fork, type ChildProcess } from 'node:child_process';
 
 import { PackageType } from '../enums/package-type.enum.js';
-import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
+import type { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
 import { logger } from './logger.util.js';
 
@@ -16,7 +16,7 @@ export class NodeProcessManager {
       options.packageType === PackageType.Module ? 'esm' : 'cjs';
   }
 
-  startChild() {
+  private startChild() {
     this.child = fork(
       `${this.options.outputDirName}/${this.startFolder}/index.js`,
       {
@@ -46,17 +46,29 @@ export class NodeProcessManager {
     });
   }
 
-  reloadChild() {
-    if (this.child && this.child.exitCode === null) {
-      this.child.kill('SIGTERM');
+  private isChildRunning() {
+    return this.child && this.child.exitCode === null;
+  }
 
-      this.timer = setTimeout(() => {
-        if (this.child && this.child.exitCode === null) {
-          logger.error('app did not exit in time, forcing restart...');
+  private stop() {
+    if (!this.isChildRunning()) {
+      return;
+    }
 
-          this.child.kill('SIGKILL');
-        }
-      }, 5000);
+    this.child!.kill('SIGTERM');
+
+    this.timer = setTimeout(() => {
+      if (this.isChildRunning()) {
+        logger.error('process did not exit in time, forcing restart...');
+
+        this.child!.kill('SIGKILL');
+      }
+    }, 5000);
+  }
+
+  reload() {
+    if (this.isChildRunning()) {
+      this.stop();
     } else {
       this.startChild();
     }

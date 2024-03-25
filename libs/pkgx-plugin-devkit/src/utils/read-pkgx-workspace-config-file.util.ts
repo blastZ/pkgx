@@ -2,7 +2,7 @@ import { resolve } from 'node:path';
 
 import { globby } from 'globby';
 
-import { PkgxWorkspaceOptions } from '../interfaces/pkgx-workspace-options.interface.js';
+import type { PkgxWorkspaceOptions } from '../interfaces/pkgx-workspace-options.interface.js';
 
 export const DEFAULT_WORKSPACE_CONFIG_BASE = 'pkgx.workspace';
 

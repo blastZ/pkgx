@@ -1,7 +1,7 @@
 import { isPathAvailable } from '../../utils/is-path-available.util.js';
 import { readJsonFile } from '../../utils/read-json-file.util.js';
 
-import { TsconfigJson } from './interfaces/tsconfig-json.interface.js';
+import type { TsconfigJson } from './interfaces/tsconfig-json.interface.js';
 
 const map = new Map<string, TsconfigJson | undefined>();
 

@@ -1,9 +1,9 @@
 import { $ } from 'zx';
 
 import {
-  PkgxContext,
   changeWorkingDirectory,
   getPkgxConfigFileOptions,
+  type PkgxContext,
 } from '@libs/pkgx-plugin-devkit';
 
 import { BuildExecutor } from '../build/index.js';

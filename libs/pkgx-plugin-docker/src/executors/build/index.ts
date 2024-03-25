@@ -6,15 +6,15 @@ import dayjs from 'dayjs';
 import { $, chalk } from 'zx';
 
 import {
-  PkgxContext,
   __dirname,
   logger,
   readPackageJsonFile,
   readPkgxWorkspaceConfigFile,
+  type PkgxContext,
 } from '@libs/pkgx-plugin-devkit';
 
-import { BuildImageOptions } from './interfaces/build-image-options.interface.js';
-import { PluginOptions } from './interfaces/plugin-options.interface.js';
+import type { BuildImageOptions } from './interfaces/build-image-options.interface.js';
+import type { PluginOptions } from './interfaces/plugin-options.interface.js';
 
 export class BuildExecutor {
   private pluginOptions: PluginOptions | undefined;

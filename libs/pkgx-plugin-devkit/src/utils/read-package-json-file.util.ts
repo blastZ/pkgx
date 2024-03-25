@@ -1,4 +1,4 @@
-import { PkgJson } from '../interfaces/pkg-json.interface.js';
+import type { PkgJson } from '../interfaces/pkg-json.interface.js';
 
 import { isPathAvailable } from './is-path-available.util.js';
 import { readJsonFile } from './read-json-file.util.js';

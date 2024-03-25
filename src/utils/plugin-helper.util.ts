@@ -3,9 +3,9 @@ import { resolve } from 'node:path';
 import { program } from 'commander';
 
 import {
-  PkgxContext,
-  PkgxPluginDefinition,
   __dirname,
+  type PkgxContext,
+  type PkgxPluginDefinition,
 } from '@libs/pkgx-plugin-devkit';
 
 type TargetType = 'generator' | 'executor';

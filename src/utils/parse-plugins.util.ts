@@ -3,9 +3,9 @@ import { resolve } from 'node:path';
 import { globby } from 'globby';
 
 import {
-  PkgxPluginDefinition,
   __dirname,
   readJsonFile,
+  type PkgxPluginDefinition,
 } from '@libs/pkgx-plugin-devkit';
 
 export async function parsePlugins() {

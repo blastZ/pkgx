@@ -1,10 +1,10 @@
 import { $ } from 'zx';
 
 import {
-  PkgxCmdOptions,
-  PkgxContext,
   changeWorkingDirectory,
   getPkgxConfigFileOptions,
+  type PkgxCmdOptions,
+  type PkgxContext,
 } from '@libs/pkgx-plugin-devkit';
 
 import { BuildExecutor } from '../build/index.js';

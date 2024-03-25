@@ -1,14 +1,14 @@
 import { $ } from 'zx';
 
 import {
-  PkgxContext,
   changeWorkingDirectory,
   getPkgxConfigFileOptions,
+  type PkgxContext,
 } from '@libs/pkgx-plugin-devkit';
 
 import { BuildExecutor } from '../build/index.js';
 
-import { BuildPackageOptions } from './build-package-options.interface.js';
+import type { BuildPackageOptions } from './build-package-options.interface.js';
 
 export class BuildPackageExecutor {
   constructor(private context: PkgxContext<BuildPackageOptions>) {}

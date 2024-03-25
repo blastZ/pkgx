@@ -4,9 +4,9 @@ import ms from 'pretty-ms';
 import handler from 'serve-handler';
 import { chalk } from 'zx';
 
-import { PkgxContext, logger } from '@libs/pkgx-plugin-devkit';
+import { logger, type PkgxContext } from '@libs/pkgx-plugin-devkit';
 
-import { ServeStaticOptions } from './serve-static-options.interface.js';
+import type { ServeStaticOptions } from './serve-static-options.interface.js';
 
 export class ServeStaticExecutor {
   constructor(private ctx: PkgxContext<ServeStaticOptions>) {}

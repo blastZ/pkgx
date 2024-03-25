@@ -8,16 +8,16 @@ import {
 import { $ } from 'zx';
 
 import {
-  InternalOptions,
   NpmHelper,
-  PkgxOptions,
   copyFiles,
   getFilledPkgxOptions,
+  type InternalOptions,
+  type PkgxOptions,
 } from '@libs/pkgx-plugin-devkit';
 
 import { getRollupOptions } from '../../core/get-rollup-options.js';
 import { handleError } from '../../core/handle-error.js';
-import { logger } from '../../core/logger.util.js';
+import { logger } from '../../core/logger.js';
 import { relativeId } from '../../core/relative-id.js';
 
 export class BuildExecutor {

@@ -2,8 +2,8 @@ import { writeFile } from 'node:fs/promises';
 import { basename } from 'node:path';
 
 import { PackageType } from '../enums/package-type.enum.js';
-import { PkgJson } from '../interfaces/pkg-json.interface.js';
-import { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
+import type { PkgJson } from '../interfaces/pkg-json.interface.js';
+import type { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
 
 import { getPackageType } from './get-package-type.util.js';
 import { isPathAvailable } from './is-path-available.util.js';

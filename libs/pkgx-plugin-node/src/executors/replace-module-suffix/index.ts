@@ -3,9 +3,9 @@ import { extname, join } from 'node:path';
 
 import { chalk } from 'zx';
 
-import { PkgxContext, logger } from '@libs/pkgx-plugin-devkit';
+import { logger, type PkgxContext } from '@libs/pkgx-plugin-devkit';
 
-import { ReplaceModuleSuffixOptions } from './replace-module-suffix-options.interface.js';
+import type { ReplaceModuleSuffixOptions } from './replace-module-suffix-options.interface.js';
 
 const REG_EXP = new RegExp(
   `(import\\s+.+from\\s+['"]|export\\s+.+from\\s+['"])` +

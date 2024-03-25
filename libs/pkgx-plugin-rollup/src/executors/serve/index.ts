@@ -10,13 +10,13 @@ import {
   getFilledPkgxOptions,
   getPkgxConfigFileOptions,
   NodeProcessManager,
-  PkgxContext,
-  PkgxOptions,
+  type PkgxContext,
+  type PkgxOptions,
 } from '@libs/pkgx-plugin-devkit';
 
 import { getRollupOptions } from '../../core/get-rollup-options.js';
 import { handleError } from '../../core/handle-error.js';
-import { logger } from '../../core/logger.util.js';
+import { logger } from '../../core/logger.js';
 import { relativeId } from '../../core/relative-id.js';
 
 export class ServeExecutor {
@@ -26,7 +26,7 @@ export class ServeExecutor {
     filledPkgxOptions: Required<PkgxOptions>,
     rollupOptions: RollupOptions[],
   ) {
-    const manager = new NodeProcessManager(filledPkgxOptions);
+    const child = new NodeProcessManager(filledPkgxOptions);
 
     const watcher = watch(rollupOptions);
 
@@ -66,7 +66,7 @@ export class ServeExecutor {
         }
 
         case 'END': {
-          manager.reloadChild();
+          child.reload();
 
           logger.logWaitingForChanges();
         }
@@ -83,7 +83,7 @@ export class ServeExecutor {
       extraWatcher.on('change', (path) => {
         logger.logExtraWatcherChange(path);
 
-        manager.reloadChild();
+        child.reload();
       });
     }
   }

@@ -2,7 +2,7 @@ import { join, parse } from 'node:path';
 
 import { globby } from 'globby';
 
-import { CopyFilePattern } from '../interfaces/copy-file-pattern.interface.js';
+import type { CopyFilePattern } from '../interfaces/copy-file-pattern.interface.js';
 
 import { copyFile } from './copy-file.util.js';
 

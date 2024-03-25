@@ -1,20 +1,15 @@
 import { build } from 'esbuild';
-import ms from 'pretty-ms';
-import { chalk } from 'zx';
 
 import {
-  InternalOptions,
   NpmHelper,
-  PkgxOptions,
   copyFiles,
   getFilledPkgxOptions,
-  logger,
+  type InternalOptions,
+  type PkgxOptions,
 } from '@libs/pkgx-plugin-devkit';
 
 import { getEsbuildOptions } from '../../core/get-esbuild-options.js';
-
-const cyanBold = (msg: string) => chalk.cyan(chalk.bold(msg));
-const greenBold = (msg: string) => chalk.green(chalk.bold(msg));
+import { logger } from '../../core/logger.js';
 
 export class BuildExecutor {
   private filledPkgxOptions: Required<PkgxOptions> | undefined;
@@ -42,10 +37,7 @@ export class BuildExecutor {
 
     await Promise.all(
       esbuildOptions.map(async (options) => {
-        const input = (options.entryPoints as string[])[0];
-        const output = options.outfile!;
-
-        logger.info(`${cyanBold(input)} → ${cyanBold(output)}...`);
+        logger.logBundleInfo(options);
 
         const start = Date.now();
 
@@ -53,7 +45,7 @@ export class BuildExecutor {
 
         const time = Date.now() - start;
 
-        logger.info(`created ${greenBold(output)} in ${greenBold(ms(time))}`);
+        logger.logBundleTime(options.outfile!, time);
       }),
     );
 
