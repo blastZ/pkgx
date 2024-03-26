@@ -5,13 +5,19 @@ import typescript, {
 } from '@rollup/plugin-typescript';
 import { type InputPluginOption } from 'rollup';
 
-import { PackageType, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
+import {
+  OutputType,
+  PackageType,
+  type PkgxOptions,
+} from '@libs/pkgx-plugin-devkit';
+
+import { getOutputDir } from '../get-output-dir.js';
 
 export function getTypescriptPlugin(
-  type: 'esm' | 'cjs' | 'bin',
+  type: OutputType,
   options: Required<PkgxOptions>,
 ): InputPluginOption {
-  const outputDir = `${options.outputDirName}/${type}`;
+  const outputDir = getOutputDir(type, options);
 
   const tsOptions: RollupTypeScriptOptions = {
     outDir: outputDir,
@@ -25,7 +31,7 @@ export function getTypescriptPlugin(
     incremental: options.incremental,
   };
 
-  if (type === 'esm' && !options.disableDtsOutput) {
+  if (type === OutputType.ESM && !options.disableDtsOutput) {
     tsOptions.declaration = true;
     tsOptions.declarationMap = false;
     tsOptions.declarationDir = outputDir + '/.dts';
