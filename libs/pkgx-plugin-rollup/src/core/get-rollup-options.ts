@@ -13,7 +13,7 @@ export async function getRollupOptions(options: Required<PkgxOptions>) {
   const outputs: RollupOptions[] = [];
 
   if (!options.disableEsmOutput) {
-    const esmOutput = options.useSwc
+    const esmOutput = options.skipTypeCheck
       ? await getSwcEsmOutput(options)
       : getEsmOutput(options);
 
@@ -21,7 +21,7 @@ export async function getRollupOptions(options: Required<PkgxOptions>) {
   }
 
   if (!options.disableCjsOutput) {
-    const cjsOutput = options.useSwc
+    const cjsOutput = options.skipTypeCheck
       ? await getSwcCjsOutput(options)
       : getCjsOutput(options);
 

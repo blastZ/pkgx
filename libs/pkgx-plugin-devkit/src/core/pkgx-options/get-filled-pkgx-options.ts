@@ -122,7 +122,8 @@ export async function getFilledPkgxOptions(
     packageType:
       options.packageType ||
       (await getPackageType(await parsePackageJsonPaths(process.cwd()))),
-    useSwc: options.useSwc ?? false,
+    skipTypeCheck: false,
+    skipTypeCheckOnServe: options.skipTypeCheckOnServe ?? false,
   };
 
   if (
@@ -137,6 +138,12 @@ export async function getFilledPkgxOptions(
     }
 
     filledOptions.disableDtsOutput = true;
+  }
+
+  if (internalOptions.isServe) {
+    if (filledOptions.skipTypeCheckOnServe) {
+      filledOptions.skipTypeCheck = true;
+    }
   }
 
   if (internalOptions.isApp) {

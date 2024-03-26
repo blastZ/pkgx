@@ -6,7 +6,6 @@ import { isResolveNeeded } from './is-resolve-needed.js';
 import { isTransformNeeded } from './is-transform-needed.js';
 import { getNodeResolvePlugin } from './plugins/get-node-resolve-plugin.js';
 import { getSwcPlugin } from './plugins/get-swc-plugin.js';
-import { getTypescriptPlugin } from './plugins/get-typescript-plugin.js';
 
 export async function getOutput(
   type: OutputType,
@@ -29,11 +28,9 @@ export async function getOutput(
   }
 
   if (isTransform) {
-    if (options.useSwc) {
-      plugins.push(getSwcPlugin(options));
-    } else {
-      plugins.push(getTypescriptPlugin());
-    }
+    plugins.push(getSwcPlugin(options));
+
+    // plugins.push(getTypescriptPlugin());
   }
 
   const output: BuildOptions = {
