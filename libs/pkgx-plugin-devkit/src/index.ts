@@ -24,3 +24,4 @@ export * from './enums/output-type.enum.js';
 export * from './enums/package-type.enum.js';
 
 export * from './core/tsconfig/index.js';
+export * from './core/watcher/index.js';

@@ -1,12 +1,12 @@
 import { resolve } from 'node:path';
 
-import chokidar from 'chokidar';
 import { watch, type RollupOptions } from 'rollup';
 import { $ } from 'zx';
 
 import {
   changeWorkingDirectory,
   copyFiles,
+  ExtraWatcher,
   getFilledPkgxOptions,
   getPkgxConfigFileOptions,
   NodeProcessManager,
@@ -27,6 +27,8 @@ export class ServeExecutor {
     rollupOptions: RollupOptions[],
   ) {
     const child = new NodeProcessManager(filledPkgxOptions);
+
+    new ExtraWatcher(filledPkgxOptions, child);
 
     const watcher = watch(rollupOptions);
 
@@ -76,16 +78,6 @@ export class ServeExecutor {
         event.result.close().catch((error) => handleError(error, true));
       }
     });
-
-    if (filledPkgxOptions.watchExtra.length > 0) {
-      const extraWatcher = chokidar.watch(filledPkgxOptions.watchExtra);
-
-      extraWatcher.on('change', (path) => {
-        logger.logExtraWatcherChange(path);
-
-        child.reload();
-      });
-    }
   }
 
   async run() {

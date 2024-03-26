@@ -19,10 +19,6 @@ class Logger extends OriginLogger {
   logWaitingForChanges() {
     this.info(`(${dayjs().format()}) waiting for changes...`);
   }
-
-  logExtraWatcherChange(path: string) {
-    return this.info(`(watcher) file ${chalk.cyan(path)} changed.`);
-  }
 }
 
 export const logger = new Logger();
