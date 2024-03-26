@@ -165,6 +165,31 @@ describe('pkgx', () => {
     await checkBuildResult();
   });
 
+  it('should build nest esm app', async () => {
+    const dir = 'tests/projects/nest-esm-app';
+
+    const checkBuildResult = async () => {
+      const { getServer } = await import(
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        './projects/nest-esm-app/output'
+      );
+
+      const server = await getServer();
+
+      const res = await request(server).get('/configs');
+
+      expect(res.status).toEqual(200);
+      expect(res.body).toEqual({ name: 'nest-esm-app' });
+    };
+
+    await $`pkgx build-app ${dir}`;
+    await checkBuildResult();
+
+    await $`pkgx esbuild:build-app ${dir}`;
+    await checkBuildResult();
+  });
+
   it('should build simplest', async () => {
     const dir = 'tests/projects/simplest';
 
