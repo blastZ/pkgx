@@ -2,6 +2,7 @@ import { context } from 'esbuild';
 import { $ } from 'zx';
 
 import {
+  ExtraWatcher,
   NodeProcessManager,
   changeWorkingDirectory,
   copyFiles,
@@ -43,6 +44,8 @@ export class ServeExecutor {
     }
 
     const child = new NodeProcessManager(filledPkgxOptions);
+
+    new ExtraWatcher(filledPkgxOptions, child);
 
     serveOptions.plugins.push({
       name: 'serve',
