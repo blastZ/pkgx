@@ -7,7 +7,7 @@ import {
   changeWorkingDirectory,
   copyFiles,
   getFilledPkgxOptions,
-  getPkgxConfigFileOptions,
+  readPkgxConfigFile,
   type PkgxCmdOptions,
   type PkgxContext,
 } from '@libs/pkgx-plugin-devkit';
@@ -24,7 +24,7 @@ export class ServeExecutor {
 
     await changeWorkingDirectory(relativePath);
 
-    const pkgxOptions = await getPkgxConfigFileOptions();
+    const pkgxOptions = await readPkgxConfigFile();
 
     const filledPkgxOptions = await getFilledPkgxOptions(
       { ...pkgxOptions, ...cmdOptions },

@@ -1,3 +1,3 @@
-import type { PkgxOptions } from './pkgx-options.interface.js';
+import type { PkgxOptions } from '../core/pkgx-options/index.js';
 
 export type PkgxCmdOptions = Pick<PkgxOptions, 'inputFileName' | 'inputDir'>;

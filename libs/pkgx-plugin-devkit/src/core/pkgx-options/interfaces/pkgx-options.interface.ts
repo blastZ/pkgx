@@ -1,4 +1,4 @@
-import type { CopyFilePattern } from './copy-file-pattern.interface.js';
+import type { CopyFilePattern } from '../../../interfaces/copy-file-pattern.interface.js';
 
 export interface PkgxOptions {
   inputFileName?: string;

@@ -4,12 +4,12 @@ import { watch, type RollupOptions } from 'rollup';
 import { $ } from 'zx';
 
 import {
+  ExtraWatcher,
+  NodeProcessManager,
   changeWorkingDirectory,
   copyFiles,
-  ExtraWatcher,
   getFilledPkgxOptions,
-  getPkgxConfigFileOptions,
-  NodeProcessManager,
+  readPkgxConfigFile,
   type PkgxContext,
   type PkgxOptions,
 } from '@libs/pkgx-plugin-devkit';
@@ -88,7 +88,7 @@ export class ServeExecutor {
 
     await changeWorkingDirectory(pkgPath);
 
-    const pkgxOptions = await getPkgxConfigFileOptions();
+    const pkgxOptions = await readPkgxConfigFile();
 
     const filledPkgxOptions = await getFilledPkgxOptions(
       { ...pkgxOptions, ...cmdOptions },

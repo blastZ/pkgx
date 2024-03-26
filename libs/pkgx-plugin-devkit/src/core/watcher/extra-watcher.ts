@@ -1,6 +1,6 @@
 import { chalk } from 'zx';
 
-import type { PkgxOptions } from '../../interfaces/pkgx-options.interface.js';
+import type { PkgxOptions } from '../../core/pkgx-options/index.js';
 import { logger } from '../../utils/logger.util.js';
 import { NodeProcessManager } from '../../utils/node-process-manager.js';
 

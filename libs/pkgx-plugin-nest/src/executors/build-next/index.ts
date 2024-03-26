@@ -5,7 +5,7 @@ import { $ } from 'zx';
 import {
   changeWorkingDirectory,
   getFilledPkgxOptions,
-  getPkgxConfigFileOptions,
+  readPkgxConfigFile,
   type PkgxContext,
 } from '@libs/pkgx-plugin-devkit';
 
@@ -18,7 +18,7 @@ export class BuildNextExecutor {
 
     await changeWorkingDirectory(relativePath);
 
-    const pkgxOptions = await getPkgxConfigFileOptions();
+    const pkgxOptions = await readPkgxConfigFile();
     const filledPkgxOptions = await getFilledPkgxOptions({
       ...pkgxOptions,
       ...cmdOptions,

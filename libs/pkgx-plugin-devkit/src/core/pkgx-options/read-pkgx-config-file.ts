@@ -2,11 +2,11 @@ import { resolve } from 'node:path';
 
 import { globby } from 'globby';
 
-import { type PkgxOptions } from '@libs/pkgx-plugin-devkit';
+import type { PkgxOptions } from './interfaces/pkgx-options.interface.js';
 
 export const DEFAULT_CONFIG_BASE = 'pkgx.config';
 
-export async function getPkgxConfigFileOptions(): Promise<PkgxOptions> {
+export async function readPkgxConfigFile(): Promise<PkgxOptions> {
   const paths = await globby(`${DEFAULT_CONFIG_BASE}.{js,mjs,cjs}`);
 
   if (paths.length < 1) {

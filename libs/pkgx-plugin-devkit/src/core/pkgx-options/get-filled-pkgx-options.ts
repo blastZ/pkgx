@@ -1,12 +1,12 @@
 import { resolve } from 'node:path';
 
-import { PackageType } from '../enums/package-type.enum.js';
-import type { InternalOptions } from '../interfaces/internal-options.interface.js';
-import type { PkgxOptions } from '../interfaces/pkgx-options.interface.js';
+import { PackageType } from '../../enums/package-type.enum.js';
+import type { InternalOptions } from '../../interfaces/internal-options.interface.js';
+import { getPackageType } from '../../utils/get-package-type.util.js';
+import { parsePackageJsonPaths } from '../../utils/parse-package-json-paths.util.js';
+import { readPackageJsonFile } from '../../utils/read-package-json-file.util.js';
 
-import { getPackageType } from './get-package-type.util.js';
-import { parsePackageJsonPaths } from './parse-package-json-paths.util.js';
-import { readPackageJsonFile } from './read-package-json-file.util.js';
+import type { PkgxOptions } from './interfaces/pkgx-options.interface.js';
 
 async function parseDependenciesToExternal(
   pkgJsonPath: string,
