@@ -6,6 +6,7 @@
     "declaration": true,
     "declarationMap": true,
     "moduleResolution": "NodeNext",
+    "verbatimModuleSyntax": true,
     "esModuleInterop": true,
     "importHelpers": true,
     "target": "ESNext",
