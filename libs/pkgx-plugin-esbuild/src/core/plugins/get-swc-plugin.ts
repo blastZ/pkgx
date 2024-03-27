@@ -24,6 +24,7 @@ const swcPlugin: (options: Required<PkgxOptions>) => Plugin = (options) => ({
       const result = await transform(ts, {
         filename: path.basename(args.path),
         jsc: {
+          target: 'esnext',
           parser: {
             syntax: 'typescript',
             decorators: true,
@@ -32,7 +33,6 @@ const swcPlugin: (options: Required<PkgxOptions>) => Plugin = (options) => ({
             legacyDecorator: true,
             decoratorMetadata: true,
           },
-          target: 'esnext',
           loose: true,
         },
         sourceMaps: options.sourceMap ? 'inline' : false,
