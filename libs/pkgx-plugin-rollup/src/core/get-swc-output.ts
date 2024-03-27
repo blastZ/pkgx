@@ -1,31 +1,27 @@
+// import swc from '@rollup/plugin-swc';
 import { type InputPluginOption, type RollupOptions } from 'rollup';
 
 import { OutputType, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
 
 import { getInput } from './get-input.js';
 import { getOutputDir } from './get-output-dir.js';
-import { getCommonjsPlugin } from './plugins/get-commonjs-plugin.js';
-import { getEsmShimPlugin } from './plugins/get-esm-shim-plugin.js';
-import { getJsonPlugin } from './plugins/get-json-plugin.js';
-import { getNodeResolvePlugin } from './plugins/get-node-resolve-plugin.js';
-import { getTypescriptPlugin } from './plugins/get-typescript-plugin.js';
+import { getSwcAliasPlugin } from './swc-plugins/get-swc-alias-plugin.js';
+import { getSwcNodeResolvePlugin } from './swc-plugins/get-swc-node-resolve-plugin.js';
+import { getSwcPlugin } from './swc-plugins/get-swc-plugin.js';
 
-export function getOutput(type: OutputType, options: Required<PkgxOptions>) {
+export async function getSwcOutput(
+  type: OutputType,
+  options: Required<PkgxOptions>,
+) {
   const outputDir = getOutputDir(type, options);
 
   const plugins: InputPluginOption = [];
 
-  plugins.push(getTypescriptPlugin(type, options));
+  plugins.push(getSwcNodeResolvePlugin());
 
-  plugins.push(getNodeResolvePlugin());
+  plugins.push(await getSwcAliasPlugin(options));
 
-  if (type !== OutputType.CJS && options.esmShim) {
-    plugins.push(getEsmShimPlugin());
-  }
-
-  plugins.push(getCommonjsPlugin());
-
-  plugins.push(getJsonPlugin());
+  plugins.push(getSwcPlugin(options));
 
   const output: RollupOptions = {
     input: getInput(type, options),
