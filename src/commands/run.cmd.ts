@@ -1,11 +1,23 @@
 import { program } from 'commander';
 import { chalk } from 'zx';
 
-import { logger } from '@libs/pkgx-plugin-devkit';
+import { logger, printDiagnostics } from '@libs/pkgx-plugin-devkit';
 
 import { Command, PluginHelper, parsePlugins } from '@/utils';
 
-async function run(inputExecutor: string, userArgs: string[]) {
+async function run(
+  inputExecutor: string,
+  userArgs: string[],
+  options: { verbose: boolean },
+) {
+  const diagnostics = ['@pkgx/core::run'];
+
+  if (options.verbose) {
+    process.env.PKGX_VERBOSE = '1';
+  }
+
+  printDiagnostics(...diagnostics, { inputExecutor, userArgs, options });
+
   const plugins = await parsePlugins();
 
   const pluginHelper = new PluginHelper(plugins);
@@ -72,6 +84,7 @@ export function createRunCommand() {
       'name of the executor e.g., @pkgx/rollup:build, build',
     )
     .argument('[args...]', 'any arguments for the executor')
+    .option('--verbose', 'show debug logs', false)
     .allowUnknownOption()
     .action(run);
 

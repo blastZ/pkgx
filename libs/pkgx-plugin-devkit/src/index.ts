@@ -5,6 +5,7 @@ export * from './utils/is-path-available.util.js';
 export * from './utils/logger.util.js';
 export * from './utils/node-process-manager.js';
 export * from './utils/npm-helper.util.js';
+export * from './utils/print-diagnostics.util.js';
 export * from './utils/read-json-file.util.js';
 export * from './utils/read-package-json-file.util.js';
 export * from './utils/read-pkgx-workspace-config-file.util.js';

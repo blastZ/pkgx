@@ -5,6 +5,7 @@ const BASE_TAG = '[pkgx]';
 const INFO_TAG = chalk.cyan(BASE_TAG);
 const WARNING_TAG = chalk.yellow(BASE_TAG);
 const ERROR_TAG = chalk.red(BASE_TAG);
+const VERBOSE_TAG = chalk.magenta('[pkgx::diagnostics]');
 
 export class Logger {
   private write(msg: string) {
@@ -21,6 +22,10 @@ export class Logger {
 
   error(msg: string) {
     this.write(`${ERROR_TAG} ${chalk.red(msg)}`);
+  }
+
+  verbose(msg: string) {
+    this.write(`${VERBOSE_TAG} ${msg}`);
   }
 }
 
