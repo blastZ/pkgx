@@ -10,12 +10,15 @@ import { getJsonPlugin } from './plugins/get-json-plugin.js';
 import { getNodeResolvePlugin } from './plugins/get-node-resolve-plugin.js';
 import { getTypescriptPlugin } from './plugins/get-typescript-plugin.js';
 
-export function getOutput(type: OutputType, options: Required<PkgxOptions>) {
+export async function getOutput(
+  type: OutputType,
+  options: Required<PkgxOptions>,
+) {
   const outputDir = getOutputDir(type, options);
 
   const plugins: InputPluginOption = [];
 
-  plugins.push(getTypescriptPlugin(type, options));
+  plugins.push(await getTypescriptPlugin(type, options));
 
   plugins.push(getNodeResolvePlugin());
 

@@ -8,16 +8,19 @@ import { type InputPluginOption } from 'rollup';
 import {
   OutputType,
   PackageType,
+  parseTsconfigJsonFiles,
   type PkgxOptions,
 } from '@libs/pkgx-plugin-devkit';
 
 import { getOutputDir } from '../get-output-dir.js';
 
-export function getTypescriptPlugin(
+export async function getTypescriptPlugin(
   type: OutputType,
   options: Required<PkgxOptions>,
-): InputPluginOption {
+): Promise<InputPluginOption> {
   const outputDir = getOutputDir(type, options);
+
+  const { tsconfigJsonPath } = await parseTsconfigJsonFiles(process.cwd());
 
   const tsOptions: RollupTypeScriptOptions = {
     outDir: outputDir,
@@ -29,6 +32,7 @@ export function getTypescriptPlugin(
       ? resolve(process.cwd(), '../../') // fix relativeSourcePath
       : undefined,
     incremental: options.incremental,
+    tsconfig: tsconfigJsonPath,
   };
 
   if (type === OutputType.ESM && !options.disableDtsOutput) {

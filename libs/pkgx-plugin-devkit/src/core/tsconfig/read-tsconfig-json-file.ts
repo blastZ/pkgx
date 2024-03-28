@@ -1,4 +1,5 @@
 import { isPathAvailable } from '../../utils/is-path-available.util.js';
+import { printDiagnostics } from '../../utils/print-diagnostics.util.js';
 import { readJsonFile } from '../../utils/read-json-file.util.js';
 
 import type { TsconfigJson } from './interfaces/tsconfig-json.interface.js';
@@ -6,6 +7,8 @@ import type { TsconfigJson } from './interfaces/tsconfig-json.interface.js';
 const map = new Map<string, TsconfigJson | undefined>();
 
 export async function readTsconfigJsonFile(filePath: string) {
+  const diagnostics = ['@pkgx/devkit::readTsconfigJsonFile', filePath];
+
   if (map.has(filePath)) {
     return map.get(filePath);
   }
@@ -13,9 +16,7 @@ export async function readTsconfigJsonFile(filePath: string) {
   const canIRead = await isPathAvailable(filePath);
 
   if (!canIRead) {
-    // logger.info(
-    //   `${chalk.cyan(relative(process.cwd(), filePath))} is not available`,
-    // );
+    printDiagnostics(...diagnostics, 'file not available');
 
     map.set(filePath, undefined);
 
@@ -25,6 +26,8 @@ export async function readTsconfigJsonFile(filePath: string) {
   const tsconfigJson = await readJsonFile<TsconfigJson>(filePath);
 
   map.set(filePath, tsconfigJson);
+
+  printDiagnostics(...diagnostics, tsconfigJson);
 
   return tsconfigJson;
 }

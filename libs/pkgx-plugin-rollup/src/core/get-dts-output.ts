@@ -5,8 +5,7 @@ import { type RollupOptions } from 'rollup';
 import { dts } from 'rollup-plugin-dts';
 
 import {
-  TSCONFIG_FILE_NAME,
-  readTsconfigJsonFile,
+  parseTsconfigJsonFiles,
   type PkgxOptions,
 } from '@libs/pkgx-plugin-devkit';
 
@@ -14,9 +13,7 @@ export async function getDtsOutput(options: Required<PkgxOptions>) {
   const inputFileName = options.esmInputFileName.slice(0, -3) + '.d.ts';
   const outputDir = `${options.outputDirName}`;
 
-  const tsconfigJson = await readTsconfigJsonFile(
-    resolve(process.cwd(), TSCONFIG_FILE_NAME),
-  );
+  const { tsconfigJson } = await parseTsconfigJsonFiles(process.cwd());
 
   let targetDir = '';
 

@@ -1,8 +1,10 @@
-import { dirname, resolve } from 'node:path';
+import { basename, dirname, resolve } from 'node:path';
 
+import { globby } from 'globby';
+
+import { logger } from '../../utils/logger.util.js';
 import { printDiagnostics } from '../../utils/print-diagnostics.util.js';
 
-import { TSCONFIG_FILE_NAME } from './constants/tsconfig-file-name.constant.js';
 import type { TsconfigJson } from './interfaces/tsconfig-json.interface.js';
 import { readTsconfigJsonFile } from './read-tsconfig-json-file.js';
 
@@ -17,6 +19,33 @@ export interface ParseTsconfigJsonFilesResult {
   wspTsconfigJson: TsconfigJson | undefined;
 }
 
+function getTsconfigJsonPath(cwd: string, paths: string[]) {
+  const priorities = [
+    'tsconfig.json',
+    'tsconfig.build.json',
+    'tsconfig.app.json',
+  ];
+
+  let index = priorities.length;
+  let result: string | undefined;
+
+  for (const path of paths) {
+    const filename = basename(path);
+    const newIndex = priorities.indexOf(filename);
+
+    if (newIndex > -1 && newIndex < index) {
+      result = path;
+      index = newIndex;
+    }
+  }
+
+  if (result) {
+    return result;
+  }
+
+  return resolve(cwd, priorities[0]);
+}
+
 export async function parseTsconfigJsonFiles(cwd: string) {
   const diagnostics = ['@pkgx/devkit::parseTsconfigJsonFiles', cwd];
 
@@ -26,7 +55,15 @@ export async function parseTsconfigJsonFiles(cwd: string) {
     return cached;
   }
 
-  const tsconfigJsonPath = resolve(cwd, TSCONFIG_FILE_NAME);
+  const tsconfigPaths = await globby(['tsconfig.json', 'tsconfig.*.json'], {
+    cwd,
+  });
+
+  const tsconfigJsonPath = getTsconfigJsonPath(cwd, tsconfigPaths);
+
+  if (tsconfigPaths.length > 1) {
+    logger.warn(`multiple tsconfig files found, using "${tsconfigJsonPath}"`);
+  }
 
   const tsconfigJson = await readTsconfigJsonFile(tsconfigJsonPath);
 

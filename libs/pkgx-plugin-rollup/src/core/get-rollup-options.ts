@@ -15,7 +15,7 @@ export async function getRollupOptions(options: Required<PkgxOptions>) {
   if (!options.disableEsmOutput) {
     const esmOutput = options.skipTypeCheck
       ? await getSwcEsmOutput(options)
-      : getEsmOutput(options);
+      : await getEsmOutput(options);
 
     outputs.push(esmOutput);
   }
@@ -23,7 +23,7 @@ export async function getRollupOptions(options: Required<PkgxOptions>) {
   if (!options.disableCjsOutput) {
     const cjsOutput = options.skipTypeCheck
       ? await getSwcCjsOutput(options)
-      : getCjsOutput(options);
+      : await getCjsOutput(options);
 
     outputs.push(cjsOutput);
   }
@@ -35,7 +35,7 @@ export async function getRollupOptions(options: Required<PkgxOptions>) {
   }
 
   if (options.cliInputFileName) {
-    const cliOutput = getCliOutput(options);
+    const cliOutput = await getCliOutput(options);
 
     outputs.push(cliOutput);
   }
