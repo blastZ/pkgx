@@ -36,6 +36,13 @@
         "arguments": ["<relative-path>"],
         "includePkgxOptions": true
       }
+    },
+    "graph": {
+      "factory": "GraphExecutor",
+      "cmd": {
+        "arguments": ["<relative-path>"],
+        "includePkgxOptions": true
+      }
     }
   }
 }
