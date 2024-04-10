@@ -42,6 +42,8 @@ async function run(
       cmdOptions = args.at(-2) || {};
     }
 
+    printDiagnostics(...diagnostics, { cmdArguments, cmdOptions });
+
     await pluginHelper.runExecutor(pluginName, executorName, {
       cmdArguments,
       cmdOptions,
@@ -67,6 +69,7 @@ async function run(
   if (executor.cmd?.includePkgxOptions) {
     command.option('--input-file-name <inputFileName>', 'input file name');
     command.option('--input-dir <inputDir>', 'input directory');
+    command.option('--source-map', 'generate source map', false);
   }
 
   if (executor.cmd?.passThrough) {
