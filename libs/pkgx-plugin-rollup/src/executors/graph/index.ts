@@ -1,9 +1,9 @@
 import { rollup, type RollupBuild, type RollupOptions } from 'rollup';
 
 import {
-  OutputType,
   changeWorkingDirectory,
   getFilledPkgxOptions,
+  OutputType,
   readPkgxConfigFile,
   type PkgxCmdOptions,
   type PkgxContext,
@@ -38,7 +38,10 @@ export class GraphExecutor {
 
     const pkgxOptions = await readPkgxConfigFile();
 
-    const filledOptions = await getFilledPkgxOptions(pkgxOptions);
+    const filledOptions = await getFilledPkgxOptions({
+      ...pkgxOptions,
+      ...options,
+    });
 
     await this.startBundle(await getGraphOutput(OutputType.ESM, filledOptions));
   }

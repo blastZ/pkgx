@@ -1,6 +1,10 @@
 import type { BuildOptions, Plugin } from 'esbuild';
 
-import { OutputType, type PkgxOptions } from '@libs/pkgx-plugin-devkit';
+import {
+  OutputType,
+  parseTsconfigJsonFiles,
+  type PkgxOptions,
+} from '@libs/pkgx-plugin-devkit';
 
 import { isResolveNeeded } from './is-resolve-needed.js';
 import { isTransformNeeded } from './is-transform-needed.js';
@@ -17,6 +21,8 @@ export async function getOutput(
       : `${options.outputDirName}/cjs`;
 
   const input = `${options.inputDir}/${options.esmInputFileName}`;
+
+  const { tsconfigJsonPath } = await parseTsconfigJsonFiles(process.cwd());
 
   const plugins: Plugin[] = [];
 
@@ -42,6 +48,7 @@ export async function getOutput(
     absWorkingDir: process.cwd(),
     plugins,
     sourcemap: options.sourceMap,
+    tsconfig: tsconfigJsonPath,
   };
 
   if (!isResolve) {
