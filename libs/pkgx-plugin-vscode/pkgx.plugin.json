@@ -1,0 +1,8 @@
+{
+  "name": "@pkgx/vscode",
+  "generators": {
+    "launch": {
+      "factory": "LaunchGenerator"
+    }
+  }
+}

@@ -15,9 +15,7 @@ async function generateResourceByPlugin(generator: string) {
   const { pluginName, generatorName } =
     pluginHelper.parseGeneratorName(generator);
 
-  logger.info(
-    `run generator ${chalk.underline(`${pluginName}:${generatorName}`)}`,
-  );
+  logger.info(`generator ${chalk.underline(`${pluginName}:${generatorName}`)}`);
 
   await pluginHelper.runGenerator(pluginName, generatorName);
 }
