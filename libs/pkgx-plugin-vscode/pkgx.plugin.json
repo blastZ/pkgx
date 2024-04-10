@@ -2,7 +2,15 @@
   "name": "@pkgx/vscode",
   "generators": {
     "launch": {
-      "factory": "LaunchGenerator"
+      "factory": "LaunchGenerator",
+      "cmd": {
+        "options": [
+          {
+            "flags": "-o, --overwrite",
+            "description": "overwrite existing launch.json"
+          }
+        ]
+      }
     }
   }
 }

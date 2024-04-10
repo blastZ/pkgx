@@ -3,15 +3,27 @@ import { basename, resolve } from 'node:path';
 import { globby } from 'globby';
 import { fs } from 'zx';
 
-import { isPathAvailable, readPackageJsonFile } from '@libs/pkgx-plugin-devkit';
+import {
+  isPathAvailable,
+  readPackageJsonFile,
+  type PkgxContext,
+} from '@libs/pkgx-plugin-devkit';
+
+interface CmdOptions {
+  overwrite?: boolean;
+}
 
 export class LaunchGenerator {
+  constructor(private context: PkgxContext<CmdOptions>) {}
+
   async run() {
+    const options = this.context.cmdOptions;
+
     const launchFilePath = resolve(process.cwd(), './.vscode/launch.json');
 
     const isLaunchExits = await isPathAvailable(launchFilePath);
 
-    if (isLaunchExits) {
+    if (isLaunchExits && !options.overwrite) {
       throw new Error('launch.json already exists');
     }
 

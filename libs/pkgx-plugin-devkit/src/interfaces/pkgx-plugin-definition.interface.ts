@@ -1,6 +1,15 @@
+export interface CmdOption {
+  flags: string;
+  description?: string;
+  defaultValue?: string | boolean | string[];
+}
+
 export interface PkgxGeneratorDefinition {
   factory: string;
   aliases?: string[];
+  cmd?: {
+    options?: CmdOption[];
+  };
 }
 
 export interface PkgxExecutorDefinition {
@@ -15,11 +24,7 @@ export interface PkgxExecutorDefinition {
         }
       | string
     )[];
-    options?: {
-      flags: string;
-      description?: string;
-      defaultValue?: string | boolean | string[];
-    }[];
+    options?: CmdOption[];
     includePkgxOptions?: boolean;
   };
 }

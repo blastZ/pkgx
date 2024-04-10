@@ -211,7 +211,11 @@ export class PluginHelper {
     return pluginModule;
   }
 
-  async runGenerator(pluginName: string, generatorName: string) {
+  async runGenerator(
+    pluginName: string,
+    generatorName: string,
+    context: PkgxContext,
+  ) {
     const generator = this.getGenerator(pluginName, generatorName);
 
     const pluginModule = await this.loadPluginModule(pluginName);
@@ -220,7 +224,7 @@ export class PluginHelper {
       throw program.error('generator factory not found');
     }
 
-    const factory = new pluginModule[generator.factory]();
+    const factory = new pluginModule[generator.factory](context);
 
     await factory.run().catch((err: any) => {
       throw program.error(err);

@@ -1,47 +1,88 @@
-import { Command } from 'commander';
-import { cd, chalk } from 'zx';
+import { chalk } from 'zx';
 
-import { logger } from '@libs/pkgx-plugin-devkit';
+import {
+  changeWorkingDirectory,
+  logger,
+  printDiagnostics,
+} from '@libs/pkgx-plugin-devkit';
 
-import { parsePlugins, PluginHelper } from '@/utils';
+import { Command, parsePlugins, PluginHelper } from '@/utils';
 
 import { ConfigGenerator } from '../generators/config/index.js';
 
-async function generateResourceByPlugin(generator: string) {
-  const plugins = await parsePlugins();
+async function generate(
+  inputGenerator: string,
+  relativePath: string,
+  options: { verbose: boolean },
+  cmd: Command,
+) {
+  const diagnostics = ['@pkgx/core::generate'];
 
-  const pluginHelper = new PluginHelper(plugins);
+  if (options.verbose) {
+    process.env.PKGX_VERBOSE = '1';
+  }
 
-  const { pluginName, generatorName } =
-    pluginHelper.parseGeneratorName(generator);
+  printDiagnostics(...diagnostics, {
+    inputGenerator,
+    relativePath,
+    options,
+    args: cmd.args,
+  });
 
-  logger.info(`generator ${chalk.underline(`${pluginName}:${generatorName}`)}`);
+  await changeWorkingDirectory(relativePath);
 
-  await pluginHelper.runGenerator(pluginName, generatorName);
-}
-
-async function generateResource(generator: string, relativePath: string) {
-  cd(relativePath);
-
-  if (generator === 'config') {
+  if (inputGenerator === 'config') {
     await new ConfigGenerator().run();
 
     return;
   }
 
-  await generateResourceByPlugin(generator);
+  const plugins = await parsePlugins();
+
+  const pluginHelper = new PluginHelper(plugins);
+
+  const { pluginName, generatorName } =
+    pluginHelper.parseGeneratorName(inputGenerator);
+
+  const command = new Command(`${pluginName}:${generatorName}`);
+
+  const generator = pluginHelper.getGenerator(pluginName, generatorName);
+
+  command.action(async (...args: any[]) => {
+    logger.info(
+      `generator ${chalk.underline(`${pluginName}:${generatorName}`)}`,
+    );
+
+    const cmdArguments: any = [];
+    const cmdOptions: any = args.at(-2) || {};
+
+    printDiagnostics(...diagnostics, { cmdArguments, cmdOptions });
+
+    await pluginHelper.runGenerator(pluginName, generatorName, {
+      cmdArguments,
+      cmdOptions,
+    });
+  });
+
+  generator.cmd?.options?.forEach((opt) => {
+    command.option(opt.flags, opt.description, opt.defaultValue);
+  });
+
+  command.parse(cmd.args.slice(2), { from: 'user' });
 }
 
 export function createGenerateCommand() {
-  const generate = new Command('generate')
+  const generateCommand = new Command('generate')
     .alias('g')
     .argument(
       '<generator>',
       'name of the generator e.g., @pkgx/docker:dockerfile, dockerfile',
     )
     .argument('<relative-path>', 'relative path to run the generator')
+    .option('--verbose', 'show debug logs', false)
+    .allowUnknownOption()
     .description('generate resources')
-    .action(generateResource);
+    .action(generate);
 
-  return generate;
+  return generateCommand;
 }
