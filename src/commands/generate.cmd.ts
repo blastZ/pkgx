@@ -6,7 +6,7 @@ import {
   printDiagnostics,
 } from '@libs/pkgx-plugin-devkit';
 
-import { Command, parsePlugins, PluginHelper } from '@/utils';
+import { Command, PluginHelper, loadPluginDefinitions } from '@/utils';
 
 import { ConfigGenerator } from '../generators/config/index.js';
 
@@ -37,7 +37,7 @@ async function generate(
     return;
   }
 
-  const plugins = await parsePlugins();
+  const plugins = await loadPluginDefinitions();
 
   const pluginHelper = new PluginHelper(plugins);
 

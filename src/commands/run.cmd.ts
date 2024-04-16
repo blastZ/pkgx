@@ -3,7 +3,7 @@ import { chalk } from 'zx';
 
 import { logger, printDiagnostics } from '@libs/pkgx-plugin-devkit';
 
-import { Command, PluginHelper, parsePlugins } from '@/utils';
+import { Command, PluginHelper, loadPluginDefinitions } from '@/utils';
 
 async function run(
   inputExecutor: string,
@@ -18,7 +18,7 @@ async function run(
 
   printDiagnostics(...diagnostics, { inputExecutor, userArgs, options });
 
-  const plugins = await parsePlugins();
+  const plugins = await loadPluginDefinitions();
 
   const pluginHelper = new PluginHelper(plugins);
 
