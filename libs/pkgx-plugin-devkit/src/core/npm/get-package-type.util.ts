@@ -1,5 +1,4 @@
-import { PackageType } from '../enums/package-type.enum.js';
-
+import { PackageType } from './enums/package-type.enum.js';
 import type { ParsePackageJsonPathsResult } from './parse-package-json-paths.util.js';
 import { readPackageJsonFile } from './read-package-json-file.util.js';
 

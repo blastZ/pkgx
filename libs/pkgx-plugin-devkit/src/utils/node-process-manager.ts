@@ -1,7 +1,7 @@
 import { fork, type ChildProcess } from 'node:child_process';
 
+import { PackageType } from '../core/npm/index.js';
 import type { PkgxOptions } from '../core/pkgx-options/index.js';
-import { PackageType } from '../enums/package-type.enum.js';
 
 import { logger } from './logger.util.js';
 

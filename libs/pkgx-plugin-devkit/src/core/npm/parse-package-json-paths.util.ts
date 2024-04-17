@@ -1,8 +1,8 @@
 import { resolve } from 'node:path';
 
-import { parseTsconfigJsonFiles } from '../core/tsconfig/index.js';
+import { printDiagnostics } from '../../utils/print-diagnostics.util.js';
+import { parseTsconfigJsonFiles } from '../tsconfig/index.js';
 
-import { printDiagnostics } from './print-diagnostics.util.js';
 import { BASE_NAME } from './read-package-json-file.util.js';
 
 export interface ParsePackageJsonPathsResult {

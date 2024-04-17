@@ -1,12 +1,12 @@
 import { writeFile } from 'node:fs/promises';
 import { basename } from 'node:path';
 
-import type { PkgxOptions } from '../core/pkgx-options/index.js';
-import { PackageType } from '../enums/package-type.enum.js';
-import type { PkgJson } from '../interfaces/pkg-json.interface.js';
+import { isPathAvailable } from '../../utils/is-path-available.util.js';
+import type { PkgxOptions } from '../pkgx-options/index.js';
 
+import { PackageType } from './enums/package-type.enum.js';
 import { getPackageType } from './get-package-type.util.js';
-import { isPathAvailable } from './is-path-available.util.js';
+import type { PkgJson } from './interfaces/pkg-json.interface.js';
 import { parsePackageJsonPaths } from './parse-package-json-paths.util.js';
 import { readPackageJsonFile } from './read-package-json-file.util.js';
 

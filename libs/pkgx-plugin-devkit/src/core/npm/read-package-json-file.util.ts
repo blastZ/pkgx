@@ -1,8 +1,8 @@
-import type { PkgJson } from '../interfaces/pkg-json.interface.js';
+import { isPathAvailable } from '../../utils/is-path-available.util.js';
+import { printDiagnostics } from '../../utils/print-diagnostics.util.js';
+import { readJsonFile } from '../../utils/read-json-file.util.js';
 
-import { isPathAvailable } from './is-path-available.util.js';
-import { printDiagnostics } from './print-diagnostics.util.js';
-import { readJsonFile } from './read-json-file.util.js';
+import type { PkgJson } from './interfaces/pkg-json.interface.js';
 
 export const BASE_NAME = 'package.json';
 
