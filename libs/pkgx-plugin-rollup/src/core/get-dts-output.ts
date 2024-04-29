@@ -49,6 +49,7 @@ export async function getDtsOutput(options: Required<PkgxOptions>) {
               process.cwd(),
               options.outputDirName,
               './esm/.dts',
+              targetDir,
               options.inputDir,
             ),
           },
