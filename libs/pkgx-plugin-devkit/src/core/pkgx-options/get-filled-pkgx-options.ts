@@ -126,6 +126,7 @@ export async function getFilledPkgxOptions(
       (await getPackageType(await parsePackageJsonPaths(process.cwd()))),
     skipTypeCheck: false,
     skipTypeCheckOnServe: options.skipTypeCheckOnServe ?? false,
+    replaceValues: options.replaceValues || {},
   };
 
   if (

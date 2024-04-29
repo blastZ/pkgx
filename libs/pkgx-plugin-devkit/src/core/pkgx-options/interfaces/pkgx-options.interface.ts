@@ -29,4 +29,5 @@ export interface PkgxOptions {
   serveEnvs?: Record<string, string>;
   skipTypeCheck?: boolean;
   skipTypeCheckOnServe?: boolean;
+  replaceValues?: Record<string, string>;
 }

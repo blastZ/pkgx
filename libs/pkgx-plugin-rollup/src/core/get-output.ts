@@ -8,6 +8,7 @@ import { getCommonjsPlugin } from './plugins/get-commonjs-plugin.js';
 import { getEsmShimPlugin } from './plugins/get-esm-shim-plugin.js';
 import { getJsonPlugin } from './plugins/get-json-plugin.js';
 import { getNodeResolvePlugin } from './plugins/get-node-resolve-plugin.js';
+import { getReplacePlugin } from './plugins/get-replace-plugin.js';
 import { getTypescriptPlugin } from './plugins/get-typescript-plugin.js';
 
 export async function getOutput(
@@ -29,6 +30,13 @@ export async function getOutput(
   plugins.push(getCommonjsPlugin());
 
   plugins.push(getJsonPlugin());
+
+  if (
+    typeof options.replaceValues === 'object' &&
+    Object.keys(options.replaceValues).length > 0
+  ) {
+    plugins.push(getReplacePlugin(options));
+  }
 
   const output: RollupOptions = {
     input: getInput(type, options),
