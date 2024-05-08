@@ -1,5 +1,5 @@
-# node v18.17.1, npm v9.6.7
-FROM node:18.17.1-alpine@sha256:3482a20c97e401b56ac50ba8920cc7b5b2022bfc6aa7d4e4c231755770cf892f AS base
+# node v20.13.0, npm v10.5.2
+FROM node:20.13.0-alpine@sha256:fac6f741d51194c175c517f66bc3125588313327ad7e0ecd673e161e4fa807f3 AS base
 
 WORKDIR /app
 
@@ -17,7 +17,7 @@ FROM base AS pnpm-env
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
-RUN corepack enable
+RUN npm install -g pnpm
 
 FROM pnpm-env AS build
 
