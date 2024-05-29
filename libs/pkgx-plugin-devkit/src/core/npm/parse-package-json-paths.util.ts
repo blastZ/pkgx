@@ -16,7 +16,8 @@ const map = new Map<string, ParsePackageJsonPathsResult>();
 export async function parsePackageJsonPaths(
   cwd: string,
 ): Promise<ParsePackageJsonPathsResult> {
-  const diagnostics = ['@pkgx/devkit::parsePackageJsonPaths', cwd];
+  const scope = '@pkgx/devkit';
+  const namespace = ['core', 'npm', 'parse-package-json-paths.util.ts'];
 
   const cached = map.get(cwd);
 
@@ -38,7 +39,7 @@ export async function parsePackageJsonPaths(
 
   map.set(cwd, result);
 
-  printDiagnostics(...diagnostics, result);
+  printDiagnostics(scope, namespace, result);
 
   return result;
 }

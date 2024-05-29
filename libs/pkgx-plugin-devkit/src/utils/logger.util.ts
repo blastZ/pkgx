@@ -24,8 +24,10 @@ export class Logger {
     this.write(`${ERROR_TAG} ${chalk.red(msg)}`);
   }
 
-  verbose(msg: string) {
-    this.write(`${VERBOSE_TAG} ${msg}`);
+  verbose(scope: string, namespace: string[], msg: string) {
+    this.write(
+      `${VERBOSE_TAG} ${chalk.blue(scope)} → ${namespace.join('/')}\n${msg}`,
+    );
   }
 }
 

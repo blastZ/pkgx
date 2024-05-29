@@ -9,19 +9,20 @@ import type { PkgxOptions } from './interfaces/pkgx-options.interface.js';
 export const DEFAULT_CONFIG_BASE = 'pkgx.config';
 
 export async function readPkgxConfigFile(): Promise<PkgxOptions> {
-  const diagnostics = ['@pkgx/devkit::readPkgxConfigFile'];
+  const scope = '@pkgx/devkit';
+  const namespace = ['core', 'pkgx-options', 'read-pkgx-config-file.ts'];
 
   const paths = await globby(`${DEFAULT_CONFIG_BASE}.{js,mjs,cjs}`);
 
   if (paths.length < 1) {
-    printDiagnostics(...diagnostics, `no pkgx config file found`);
+    printDiagnostics(scope, namespace, { msg: `no pkgx config file found` });
 
     return {};
   }
 
   const config = (await import(resolve('.', paths[0]))).default;
 
-  printDiagnostics(...diagnostics, paths[0], config);
+  printDiagnostics(scope, namespace, { file: paths[0], config });
 
   return config;
 }

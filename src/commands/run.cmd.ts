@@ -10,13 +10,17 @@ async function run(
   userArgs: string[],
   options: { verbose: boolean },
 ) {
-  const diagnostics = ['@pkgx/core::run'];
-
+  const scope = '@pkgx/core';
+  const namespace = ['commands', 'run.cmd.ts'];
   if (options.verbose) {
     process.env.PKGX_VERBOSE = '1';
   }
 
-  printDiagnostics(...diagnostics, { inputExecutor, userArgs, options });
+  printDiagnostics(scope, namespace, {
+    inputExecutor,
+    userArgs,
+    options,
+  });
 
   const plugins = await loadPluginDefinitions();
 
@@ -42,7 +46,7 @@ async function run(
       cmdOptions = args.at(-2) || {};
     }
 
-    printDiagnostics(...diagnostics, { cmdArguments, cmdOptions });
+    printDiagnostics(scope, namespace, { cmdArguments, cmdOptions });
 
     await pluginHelper.runExecutor(pluginName, executorName, {
       cmdArguments,

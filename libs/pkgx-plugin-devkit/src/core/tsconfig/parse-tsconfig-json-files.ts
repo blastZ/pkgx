@@ -47,7 +47,8 @@ function getTsconfigJsonPath(cwd: string, paths: string[]) {
 }
 
 export async function parseTsconfigJsonFiles(cwd: string) {
-  const diagnostics = ['@pkgx/devkit::parseTsconfigJsonFiles', cwd];
+  const scope = '@pkgx/devkit';
+  const namespace = ['core', 'tsconfig', 'parse-tsconfig-json-files.ts'];
 
   const cached = map.get(cwd);
 
@@ -91,7 +92,7 @@ export async function parseTsconfigJsonFiles(cwd: string) {
 
   map.set(cwd, result);
 
-  printDiagnostics(...diagnostics, result);
+  printDiagnostics(scope, namespace, { cwd, result });
 
   return result;
 }
