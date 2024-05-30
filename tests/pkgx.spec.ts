@@ -233,17 +233,29 @@ describe('pkgx', () => {
   it('should support source map', async () => {
     const dir = 'tests/projects/node-app';
 
-    const checkBuildResult = async () => {
+    const checkBuildResult = async (expected: boolean) => {
       expect(await fs.exists(resolve(dir, './output/esm/index.js.map'))).toBe(
-        true,
+        expected,
       );
     };
 
+    await $`pkgx build-app ${dir}`;
+    await checkBuildResult(false);
+
     await $`pkgx build-app ${dir} --source-map`;
-    await checkBuildResult();
+    await checkBuildResult(true);
+
+    await $`pkgx build-app ${dir} -c with-source-map.config.js`;
+    await checkBuildResult(true);
+
+    await $`pkgx esbuild:build-app ${dir}`;
+    await checkBuildResult(false);
+
+    await $`pkgx esbuild:build-app ${dir} -c with-source-map.config.js`;
+    await checkBuildResult(true);
 
     await $`pkgx esbuild:build-app ${dir} --source-map`;
-    await checkBuildResult();
+    await checkBuildResult(true);
   });
 
   it('should work with config generator', async () => {
