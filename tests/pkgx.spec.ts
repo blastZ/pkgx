@@ -259,4 +259,16 @@ describe('pkgx', () => {
 
     await $`rm -rf ${dir}`.quiet();
   });
+
+  it('should work with specific config file', async () => {
+    const dir = 'tests/projects/node-package';
+
+    await $`pkgx build ${dir} -c without-cjs.config.js`;
+
+    const t = await fs.exists(resolve(dir, 'output/esm'));
+    const t2 = await fs.exists(resolve(dir, 'output/cjs'));
+
+    expect(t).toBe(true);
+    expect(t2).toBe(false);
+  });
 });
