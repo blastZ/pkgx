@@ -23,7 +23,7 @@ FROM pnpm-env AS build
 
 COPY . .
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 
 ARG APP_NAME
 
@@ -33,21 +33,21 @@ FROM pnpm-env AS app-deps
 
 ARG APP_FOLDER
 
-COPY apps/${APP_FOLDER}/lib[s] ./libs
+COPY apps/${APP_FOLDER}/package[s] ./packages
 COPY --from=build /app/apps/${APP_FOLDER}/output/package.json ./package.json
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod
 
 FROM base AS prod
 
-ENV NODE_ENV production
-ENV APP_ENV production
+ENV NODE_ENV=production
+ENV APP_ENV=production
 
 COPY --from=app-deps /app/node_modules ./node_modules
 
 ARG APP_FOLDER
 
-COPY --from=build /app/apps/${APP_FOLDER}/node_modules/@blastz/prisma-clien[t] ./node_modules/@blastz/prisma-client
+COPY --from=build /app/node_modules/@blastz/prisma-clien[t] ./node_modules/@blastz/prisma-client
 COPY --from=build /app/apps/${APP_FOLDER}/output/. .
 
-CMD pm2-runtime --raw esm/index.js
+CMD ["pm2-runtime", "--raw", "esm/index.js"]
