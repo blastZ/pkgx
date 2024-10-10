@@ -7,7 +7,8 @@ import type { TsconfigJson } from './interfaces/tsconfig-json.interface.js';
 const map = new Map<string, TsconfigJson | undefined>();
 
 export async function readTsconfigJsonFile(filePath: string) {
-  const diagnostics = ['@pkgx/devkit::readTsconfigJsonFile', filePath];
+  const scope = '@pkgx/devkit';
+  const namespace = ['core', 'tsconfig', 'read-tsconfig-json-file.ts'];
 
   if (map.has(filePath)) {
     return map.get(filePath);
@@ -16,7 +17,10 @@ export async function readTsconfigJsonFile(filePath: string) {
   const canIRead = await isPathAvailable(filePath);
 
   if (!canIRead) {
-    printDiagnostics(...diagnostics, 'file not available');
+    printDiagnostics(scope, namespace, {
+      filePath,
+      msg: 'file not available',
+    });
 
     map.set(filePath, undefined);
 
@@ -27,7 +31,7 @@ export async function readTsconfigJsonFile(filePath: string) {
 
   map.set(filePath, tsconfigJson);
 
-  printDiagnostics(...diagnostics, tsconfigJson);
+  printDiagnostics(scope, namespace, { filePath, tsconfigJson });
 
   return tsconfigJson;
 }

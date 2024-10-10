@@ -16,13 +16,14 @@ async function generate(
   options: { verbose: boolean },
   cmd: Command,
 ) {
-  const diagnostics = ['@pkgx/core::generate'];
+  const scope = '@pkgx/core';
+  const namespace = ['commands', 'generate.cmd.ts'];
 
   if (options.verbose) {
     process.env.PKGX_VERBOSE = '1';
   }
 
-  printDiagnostics(...diagnostics, {
+  printDiagnostics(scope, namespace, {
     inputGenerator,
     relativePath,
     options,
@@ -56,7 +57,7 @@ async function generate(
     const cmdArguments: any = [];
     const cmdOptions: any = args.at(-2) || {};
 
-    printDiagnostics(...diagnostics, { cmdArguments, cmdOptions });
+    printDiagnostics(scope, namespace, { cmdArguments, cmdOptions });
 
     await pluginHelper.runGenerator(pluginName, generatorName, {
       cmdArguments,

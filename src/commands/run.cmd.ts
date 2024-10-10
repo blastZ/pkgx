@@ -5,18 +5,36 @@ import { logger, printDiagnostics } from '@libs/pkgx-plugin-devkit';
 
 import { Command, PluginHelper, loadPluginDefinitions } from '@/utils';
 
-async function run(
-  inputExecutor: string,
-  userArgs: string[],
-  options: { verbose: boolean },
-) {
-  const diagnostics = ['@pkgx/core::run'];
+const scope = '@pkgx/core';
+const namespace = ['commands', 'run.cmd.ts'];
 
+interface RunOptions {
+  verbose: boolean;
+  config?: string;
+}
+
+function loadEnvs(options: RunOptions) {
   if (options.verbose) {
     process.env.PKGX_VERBOSE = '1';
   }
 
-  printDiagnostics(...diagnostics, { inputExecutor, userArgs, options });
+  if (options.config) {
+    process.env.PKGX_CONFIG_FILE = options.config;
+  }
+}
+
+async function run(
+  inputExecutor: string,
+  userArgs: string[],
+  options: RunOptions,
+) {
+  loadEnvs(options);
+
+  printDiagnostics(scope, namespace, {
+    inputExecutor,
+    userArgs,
+    options,
+  });
 
   const plugins = await loadPluginDefinitions();
 
@@ -42,7 +60,7 @@ async function run(
       cmdOptions = args.at(-2) || {};
     }
 
-    printDiagnostics(...diagnostics, { cmdArguments, cmdOptions });
+    printDiagnostics(scope, namespace, { cmdArguments, cmdOptions });
 
     await pluginHelper.runExecutor(pluginName, executorName, {
       cmdArguments,
@@ -69,7 +87,7 @@ async function run(
   if (executor.cmd?.includePkgxOptions) {
     command.option('--input-file-name <inputFileName>', 'input file name');
     command.option('--input-dir <inputDir>', 'input directory');
-    command.option('--source-map', 'generate source map', false);
+    command.option('--source-map', 'generate source map');
   }
 
   if (executor.cmd?.passThrough) {
@@ -88,6 +106,10 @@ export function createRunCommand() {
     )
     .argument('[args...]', 'any arguments for the executor')
     .option('--verbose', 'show debug logs', false)
+    .option(
+      '-c, --config <filename>',
+      'use this config file, defaults to pkgx.config.{js,mjs,cjs}',
+    )
     .allowUnknownOption()
     .action(run);
 

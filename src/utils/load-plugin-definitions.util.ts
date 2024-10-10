@@ -9,12 +9,13 @@ import {
   type PkgxPluginDefinition,
 } from '@libs/pkgx-plugin-devkit';
 
-const diagnostics = ['@pkgx/core::loadPluginDefinitions'];
+const scope = '@pkgx/core';
+const namespace = ['utils', 'load-plugin-definitions.util.ts'];
 
 async function _loadPluginDefinitions(pattern: string) {
   const plugins = await globby(pattern);
 
-  printDiagnostics(...diagnostics, { pattern, plugins });
+  printDiagnostics(scope, namespace, { pattern, plugins });
 
   const definitions = await Promise.all(
     plugins.map(

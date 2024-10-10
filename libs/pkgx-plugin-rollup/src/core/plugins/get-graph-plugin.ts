@@ -80,7 +80,8 @@ function getTargetGraph(
 export function getGraphPlugin(
   options: Required<PkgxOptions>,
 ): InputPluginOption {
-  const diagnostics = ['@pkgx/rollup::getGraphPlugin'];
+  const scope = '@pkgx/rollup';
+  const namespace = ['core', 'plugins', 'get-graph-plugin.ts'];
 
   return {
     name: 'graph',
@@ -156,7 +157,7 @@ export function getGraphPlugin(
 
       const targetGraph = getTargetGraph(getId(process.cwd()), graph);
 
-      printDiagnostics(...diagnostics, graph);
+      printDiagnostics(scope, namespace, graph);
 
       console.log(inspect(targetGraph, false, 10, true));
     },

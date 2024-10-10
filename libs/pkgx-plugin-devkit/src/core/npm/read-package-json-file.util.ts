@@ -9,7 +9,8 @@ export const BASE_NAME = 'package.json';
 const map = new Map<string, PkgJson | undefined>();
 
 export async function readPackageJsonFile(filePath: string) {
-  const diagnostics = ['@pkgx/devkit::readPackageJsonFile', filePath];
+  const scope = '@pkgx/devkit';
+  const namespace = ['core', 'npm', 'read-package-json-file.util.ts'];
 
   if (map.has(filePath)) {
     return map.get(filePath);
@@ -18,7 +19,10 @@ export async function readPackageJsonFile(filePath: string) {
   const canIRead = await isPathAvailable(filePath);
 
   if (!canIRead) {
-    printDiagnostics(...diagnostics, 'file not available');
+    printDiagnostics(scope, namespace, {
+      filePath,
+      msg: 'file not available',
+    });
 
     map.set(filePath, undefined);
 
@@ -29,7 +33,7 @@ export async function readPackageJsonFile(filePath: string) {
 
   map.set(filePath, pkgJson);
 
-  printDiagnostics(...diagnostics, pkgJson);
+  printDiagnostics(scope, namespace, { filePath, pkgJson });
 
   return pkgJson;
 }

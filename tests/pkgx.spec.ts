@@ -233,17 +233,29 @@ describe('pkgx', () => {
   it('should support source map', async () => {
     const dir = 'tests/projects/node-app';
 
-    const checkBuildResult = async () => {
+    const checkBuildResult = async (expected: boolean) => {
       expect(await fs.exists(resolve(dir, './output/esm/index.js.map'))).toBe(
-        true,
+        expected,
       );
     };
 
+    await $`pkgx build-app ${dir}`;
+    await checkBuildResult(false);
+
     await $`pkgx build-app ${dir} --source-map`;
-    await checkBuildResult();
+    await checkBuildResult(true);
+
+    await $`pkgx build-app ${dir} -c with-source-map.config.js`;
+    await checkBuildResult(true);
+
+    await $`pkgx esbuild:build-app ${dir}`;
+    await checkBuildResult(false);
+
+    await $`pkgx esbuild:build-app ${dir} -c with-source-map.config.js`;
+    await checkBuildResult(true);
 
     await $`pkgx esbuild:build-app ${dir} --source-map`;
-    await checkBuildResult();
+    await checkBuildResult(true);
   });
 
   it('should work with config generator', async () => {
@@ -258,5 +270,17 @@ describe('pkgx', () => {
     expect(t).toBe(true);
 
     await $`rm -rf ${dir}`.quiet();
+  });
+
+  it('should work with specific config file', async () => {
+    const dir = 'tests/projects/node-package';
+
+    await $`pkgx build ${dir} -c without-cjs.config.js`;
+
+    const t = await fs.exists(resolve(dir, 'output/esm'));
+    const t2 = await fs.exists(resolve(dir, 'output/cjs'));
+
+    expect(t).toBe(true);
+    expect(t2).toBe(false);
   });
 });

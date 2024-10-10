@@ -2,10 +2,20 @@ import { inspect } from 'util';
 
 import { logger } from './logger.util.js';
 
-export function printDiagnostics(...args: any[]) {
+export function printDiagnostics(
+  /**
+   * @example '@pkgx/core'
+   */
+  scope: string,
+  /**
+   * @example ['commands', 'run.cmd.ts']
+   */
+  namespace: string[],
+  diagnostics: Record<string, any>,
+) {
   if (process.env.PKGX_VERBOSE !== '1') {
     return;
   }
 
-  logger.verbose(inspect(args, false, 10, true));
+  logger.verbose(scope, namespace, inspect(diagnostics, false, 10, true));
 }
