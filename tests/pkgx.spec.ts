@@ -2,6 +2,7 @@ import { createRequire } from 'node:module';
 import { resolve } from 'node:path';
 
 import request from 'supertest';
+import { describe, expect, it } from 'vitest';
 import { $, fs } from 'zx';
 
 async function readFileToString(projectDir: string, filePath: string) {
@@ -32,7 +33,7 @@ function requirePackage(outputDir: string) {
   );
 }
 
-describe('pkgx', () => {
+describe('pkgx', { concurrent: true }, () => {
   // beforeAll(async () => {
   //   await $`./scripts/build.js`;
   // }, 10000);
@@ -256,7 +257,7 @@ describe('pkgx', () => {
 
     await $`pkgx esbuild:build-app ${dir} --source-map`;
     await checkBuildResult(true);
-  });
+  }, 10000);
 
   it('should work with config generator', async () => {
     const dir = 'tests/projects/temp-1';
