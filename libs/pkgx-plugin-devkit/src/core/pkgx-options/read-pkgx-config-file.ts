@@ -1,8 +1,7 @@
 import { extname, resolve } from 'node:path';
 
-import { globby } from 'globby';
-
 import { loadEsModule } from '../../utils/load-es-module.util.js';
+import { matchPaths } from '../../utils/match-paths.util.js';
 import { printDiagnostics } from '../../utils/print-diagnostics.util.js';
 
 import type { PkgxOptions } from './interfaces/pkgx-options.interface.js';
@@ -31,7 +30,7 @@ export async function readPkgxConfigFile(): Promise<PkgxOptions> {
     }
   }
 
-  const paths = await globby(pattern);
+  const paths = await matchPaths(pattern);
 
   if (paths.length < 1) {
     printDiagnostics(scope, namespace, {

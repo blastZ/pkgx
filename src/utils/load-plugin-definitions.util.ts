@@ -1,9 +1,8 @@
 import { resolve } from 'node:path';
 
-import { globby } from 'globby';
-
 import {
   __dirname,
+  matchPaths,
   printDiagnostics,
   readJsonFile,
   type PkgxPluginDefinition,
@@ -13,7 +12,7 @@ const scope = '@pkgx/core';
 const namespace = ['utils', 'load-plugin-definitions.util.ts'];
 
 async function _loadPluginDefinitions(pattern: string) {
-  const plugins = await globby(pattern);
+  const plugins = await matchPaths(pattern);
 
   printDiagnostics(scope, namespace, { pattern, plugins });
 

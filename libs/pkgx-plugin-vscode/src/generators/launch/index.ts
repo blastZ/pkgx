@@ -1,10 +1,10 @@
 import { basename, resolve } from 'node:path';
 
-import { globby } from 'globby';
 import { fs } from 'zx';
 
 import {
   isPathAvailable,
+  matchPaths,
   readPackageJsonFile,
   type PkgxContext,
 } from '@libs/pkgx-plugin-devkit';
@@ -35,7 +35,7 @@ export class LaunchGenerator {
       throw new Error('apps folder not found');
     }
 
-    const appPaths = await globby(`${appsFolderPath}/*`, {
+    const appPaths = await matchPaths(`${appsFolderPath}/*`, {
       onlyDirectories: true,
     });
 

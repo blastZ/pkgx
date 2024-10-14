@@ -4,6 +4,7 @@ export * from './utils/copy-files.util.js';
 export * from './utils/is-path-available.util.js';
 export * from './utils/load-es-module.util.js';
 export * from './utils/logger.util.js';
+export * from './utils/match-paths.util.js';
 export * from './utils/node-process-manager.js';
 export * from './utils/print-diagnostics.util.js';
 export * from './utils/read-json-file.util.js';

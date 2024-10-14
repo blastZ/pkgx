@@ -1,8 +1,7 @@
 import { basename, dirname, resolve } from 'node:path';
 
-import { globby } from 'globby';
-
 import { logger } from '../../utils/logger.util.js';
+import { matchPaths } from '../../utils/match-paths.util.js';
 import { printDiagnostics } from '../../utils/print-diagnostics.util.js';
 
 import type { TsconfigJson } from './interfaces/tsconfig-json.interface.js';
@@ -56,7 +55,7 @@ export async function parseTsconfigJsonFiles(cwd: string) {
     return cached;
   }
 
-  const tsconfigPaths = await globby(['tsconfig.json', 'tsconfig.*.json'], {
+  const tsconfigPaths = await matchPaths(['tsconfig.json', 'tsconfig.*.json'], {
     cwd,
   });
 

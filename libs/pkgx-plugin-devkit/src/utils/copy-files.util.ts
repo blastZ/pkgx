@@ -1,10 +1,9 @@
 import { join, parse } from 'node:path';
 
-import { globby } from 'globby';
-
 import type { CopyFilePattern } from '../interfaces/copy-file-pattern.interface.js';
 
 import { copyFile } from './copy-file.util.js';
+import { matchPaths } from './match-paths.util.js';
 
 interface Options {
   destDir?: string;
@@ -21,7 +20,7 @@ export async function copyFiles(
         const src = isSrc ? p : p.src;
         const globOptions = isSrc ? undefined : p.globOptions;
 
-        const matchedPaths = await globby(src, {
+        const matchedPaths = await matchPaths(src, {
           expandDirectories: false,
           onlyFiles: false,
           ...globOptions,
