@@ -4,6 +4,8 @@ import { globby } from 'globby';
 
 import type { PkgxWorkspaceOptions } from '../interfaces/pkgx-workspace-options.interface.js';
 
+import { loadEsModule } from './load-es-module.util.js';
+
 export const DEFAULT_WORKSPACE_CONFIG_BASE = 'pkgx.workspace';
 
 export async function readPkgxWorkspaceConfigFile(): Promise<PkgxWorkspaceOptions> {
@@ -13,7 +15,7 @@ export async function readPkgxWorkspaceConfigFile(): Promise<PkgxWorkspaceOption
     return {};
   }
 
-  const config = (await import(resolve('.', paths[0]))).default;
+  const config = (await loadEsModule(resolve('.', paths[0]))).default;
 
   return config;
 }

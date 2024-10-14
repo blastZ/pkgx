@@ -4,6 +4,7 @@ import { program } from 'commander';
 
 import {
   __dirname,
+  loadEsModule,
   type PkgxContext,
   type PkgxPluginDefinition,
 } from '@libs/pkgx-plugin-devkit';
@@ -195,14 +196,12 @@ export class PluginHelper {
       throw program.error('plugin not found');
     }
 
-    const pluginModule = await import(
+    const pluginModule = await loadEsModule(
       resolve(
         __dirname,
         `../libs/${plugin.name.replace('@pkgx/', 'pkgx-plugin-')}/esm/index.js`,
-      )
-    ).catch((err) => {
-      throw program.error(err.message || 'import plugin module failed');
-    });
+      ),
+    );
 
     if (!pluginModule) {
       throw program.error('plugin module not found');

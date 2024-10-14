@@ -2,6 +2,7 @@ import { extname, resolve } from 'node:path';
 
 import { globby } from 'globby';
 
+import { loadEsModule } from '../../utils/load-es-module.util.js';
 import { printDiagnostics } from '../../utils/print-diagnostics.util.js';
 
 import type { PkgxOptions } from './interfaces/pkgx-options.interface.js';
@@ -41,7 +42,7 @@ export async function readPkgxConfigFile(): Promise<PkgxOptions> {
     return {};
   }
 
-  const config = (await import(resolve('.', paths[0]))).default;
+  const config = (await loadEsModule(resolve('.', paths[0]))).default;
 
   printDiagnostics(scope, namespace, { pattern, file: paths[0], config });
 
