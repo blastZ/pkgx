@@ -22,8 +22,8 @@ export class NodeProcessManager {
       {
         execArgv: ['--enable-source-maps'],
         env: {
-          ...process.env,
           APP_ENV: 'local',
+          ...process.env,
           ...this.options.serveEnvs,
         },
       },
