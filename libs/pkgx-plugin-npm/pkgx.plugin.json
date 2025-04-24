@@ -6,6 +6,21 @@
       "cmd": {
         "arguments": ["<relative-path>"]
       }
+    },
+    "cp-lib": {
+      "factory": "CpLibExecutor",
+      "cmd": {
+        "arguments": [
+          {
+            "flags": "<original-path>",
+            "description": "original path"
+          },
+          {
+            "flags": "<target-path>",
+            "description": "target path"
+          }
+        ]
+      }
     }
   }
 }
