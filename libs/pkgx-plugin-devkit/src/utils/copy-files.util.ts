@@ -3,10 +3,44 @@ import { join, parse } from 'node:path';
 import type { CopyFilePattern } from '../interfaces/copy-file-pattern.interface.js';
 
 import { copyFile } from './copy-file.util.js';
+import { isDir } from './is-dir.util.js';
 import { matchPaths } from './match-paths.util.js';
+import { printDiagnostics } from './print-diagnostics.util.js';
 
 interface Options {
   destDir?: string;
+}
+
+async function filterRedundantPaths(paths: string[]): Promise<string[]> {
+  if (paths.length === 0) {
+    return paths;
+  }
+
+  const sortedPaths = paths.sort((a, b) => a.length - b.length);
+
+  const filtered: string[] = [];
+
+  for (const path of sortedPaths) {
+    let isContainedByParent = false;
+
+    for (const filteredPath of filtered) {
+      if (await isDir(filteredPath)) {
+        if (path.startsWith(filteredPath)) {
+          isContainedByParent = true;
+
+          break;
+        }
+      }
+    }
+
+    if (isContainedByParent) {
+      continue;
+    }
+
+    filtered.push(path);
+  }
+
+  return filtered;
 }
 
 export async function copyFiles(
@@ -26,12 +60,22 @@ export async function copyFiles(
           ...globOptions,
         });
 
-        if (matchedPaths.length < 1) {
+        /**
+         * copyFile 会递归复制整个文件夹，因此这里需要过滤掉子路径，避免重复复制操作
+         */
+        const filteredPaths = await filterRedundantPaths(matchedPaths);
+
+        printDiagnostics('@pkgx/devkit', ['utils', 'copy-files.util.ts'], {
+          matchedPaths,
+          filteredPaths,
+        });
+
+        if (filteredPaths.length < 1) {
           return;
         }
 
         await Promise.all(
-          matchedPaths.map(async (matchedPath) => {
+          filteredPaths.map(async (matchedPath) => {
             if (!isSrc) {
               return await copyFile(matchedPath, p.dest, p.options);
             }

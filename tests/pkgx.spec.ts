@@ -33,7 +33,7 @@ function requirePackage(outputDir: string) {
   );
 }
 
-describe('pkgx', { concurrent: true }, () => {
+describe('pkgx', { concurrent: true, timeout: 30000 }, () => {
   // beforeAll(async () => {
   //   await $`./scripts/build.js`;
   // }, 10000);

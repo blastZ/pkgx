@@ -4,6 +4,7 @@ import { chalk, fs } from 'zx';
 
 import { isDir } from './is-dir.util.js';
 import { logger } from './logger.util.js';
+import { printDiagnostics } from './print-diagnostics.util.js';
 
 export async function copyFile(
   src: string,
@@ -24,6 +25,10 @@ export async function copyFile(
   try {
     await fs.copy(src, destination, options);
   } catch (err) {
+    printDiagnostics('@pkgx/devkit', ['utils', 'copy-file.util.ts'], {
+      copyError: err,
+    });
+
     logger.error(`failed to copy ${src} → ${destination}`);
   }
 
