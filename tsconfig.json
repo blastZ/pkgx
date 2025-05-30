@@ -30,6 +30,9 @@
       ],
       "@libs/pkgx-plugin-devkit": [
         "./libs/pkgx-plugin-devkit/src/index.js"
+      ],
+      "@libs/pkgx-plugin-rollup": [
+        "./libs/pkgx-plugin-rollup/src/index.js"
       ]
     }
   },

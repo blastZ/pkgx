@@ -18,6 +18,7 @@ async function buildPlugins() {
       'pkgx-plugin-rollup',
       'pkgx-plugin-esbuild',
       'pkgx-plugin-vscode',
+      'pkgx-plugin-rolldown',
     ].map((pluginName) => {
       return new esbuildPlugin.BuildExecutor({
         inputDir: `libs/${pluginName}/src`,

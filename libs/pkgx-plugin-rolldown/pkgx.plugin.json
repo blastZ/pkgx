@@ -1,0 +1,48 @@
+{
+  "name": "@pkgx/rolldown",
+  "executors": {
+    "build-package": {
+      "factory": "BuildPackageExecutor",
+      "aliases": ["build"],
+      "cmd": {
+        "arguments": ["<relative-path>"],
+        "includePkgxOptions": true,
+        "options": [
+          {
+            "flags": "--pack",
+            "description": "pack package after build"
+          }
+        ]
+      }
+    },
+    "build-app": {
+      "factory": "BuildAppExecutor",
+      "cmd": {
+        "arguments": ["<relative-path>"],
+        "includePkgxOptions": true
+      }
+    },
+    "serve-app": {
+      "factory": "ServeExecutor",
+      "aliases": ["serve"],
+      "cmd": {
+        "arguments": ["<relative-path>"],
+        "includePkgxOptions": true
+      }
+    },
+    "test": {
+      "factory": "TestExecutor",
+      "cmd": {
+        "arguments": ["<relative-path>"],
+        "includePkgxOptions": true
+      }
+    },
+    "graph": {
+      "factory": "GraphExecutor",
+      "cmd": {
+        "arguments": ["<relative-path>"],
+        "includePkgxOptions": true
+      }
+    }
+  }
+}

@@ -44,7 +44,10 @@ async function getPackageBasedExternal(internalOptions: InternalOptions) {
     ? await parseDependenciesToExternal(wspPkgJsonPath, internalOptions)
     : [];
 
-  return pkgExternal.concat(wspPkgExternal).concat([/^node:.+$/]);
+  return pkgExternal
+    .concat(wspPkgExternal)
+    .concat(['dotenv/config'])
+    .concat([/^node:.+$/]);
 }
 
 async function getExternal(

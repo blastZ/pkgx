@@ -41,7 +41,7 @@ describe('pkgx', { concurrent: true, timeout: 30000 }, () => {
   it('should build package for cjs and esm', async () => {
     const dir = 'tests/projects/node-package';
 
-    await $`pkgx build ${dir}`;
+    await $`pkgx rollup:build ${dir}`;
 
     const { maskStr, currentYear } = await importPackage(
       './projects/node-package/output',
@@ -122,10 +122,13 @@ describe('pkgx', { concurrent: true, timeout: 30000 }, () => {
       expect(app.listen).toBeDefined();
     };
 
-    await $`pkgx build-app ${dir}`;
+    await $`pkgx rollup:build-app ${dir}`;
     await checkBuildResult();
 
     await $`pkgx esbuild:build-app ${dir}`;
+    await checkBuildResult();
+
+    await $`pkgx rolldown:build-app ${dir}`;
     await checkBuildResult();
   }, 5000);
 
@@ -159,7 +162,7 @@ describe('pkgx', { concurrent: true, timeout: 30000 }, () => {
       expect(app.listen).toBeDefined();
     };
 
-    await $`pkgx build-app ${dir}`;
+    await $`pkgx rollup:build-app ${dir}`;
     await checkBuildResult();
 
     await $`pkgx esbuild:build-app ${dir}`;
@@ -180,7 +183,7 @@ describe('pkgx', { concurrent: true, timeout: 30000 }, () => {
       expect(res.body).toEqual({ name: 'nest-cjs-app' });
     };
 
-    await $`pkgx build-app ${dir}`;
+    await $`pkgx rollup:build-app ${dir}`;
     await checkBuildResult();
 
     await $`pkgx esbuild:build-app ${dir}`;
@@ -203,17 +206,20 @@ describe('pkgx', { concurrent: true, timeout: 30000 }, () => {
       expect(res.body).toEqual({ name: 'nest-esm-app' });
     };
 
-    await $`pkgx build-app ${dir}`;
+    await $`pkgx rollup:build-app ${dir}`;
     await checkBuildResult();
 
     await $`pkgx esbuild:build-app ${dir}`;
+    await checkBuildResult();
+
+    await $`pkgx rolldown:build-app ${dir}`;
     await checkBuildResult();
   });
 
   it('should build simplest', async () => {
     const dir = 'tests/projects/simplest';
 
-    await $`pkgx build ${dir}`;
+    await $`pkgx rollup:build ${dir}`;
 
     const { echo } = await importPackage('./projects/simplest/output');
 
@@ -240,13 +246,13 @@ describe('pkgx', { concurrent: true, timeout: 30000 }, () => {
       );
     };
 
-    await $`pkgx build-app ${dir}`;
+    await $`pkgx rollup:build-app ${dir}`;
     await checkBuildResult(false);
 
-    await $`pkgx build-app ${dir} --source-map`;
+    await $`pkgx rollup:build-app ${dir} --source-map`;
     await checkBuildResult(true);
 
-    await $`pkgx build-app ${dir} -c with-source-map.config.js`;
+    await $`pkgx rollup:build-app ${dir} -c with-source-map.config.js`;
     await checkBuildResult(true);
 
     await $`pkgx esbuild:build-app ${dir}`;
@@ -256,6 +262,15 @@ describe('pkgx', { concurrent: true, timeout: 30000 }, () => {
     await checkBuildResult(true);
 
     await $`pkgx esbuild:build-app ${dir} --source-map`;
+    await checkBuildResult(true);
+
+    await $`pkgx rolldown:build-app ${dir}`;
+    await checkBuildResult(false);
+
+    await $`pkgx rolldown:build-app ${dir} -c with-source-map.config.js`;
+    await checkBuildResult(true);
+
+    await $`pkgx rolldown:build-app ${dir} --source-map`;
     await checkBuildResult(true);
   }, 10000);
 
